@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 public class QuizActivity extends AppCompatActivity implements AnswerFragment.AnswerListener{
 
+    private Question curQuestion;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -16,13 +18,19 @@ public class QuizActivity extends AppCompatActivity implements AnswerFragment.An
 
 
         // test buttons and whatnot
-        Button test = (Button) findViewById(R.id.testButton);
-        final TextView asdf = (TextView) findViewById(R.id.asdf);
+        final Button test = (Button) findViewById(R.id.testButton);
+        final TextView questionView = (TextView) findViewById(R.id.questionView);
+
+
+        curQuestion = new Question();
+
+        questionView.setText(curQuestion.getQuestion());
+
 
         test.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                asdf.setText(R.string.testButton);
+                test.setEnabled(false);
             }
         });
 
@@ -44,21 +52,26 @@ public class QuizActivity extends AppCompatActivity implements AnswerFragment.An
     // return the potential answers to the given question
     @Override
     public String getA() {
-        return "Aasdfa";
+        return curQuestion.getA();
     }
 
     @Override
     public String getB() {
-        return "B";
+        return curQuestion.getB();
     }
 
     @Override
     public String getC() {
-        return "C";
+        return curQuestion.getC();
     }
 
     @Override
     public String getD() {
-        return "D";
+        return curQuestion.getD();
+    }
+
+    @Override
+    public String getAnswer() {
+        return curQuestion.getAnswer();
     }
 }

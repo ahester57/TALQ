@@ -1,6 +1,8 @@
 package edu.umsl.hester.superclickers;
 
 import android.app.Fragment;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -19,6 +21,7 @@ public class AnswerFragment extends Fragment {
     // QuizActivity must implement these methods
     // This will be our way of communicating to the main activity from fragments
     public interface AnswerListener{
+        String getAnswer();
         String getA();
         String getB();
         String getC();
@@ -34,10 +37,10 @@ public class AnswerFragment extends Fragment {
 
         // Initialize buttons from fragment_answer
         // Fragments are awesome and we should use them
-        Button buttonA = (Button) view.findViewById(R.id.buttonA);
-        Button buttonB = (Button) view.findViewById(R.id.buttonB);
-        Button buttonC = (Button) view.findViewById(R.id.buttonC);
-        Button buttonD = (Button) view.findViewById(R.id.buttonD);
+        final Button buttonA = (Button) view.findViewById(R.id.buttonA);
+        final Button buttonB = (Button) view.findViewById(R.id.buttonB);
+        final Button buttonC = (Button) view.findViewById(R.id.buttonC);
+        final Button buttonD = (Button) view.findViewById(R.id.buttonD);
 
 
         // Set the button texts from whatever the getA,B,C,D() methods in QuizActivity
@@ -47,7 +50,25 @@ public class AnswerFragment extends Fragment {
         buttonC.setText(activity.getC());
         buttonD.setText(activity.getD());
 
+
+        buttonC.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                buttonA.setEnabled(false);
+                buttonB.setEnabled(false);
+                buttonC.setEnabled(false);
+                buttonD.setEnabled(false);
+                view.getBackground().setColorFilter(Color.GREEN, PorterDuff.Mode.MULTIPLY);
+            }
+        });
+
+
         return view;
+    }
+
+
+    private void setButtonText() {
+
     }
 
 

@@ -14,10 +14,11 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
+        android:text="question"
         android:layout_alignParentEnd="true"
+        android:id="@+id/questionView"
         android:layout_alignParentStart="true"
-        android:id="@+id/asdf" />
+        android:textSize="24sp" />
 
     <LinearLayout
         android:orientation="vertical"
@@ -35,7 +36,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/testButton"
         android:layout_marginTop="102dp"
-        android:layout_below="@+id/asdf"
+        android:layout_below="@+id/questionView"
         android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
