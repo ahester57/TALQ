@@ -7,12 +7,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class FirstActivity extends AppCompatActivity implements AnswerFragment.AnswerListener{
+public class QuizActivity extends AppCompatActivity implements AnswerFragment.AnswerListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_first);
+        setContentView(R.layout.activity_quiz);
 
 
         // test buttons and whatnot
@@ -31,7 +31,7 @@ public class FirstActivity extends AppCompatActivity implements AnswerFragment.A
         // create instance of the answer fragment
         AnswerFragment answerFrag = new AnswerFragment();
 
-        // load answer fragment into answerSection of FirstActivity
+        // load answer fragment into answerSection of QuizActivity
         android.app.FragmentManager fm = getFragmentManager();
         android.app.FragmentTransaction ft = fm.beginTransaction();
         ft.replace(R.id.answerSection, answerFrag);
@@ -39,8 +39,26 @@ public class FirstActivity extends AppCompatActivity implements AnswerFragment.A
 
     }
 
+
+    // Eventually, the following methods (located elsewhere, this is for concept) will
+    // return the potential answers to the given question
     @Override
-    public int getTest() {
-        return 2;
+    public String getA() {
+        return "Aasdfa";
+    }
+
+    @Override
+    public String getB() {
+        return "B";
+    }
+
+    @Override
+    public String getC() {
+        return "C";
+    }
+
+    @Override
+    public String getD() {
+        return "D";
     }
 }
