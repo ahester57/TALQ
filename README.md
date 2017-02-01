@@ -1,5 +1,6 @@
 # Super Clickers
 Hello all,
+
 This is our group's repo for our Super Clickers app.
 
 go to your terminal and find your AndroidStudioProjects folder.
