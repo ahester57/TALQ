@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">SuperClickers</string>
+    <string name="testButton">This button does something</string>
+</resources>
