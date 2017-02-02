@@ -14,9 +14,11 @@ import android.widget.Button;
  * Created by stin on 1/31/17.
  */
 
-public class AnswerFragment extends Fragment {
+public class AnswerFragment extends Fragment implements View.OnClickListener{
 
     private AnswerListener activity;
+
+    Button buttonA, buttonB, buttonC, buttonD;
 
     // QuizActivity must implement these methods
     // This will be our way of communicating to the main activity from fragments
@@ -37,38 +39,54 @@ public class AnswerFragment extends Fragment {
 
         // Initialize buttons from fragment_answer
         // Fragments are awesome and we should use them
-        final Button buttonA = (Button) view.findViewById(R.id.buttonA);
-        final Button buttonB = (Button) view.findViewById(R.id.buttonB);
-        final Button buttonC = (Button) view.findViewById(R.id.buttonC);
-        final Button buttonD = (Button) view.findViewById(R.id.buttonD);
+        buttonA = (Button) view.findViewById(R.id.buttonA);
+        buttonB = (Button) view.findViewById(R.id.buttonB);
+        buttonC = (Button) view.findViewById(R.id.buttonC);
+        buttonD = (Button) view.findViewById(R.id.buttonD);
 
 
         // Set the button texts from whatever the getA,B,C,D() methods in QuizActivity
         // Eventually, we'll move the potential answers somewhere else
-        buttonA.setText(activity.getA());
-        buttonB.setText(activity.getB());
-        buttonC.setText(activity.getC());
-        buttonD.setText(activity.getD());
+        setButtonText();
 
-
-        buttonC.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                buttonA.setEnabled(false);
-                buttonB.setEnabled(false);
-                buttonC.setEnabled(false);
-                buttonD.setEnabled(false);
-                view.getBackground().setColorFilter(Color.GREEN, PorterDuff.Mode.MULTIPLY);
-            }
-        });
-
+        buttonA.setOnClickListener(this);
+        buttonB.setOnClickListener(this);
+        buttonC.setOnClickListener(this);
+        buttonD.setOnClickListener(this);
 
         return view;
     }
 
 
-    private void setButtonText() {
+    // made button listening easier
+    @Override
+    public void onClick(View view) {
+        // handle button clicks
+        switch(view.getId()) {
+            case R.id.buttonA:
 
+                break;
+            case R.id.buttonB:
+
+                break;
+            case R.id.buttonC:
+                buttonA.setEnabled(false);
+                buttonB.setEnabled(false);
+                buttonC.setEnabled(false);
+                buttonD.setEnabled(false);
+                view.getBackground().setColorFilter(Color.GREEN, PorterDuff.Mode.MULTIPLY);
+                break;
+            case R.id.buttonD:
+
+                break;
+        }
+    }
+
+    private void setButtonText() {
+        buttonA.setText(activity.getA());
+        buttonB.setText(activity.getB());
+        buttonC.setText(activity.getC());
+        buttonD.setText(activity.getD());
     }
 
 

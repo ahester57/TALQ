@@ -1,15 +1,19 @@
 package edu.umsl.hester.superclickers;
 
 
+import android.app.Dialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class QuizActivity extends AppCompatActivity implements AnswerFragment.AnswerListener{
+public class QuizActivity extends AppCompatActivity implements View.OnClickListener, AnswerFragment.AnswerListener{
 
     private Question curQuestion;
+
+    private Button test;
+    private TextView questionView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,8 +22,8 @@ public class QuizActivity extends AppCompatActivity implements AnswerFragment.An
 
 
         // test buttons and whatnot
-        final Button test = (Button) findViewById(R.id.testButton);
-        final TextView questionView = (TextView) findViewById(R.id.questionView);
+        test = (Button) findViewById(R.id.testButton);
+        questionView = (TextView) findViewById(R.id.questionView);
 
 
         curQuestion = new Question();
@@ -27,12 +31,7 @@ public class QuizActivity extends AppCompatActivity implements AnswerFragment.An
         questionView.setText(curQuestion.getQuestion());
 
 
-        test.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                test.setEnabled(false);
-            }
-        });
+        test.setOnClickListener(this);
 
 
 
@@ -47,6 +46,40 @@ public class QuizActivity extends AppCompatActivity implements AnswerFragment.An
 
     }
 
+    // put button listeners here
+    @Override
+    public void onClick(View view) {
+        // handle button clicks
+        switch(view.getId()) {
+            case(R.id.testButton):
+                boolean flag = true;
+                try {
+                    ClassDb entry = new ClassDb(QuizActivity.this);
+                    entry.open();
+                    entry.createEntry("Farmer", "3494903");
+                    entry.close();
+                } catch (Exception e) {
+                    flag = false;
+                } finally {
+                    if (flag) {
+                        Dialog d = new Dialog(this);
+                        d.setTitle("Succes");
+                        TextView tv = new TextView(this);
+                        tv.setText("User added");
+                        d.setContentView(tv);
+                        d.show();
+                    } else {
+                        Dialog d = new Dialog(this);
+                        d.setTitle("Fail");
+                        TextView tv = new TextView(this);
+                        tv.setText("User not added");
+                        d.setContentView(tv);
+                        d.show();
+                    }
+                }
+                break;
+        }
+    }
 
     // Eventually, the following methods (located elsewhere, this is for concept) will
     // return the potential answers to the given question

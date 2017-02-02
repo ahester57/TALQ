@@ -8,6 +8,5 @@ from there:
 
 git clone http://umsl.vigilantestudio.com/arh5w6/superClickers.git
 
-I've uploaded a starting layout for our app.
-
+Added a database system (not yet fully implemented)
 
