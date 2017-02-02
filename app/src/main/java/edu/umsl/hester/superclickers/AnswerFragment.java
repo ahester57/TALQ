@@ -1,10 +1,12 @@
 package edu.umsl.hester.superclickers;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,16 +20,14 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
 
     private AnswerListener activity;
 
-    Button buttonA, buttonB, buttonC, buttonD;
+    Button buttonA, buttonB, buttonC, buttonD, buttonNext;
+    Question curQuestion;
 
     // QuizActivity must implement these methods
     // This will be our way of communicating to the main activity from fragments
     public interface AnswerListener{
-        String getAnswer();
-        String getA();
-        String getB();
-        String getC();
-        String getD();
+        Question getQuestion();
+        void nextQuestion();
     }
 
     @Nullable
@@ -43,16 +43,22 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
         buttonB = (Button) view.findViewById(R.id.buttonB);
         buttonC = (Button) view.findViewById(R.id.buttonC);
         buttonD = (Button) view.findViewById(R.id.buttonD);
-
+        buttonNext = (Button) view.findViewById(R.id.buttonNext);
 
         // Set the button texts from whatever the getA,B,C,D() methods in QuizActivity
         // Eventually, we'll move the potential answers somewhere else
+        curQuestion = activity.getQuestion();
         setButtonText();
 
         buttonA.setOnClickListener(this);
         buttonB.setOnClickListener(this);
         buttonC.setOnClickListener(this);
         buttonD.setOnClickListener(this);
+
+        buttonNext.setOnClickListener(this);
+        buttonNext.setEnabled(false);
+
+        // @TODO add knowing which button is right directly
 
         return view;
     }
@@ -62,33 +68,63 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onClick(View view) {
         // handle button clicks
-        switch(view.getId()) {
-            case R.id.buttonA:
+        Button but = (Button) view;
 
+        switch(view.getId()){
+            case R.id.buttonNext:
+                //this.getFragmentManager().beginTransaction().remove(this).commit();
+                // loads new question
+                activity.nextQuestion();
                 break;
-            case R.id.buttonB:
-
-                break;
-            case R.id.buttonC:
-                buttonA.setEnabled(false);
-                buttonB.setEnabled(false);
-                buttonC.setEnabled(false);
-                buttonD.setEnabled(false);
-                view.getBackground().setColorFilter(Color.GREEN, PorterDuff.Mode.MULTIPLY);
-                break;
-            case R.id.buttonD:
-
-                break;
+            default:
+                // check if button contains the right answer or not
+                if (checkAnswer(but)) {
+                    setSuccess(but);
+                } else {
+                    setFailure(but);
+                }
+                buttonNext.setEnabled(true);
         }
+
+
     }
 
+    // whether button contains the right answer
+    private boolean checkAnswer(Button but) {
+        return (curQuestion.check(but.getText().toString()));
+    }
+
+    // makes correct choice green
+    private void setSuccess(Button but) {
+        disableButtons();
+        but.getBackground().setColorFilter(Color.GREEN, PorterDuff.Mode.MULTIPLY);
+    }
+
+    // makes wrong choice red
+    private void setFailure(Button but) {
+        disableButtons();
+        but.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.MULTIPLY);
+    }
+
+    // set buttons to choices
     private void setButtonText() {
-        buttonA.setText(activity.getA());
-        buttonB.setText(activity.getB());
-        buttonC.setText(activity.getC());
-        buttonD.setText(activity.getD());
+        buttonA.setText(curQuestion.getA());
+        buttonB.setText(curQuestion.getB());
+        buttonC.setText(curQuestion.getC());
+        buttonD.setText(curQuestion.getD());
     }
 
+    //disable buttons
+    private void disableButtons() {
+        buttonA.setEnabled(false);
+        buttonA.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.DST);
+        buttonB.setEnabled(false);
+        buttonB.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.DST);
+        buttonC.setEnabled(false);
+        buttonC.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.DST);
+        buttonD.setEnabled(false);
+        buttonD.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.DST);
+    }
 
 
 }

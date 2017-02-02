@@ -15,6 +15,8 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
     private Button test;
     private TextView questionView;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +65,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
                 } finally {
                     if (flag) {
                         Dialog d = new Dialog(this);
-                        d.setTitle("Succes");
+                        d.setTitle("Success");
                         TextView tv = new TextView(this);
                         tv.setText("User added");
                         d.setContentView(tv);
@@ -81,30 +83,23 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    // Eventually, the following methods (located elsewhere, this is for concept) will
-    // return the potential answers to the given question
+
+    // returns current question
     @Override
-    public String getA() {
-        return curQuestion.getA();
+    public Question getQuestion() {
+        return curQuestion;
     }
 
     @Override
-    public String getB() {
-        return curQuestion.getB();
-    }
+    public void nextQuestion() {
+        curQuestion = new Question();
+        questionView.setText(curQuestion.getQuestion());
+        AnswerFragment answerFrag = new AnswerFragment();
 
-    @Override
-    public String getC() {
-        return curQuestion.getC();
-    }
-
-    @Override
-    public String getD() {
-        return curQuestion.getD();
-    }
-
-    @Override
-    public String getAnswer() {
-        return curQuestion.getAnswer();
+        // load answer fragment into answerSection of QuizActivity
+        android.app.FragmentManager fm = getFragmentManager();
+        android.app.FragmentTransaction ft = fm.beginTransaction();
+        ft.replace(R.id.answerSection, answerFrag);
+        ft.commit();
     }
 }
