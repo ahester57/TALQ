@@ -26,6 +26,17 @@ class Question {
 
     }
 
+    Question(String s) {
+        question = s;
+        choices = new ArrayList<>();
+        choices.add("its");
+        choices.add("over");
+        choices.add("good");
+        choices.add("luck");
+
+        answer = "over";
+    }
+
     boolean check(String guess) {
         return answer.equalsIgnoreCase(guess);
     }

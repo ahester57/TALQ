@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 public class QuizActivity extends AppCompatActivity implements View.OnClickListener, AnswerFragment.AnswerListener{
 
+    private Quiz curQuiz;
     private Question curQuestion;
 
     private Button test;
@@ -27,24 +28,11 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         test = (Button) findViewById(R.id.testButton);
         questionView = (TextView) findViewById(R.id.questionView);
 
-
-        curQuestion = new Question();
-
-        questionView.setText(curQuestion.getQuestion());
-
-
         test.setOnClickListener(this);
 
+        curQuiz = new Quiz();
+        nextQuestion();
 
-
-        // create instance of the answer fragment
-        AnswerFragment answerFrag = new AnswerFragment();
-
-        // load answer fragment into answerSection of QuizActivity
-        android.app.FragmentManager fm = getFragmentManager();
-        android.app.FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(R.id.answerSection, answerFrag);
-        ft.commit();
 
     }
 
@@ -54,32 +42,9 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         // handle button clicks
         switch(view.getId()) {
             case(R.id.testButton):
-                boolean flag = true;
-                try {
-                    ClassDb entry = new ClassDb(QuizActivity.this);
-                    entry.open();
-                    entry.createEntry("Farmer", "3494903");
-                    entry.close();
-                } catch (Exception e) {
-                    flag = false;
-                } finally {
-                    if (flag) {
-                        Dialog d = new Dialog(this);
-                        d.setTitle("Success");
-                        TextView tv = new TextView(this);
-                        tv.setText("User added");
-                        d.setContentView(tv);
-                        d.show();
-                    } else {
-                        Dialog d = new Dialog(this);
-                        d.setTitle("Fail");
-                        TextView tv = new TextView(this);
-                        tv.setText("User not added");
-                        d.setContentView(tv);
-                        d.show();
-                    }
-                }
-                break;
+                curQuiz = new Quiz();
+                nextQuestion();
+
         }
     }
 
@@ -92,10 +57,12 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void nextQuestion() {
-        curQuestion = new Question();
-        questionView.setText(curQuestion.getQuestion());
-        AnswerFragment answerFrag = new AnswerFragment();
+        curQuestion = curQuiz.getNextQuestion();
 
+        questionView.setText(curQuestion.getQuestion());
+
+        // create instance of the answer fragment
+        AnswerFragment answerFrag = new AnswerFragment();
         // load answer fragment into answerSection of QuizActivity
         android.app.FragmentManager fm = getFragmentManager();
         android.app.FragmentTransaction ft = fm.beginTransaction();
