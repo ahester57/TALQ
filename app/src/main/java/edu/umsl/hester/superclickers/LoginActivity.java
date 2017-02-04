@@ -1,6 +1,5 @@
 package edu.umsl.hester.superclickers;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 
@@ -13,9 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import org.json.JSONObject;
 
-import java.io.InputStream;
 
 /**
  * Created by Austin on 2/2/2017.
@@ -57,12 +54,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     Login button attempts to connect to server found in InstantMessager
                     app. Run Server2.java before attempting to connect
                  */
-                new ConnectAsyncTask(getmHandler()).execute(userName.getText().toString());
-                login.setEnabled(false);
+                asdf = new ConnectAsyncTask(getmHandler()).execute(userName.getText().toString());
+
+                //login.setEnabled(false);
                 //user = new User(userName.getText().toString(), userName.getText().toString(), 85);
 
                 break;
             case R.id.buttonSend:
+
+
+
                 Intent quizIntent = new Intent(LoginActivity.this, QuizActivity.class);
                 quizIntent.putExtra("USER_NAME", userName.getText().toString());
                 startActivity(quizIntent);
@@ -83,12 +84,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         userName.setText("could not connect");
                         break;
                     case 67:
-                        userName.setText(".xx.");
+                        userName.setText("..");
                         break;
                     case 69:
                         userName.setText("....");
                         break;
-
+                    case 87:
+                        userName.setText("........");
+                        break;
                     default:
                         userName.setText(msg.toString());
                 }
@@ -96,8 +99,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         };
         return mHandler;
     }
-
-
 
 
 }

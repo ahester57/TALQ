@@ -4,7 +4,6 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.util.Log;
 
-import static android.content.ContentValues.TAG;
 
 
 public class ConnectAsyncTask extends AsyncTask<String, String, TCPClient> {
@@ -12,12 +11,14 @@ public class ConnectAsyncTask extends AsyncTask<String, String, TCPClient> {
     private static final String TAG = "ConnectAsyncTask";
     static String serverMessage = ";";
     private String userMessage = "CLIENT - ";
-    private TCPClient tcpClient;
+    private static TCPClient tcpClient;
     private Handler mHandler;
+
 
     ConnectAsyncTask(Handler handler) {
         this.mHandler = handler;
         this.userMessage = "";
+
     }
 
     @Override
@@ -33,6 +34,12 @@ public class ConnectAsyncTask extends AsyncTask<String, String, TCPClient> {
                                 public void callbackMessageReceiver (String message) {
                                     publishProgress(message);
                                 }
+                        },
+                        new TCPClient.MessageSend() {
+                            @Override
+                            public void callbackMessageSend(String message) {
+                                tcpClient.sendMessage(message);
+                            }
                         });
         } catch (NullPointerException e) {
             Log.d(TAG, "Null ptr exc.");
@@ -53,13 +60,15 @@ public class ConnectAsyncTask extends AsyncTask<String, String, TCPClient> {
             mHandler.sendEmptyMessageDelayed(1, 2000);
             tcpClient.stopClient();
         } else {
-            //tcpClient.sendMessage("god damn gibbons");
+            tcpClient.sendMessage("god damn gibbons");
             serverMessage = values[0];
             mHandler.sendEmptyMessageDelayed(1, 2000);
             //mHandler.sendEmptyMessageDelayed(22, 2000);
             //tcpClient.stopClient();
         }
     }
+
+
 
     @Override
     protected void onPostExecute(TCPClient result) {
@@ -70,4 +79,6 @@ public class ConnectAsyncTask extends AsyncTask<String, String, TCPClient> {
         }
         mHandler.sendEmptyMessageDelayed(67, 4000);
     }
+
+
 }

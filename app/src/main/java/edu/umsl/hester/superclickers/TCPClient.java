@@ -1,7 +1,6 @@
 package edu.umsl.hester.superclickers;
 
 import android.os.Handler;
-import android.support.annotation.MainThread;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -18,14 +17,17 @@ class TCPClient {
 
     private static final String TAG = "TCPClient";
     private final Handler mHandler;
-    private String ipNumber, incomingMessage, command;
+    private String ipNumber, incomingMessage, outMessage, command;
     BufferedReader in;
     PrintWriter out;
     private MessageCallback listener = null;
+    private MessageSend unlistener = null;
     private boolean mRun = false;
 
-    TCPClient(Handler mHandler, String command, String ipNumber, MessageCallback listener) {
+    TCPClient(Handler mHandler, String command, String ipNumber,
+                MessageCallback listener, MessageSend unlistener) {
         this.listener         = listener;
+        this.unlistener       = unlistener;
         this.ipNumber         = ipNumber;
         this.command          = command ;
         this.mHandler         = mHandler;
@@ -37,6 +39,7 @@ class TCPClient {
             out.flush();
             mHandler.sendEmptyMessageDelayed(69, 1000);
             Log.d(TAG,"Sent message: " + message);
+
         }
     }
 
@@ -76,6 +79,9 @@ class TCPClient {
                         listener.callbackMessageReceiver(incomingMessage);
                     }
                     incomingMessage = null;
+                    if (unlistener != null) {
+                        unlistener.callbackMessageSend("ehlloo");
+                    }
                 }
 
                 Log.d(TAG, "Received Message: " +incomingMessage);
@@ -109,5 +115,9 @@ class TCPClient {
 
      interface MessageCallback {
          void callbackMessageReceiver(String message);
+    }
+
+    interface MessageSend {
+        void callbackMessageSend(String message);
     }
 }
