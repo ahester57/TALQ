@@ -105,6 +105,8 @@ class TCPClient {
         }
     }
 
+
+
      interface MessageCallback {
          void callbackMessageReceiver(String message);
     }

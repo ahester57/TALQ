@@ -10,19 +10,24 @@ import static android.content.ContentValues.TAG;
 public class ConnectAsyncTask extends AsyncTask<String, String, TCPClient> {
 
     private static final String TAG = "ConnectAsyncTask";
+    static String serverMessage = ";";
+    private String userMessage = "CLIENT - ";
     private TCPClient tcpClient;
     private Handler mHandler;
 
     ConnectAsyncTask(Handler handler) {
         this.mHandler = handler;
+        this.userMessage = "";
     }
 
     @Override
     protected TCPClient doInBackground(String... strings) {
         Log.d(TAG, "In background");
+        if (strings.length > 0)
+            userMessage = strings[0];
 
         try {
-            tcpClient = new TCPClient(mHandler, "test", "127.0.0.1",
+            tcpClient = new TCPClient(mHandler, userMessage, "192.168.1.125",
                         new TCPClient.MessageCallback() {
                                 @Override
                                 public void callbackMessageReceiver (String message) {
@@ -40,15 +45,19 @@ public class ConnectAsyncTask extends AsyncTask<String, String, TCPClient> {
     @Override
     protected void onProgressUpdate(String... values) {
         super.onProgressUpdate(values);
-        Log.d(TAG, "In progress update, values: " + values.toString());
-        if (values[0].equals("shutdown")) {
-            tcpClient.sendMessage("test");
+        Log.d(TAG, "In progress update, values: " + values[0]);
+        if (values[0].equals("SERVER - END")) {
+            tcpClient.sendMessage("asdf");
+            //tcpClient.stopClient();
+            serverMessage = values[0];
+            mHandler.sendEmptyMessageDelayed(1, 2000);
             tcpClient.stopClient();
-            mHandler.sendEmptyMessageDelayed(45, 2000);
         } else {
-            tcpClient.sendMessage("wrong");
-            mHandler.sendEmptyMessageDelayed(22, 2000);
-            tcpClient.stopClient();
+            //tcpClient.sendMessage("god damn gibbons");
+            serverMessage = values[0];
+            mHandler.sendEmptyMessageDelayed(1, 2000);
+            //mHandler.sendEmptyMessageDelayed(22, 2000);
+            //tcpClient.stopClient();
         }
     }
 
