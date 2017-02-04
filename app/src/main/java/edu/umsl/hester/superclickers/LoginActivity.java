@@ -1,5 +1,6 @@
 package edu.umsl.hester.superclickers;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +22,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
 
         login = (Button) findViewById(R.id.buttonLogin);
         userName = (EditText) findViewById(R.id.editName);
@@ -34,8 +36,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         switch (view.getId()){
             case R.id.buttonLogin:
-                user = new User(userName.getText().toString(), userName.getText().toString(), 85);
-
+                //user = new User(userName.getText().toString(), userName.getText().toString(), 85);
+                Intent quizIntent = new Intent(LoginActivity.this, QuizActivity.class);
+                quizIntent.putExtra("USER_NAME", userName.getText().toString());
+                startActivity(quizIntent);
                 break;
         }
     }

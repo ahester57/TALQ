@@ -3,12 +3,13 @@ package edu.umsl.hester.superclickers;
 
 class User{
 
-    private String firstName;
-    private String lastName;
+    private String firstName = "", lastName = "";
     private int studentId;
 
 
-
+    User(String name) {
+        this.firstName = name;
+    }
 
     User(String firstName, String lastName, int studentId) {
         this.firstName = firstName;

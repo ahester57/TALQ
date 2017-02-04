@@ -8,14 +8,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class QuizActivity extends AppCompatActivity implements View.OnClickListener, AnswerFragment.AnswerListener{
+public class QuizActivity extends AppCompatActivity implements View.OnClickListener, AnswerFragment.AnswerListener {
+
+    private User user;
 
     private Quiz curQuiz;
     private Question curQuestion;
 
     private Button test;
     private TextView questionView;
-
 
 
     @Override
@@ -30,18 +31,25 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
 
         test.setOnClickListener(this);
 
-        curQuiz = new Quiz();
+        user = new User(getIntent().getStringExtra("USER_NAME"));
+        test.setText(user.getFirstName());
+
+        // Load quiz
+        if (savedInstanceState != null) {
+            curQuiz = (Quiz) savedInstanceState.getSerializable("QUIZ");
+        } else {
+            curQuiz = new Quiz();
+        }
+
         nextQuestion();
-
-
     }
 
     // put button listeners here
     @Override
     public void onClick(View view) {
         // handle button clicks
-        switch(view.getId()) {
-            case(R.id.testButton):
+        switch (view.getId()) {
+            case (R.id.testButton):
                 curQuiz = new Quiz();
                 nextQuestion();
 
@@ -68,5 +76,12 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         android.app.FragmentTransaction ft = fm.beginTransaction();
         ft.replace(R.id.answerSection, answerFrag);
         ft.commit();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable("QUIZ", curQuiz);
+
     }
 }
