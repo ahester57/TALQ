@@ -6,7 +6,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        android:text="Name"
+        android:text="@string/name"
         android:ems="10"
         android:layout_alignParentTop="true"
         android:layout_marginTop="91dp"
@@ -17,7 +17,7 @@
         android:layout_alignParentEnd="true" />
 
     <Button
-        android:text="Login"
+        android:text="@string/login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -26,12 +26,20 @@
         android:id="@+id/buttonLogin" />
 
     <Button
-        android:text="Send"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignLeft="@+id/buttonLogin"
         android:layout_alignStart="@+id/buttonLogin"
         android:layout_marginBottom="55dp"
-        android:id="@+id/buttonSend" />
+        android:id="@+id/buttonSend"
+        android:text="@string/go" />
+
+    <TextView
+        android:text=".."
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/serverText" />
 </RelativeLayout>

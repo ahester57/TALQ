@@ -17,17 +17,15 @@ class TCPClient {
 
     private static final String TAG = "TCPClient";
     private final Handler mHandler;
-    private String ipNumber, incomingMessage, outMessage, command;
-    BufferedReader in;
-    PrintWriter out;
+    private String ipNumber, incomingMessage, command;
+    private BufferedReader in;
+    private PrintWriter out;
     private MessageCallback listener = null;
-    private MessageSend unlistener = null;
     private boolean mRun = false;
 
     TCPClient(Handler mHandler, String command, String ipNumber,
-                MessageCallback listener, MessageSend unlistener) {
+                MessageCallback listener) {
         this.listener         = listener;
-        this.unlistener       = unlistener;
         this.ipNumber         = ipNumber;
         this.command          = command ;
         this.mHandler         = mHandler;
@@ -52,6 +50,7 @@ class TCPClient {
 
     void run() {
         mRun = true;
+        int count = 0;
 
         try {
 
@@ -73,18 +72,19 @@ class TCPClient {
                 mHandler.sendEmptyMessageDelayed(87, 2000);
 
                 //listen for incloming message while mRun
-                while (mRun) {
+                // i know loop is dumb anymore but hey its in dev
+                while (count < 1) {
                     incomingMessage = in.readLine();
+
                     if (incomingMessage != null && listener != null) {
                         listener.callbackMessageReceiver(incomingMessage);
                     }
+                    Log.d(TAG, "Received Message: " +incomingMessage);
                     incomingMessage = null;
-                    if (unlistener != null) {
-                        unlistener.callbackMessageSend("ehlloo");
-                    }
+                    count++;
                 }
 
-                Log.d(TAG, "Received Message: " +incomingMessage);
+
 
             } catch (Exception e) {
 

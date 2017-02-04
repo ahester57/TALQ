@@ -5,8 +5,14 @@ import android.os.Handler;
 import android.util.Log;
 
 
+/*
+    I think I am going to abandon this asynctask. Instead, I am going
+    to move towards a webservice, as that seems like a better way to
+    communicate with a server throughout the application's lifecycle.
 
-public class ConnectAsyncTask extends AsyncTask<String, String, TCPClient> {
+    For now this will do for testing 
+ */
+class ConnectAsyncTask extends AsyncTask<String, String, TCPClient> {
 
     private static final String TAG = "ConnectAsyncTask";
     static String serverMessage = ";";
@@ -34,12 +40,6 @@ public class ConnectAsyncTask extends AsyncTask<String, String, TCPClient> {
                                 public void callbackMessageReceiver (String message) {
                                     publishProgress(message);
                                 }
-                        },
-                        new TCPClient.MessageSend() {
-                            @Override
-                            public void callbackMessageSend(String message) {
-                                tcpClient.sendMessage(message);
-                            }
                         });
         } catch (NullPointerException e) {
             Log.d(TAG, "Null ptr exc.");
@@ -60,7 +60,7 @@ public class ConnectAsyncTask extends AsyncTask<String, String, TCPClient> {
             mHandler.sendEmptyMessageDelayed(1, 2000);
             tcpClient.stopClient();
         } else {
-            tcpClient.sendMessage("god damn gibbons");
+            //tcpClient.sendMessage("god damn gibbons");
             serverMessage = values[0];
             mHandler.sendEmptyMessageDelayed(1, 2000);
             //mHandler.sendEmptyMessageDelayed(22, 2000);
@@ -77,6 +77,7 @@ public class ConnectAsyncTask extends AsyncTask<String, String, TCPClient> {
         if (result != null && result.isRunning()) {
             result.stopClient();
         }
+
         mHandler.sendEmptyMessageDelayed(67, 4000);
     }
 
