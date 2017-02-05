@@ -1,13 +1,13 @@
-package edu.umsl.hester.superclickers;
+package edu.umsl.hester.superclickers.app;
 
 
-class User{
+public class User{
 
     private String firstName = "", lastName = "";
     private int studentId;
 
 
-    User(String name) {
+    public User(String name) {
         this.firstName = name;
     }
 
@@ -19,7 +19,7 @@ class User{
     }
 
 
-    String getFirstName() { return firstName; }
+    public String getFirstName() { return firstName; }
 
     String getLastName() { return lastName; }
 

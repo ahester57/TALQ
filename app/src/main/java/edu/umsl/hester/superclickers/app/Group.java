@@ -1,7 +1,8 @@
-package edu.umsl.hester.superclickers;
+package edu.umsl.hester.superclickers.app;
 
 import java.util.ArrayList;
 
+import edu.umsl.hester.superclickers.app.User;
 
 
 class Group{

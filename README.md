@@ -18,3 +18,11 @@ Added a database system (not yet fully implemented)
 
 	- registration / login service using above
 
+- [02/05/17]
+
+- database setup
+
+- login / register done (use fart@johnson.com password: fart)
+
+- added home activity
+

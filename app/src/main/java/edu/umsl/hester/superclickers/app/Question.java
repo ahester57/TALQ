@@ -1,9 +1,9 @@
-package edu.umsl.hester.superclickers;
+package edu.umsl.hester.superclickers.app;
 
 import java.util.ArrayList;
 
 
-class Question {
+public class Question {
 
     private String question;
     private ArrayList<String> choices;
@@ -37,28 +37,28 @@ class Question {
         answer = "over";
     }
 
-    boolean check(String guess) {
+    public boolean check(String guess) {
         return answer.equalsIgnoreCase(guess);
     }
 
 
-    String getQuestion() { return question; }
+    public String getQuestion() { return question; }
 
     //ArrayList<String> getChoices() { return choices; }
 
-    String getA() {
+    public String getA() {
         return choices.get(0);
     }
 
-    String getB() {
+    public String getB() {
         return choices.get(1);
     }
 
-    String getC() {
+    public String getC() {
         return choices.get(2);
     }
 
-    String getD() {
+    public String getD() {
         return choices.get(3);
     }
 

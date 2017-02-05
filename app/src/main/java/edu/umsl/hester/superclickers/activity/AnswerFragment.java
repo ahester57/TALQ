@@ -1,4 +1,4 @@
-package edu.umsl.hester.superclickers;
+package edu.umsl.hester.superclickers.activity;
 
 import android.app.Fragment;
 import android.content.Context;
@@ -11,6 +11,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+
+import edu.umsl.hester.superclickers.R;
+import edu.umsl.hester.superclickers.app.Question;
 
 /**
  * Created by stin on 1/31/17.
@@ -68,7 +71,7 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onClick(View view) {
         // handle button clicks
-        Button but = (Button) view;
+
 
         switch(view.getId()){
             case R.id.buttonNext:
@@ -77,6 +80,7 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
                 activity.nextQuestion();
                 break;
             default:
+                Button but = (Button) view;
                 // check if button contains the right answer or not
                 if (checkAnswer(but)) {
                     setSuccess(but);

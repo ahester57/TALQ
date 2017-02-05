@@ -1,23 +1,24 @@
-package edu.umsl.hester.superclickers;
+package edu.umsl.hester.superclickers.app;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 
 
-class Quiz implements Serializable{
+
+public class Quiz implements Serializable{
 
     private ArrayList<Question> questions;
 
     private int qNum;
 
-    Quiz() {
+    public Quiz() {
         questions = new ArrayList<>();
         questions.add(new Question());
         questions.add(new Question("all clear"));
         qNum = 0;
     }
 
-    Question getNextQuestion() {
+    public Question getNextQuestion() {
 
         Question q = questions.get(qNum);
         qNum = (qNum + 1) % questions.size();

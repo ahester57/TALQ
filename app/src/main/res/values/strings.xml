@@ -3,7 +3,13 @@
     <string name="testButton">This button does something</string>
     <string name="connecting">Connecting....</string>
     <string name="name">Name</string>
+    <string name="email">Email</string>
     <string name="pwd">Enter password</string>
     <string name="login">Login</string>
-    <string name="go">Go</string>
+    <string name="logout">Logout</string>
+    <string name="go">Go Back</string>
+    <string name="register">Register</string>
+    <string name="confirm">Confirm password</string>
+    <string name="skip">Skip</string>
+    <string name="play">Play</string>
 </resources>
