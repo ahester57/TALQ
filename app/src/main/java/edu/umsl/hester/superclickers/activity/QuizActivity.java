@@ -37,12 +37,11 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
 
         test.setOnClickListener(this);
 
-        user = new User(getIntent().getStringExtra("USER_NAME"));
-        test.setText(user.getFirstName());
+
 
         // Load quiz
         if (savedInstanceState != null) {
-            curQuiz = (Quiz) savedInstanceState.getSerializable("QUIZ");
+            curQuiz = new Quiz();
         } else {
             curQuiz = new Quiz();
         }

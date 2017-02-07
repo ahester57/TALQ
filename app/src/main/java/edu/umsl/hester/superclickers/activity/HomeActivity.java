@@ -11,7 +11,8 @@ import android.widget.TextView;
 import java.util.HashMap;
 
 import edu.umsl.hester.superclickers.R;
-import edu.umsl.hester.superclickers.helper.SQLiteHandler;
+import edu.umsl.hester.superclickers.app.User;
+import edu.umsl.hester.superclickers.helper.UserSQLiteHandler;
 import edu.umsl.hester.superclickers.helper.SessionManager;
 
 /**
@@ -23,10 +24,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     private TextView textName, textEmail;
     private Button btnLogout, btnPlay;
 
-    private SQLiteHandler db;
+    private UserSQLiteHandler db;
     private SessionManager session;
 
-    private String name, email;
+    private User user;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,7 +40,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         btnPlay = (Button) findViewById(R.id.btnPlay);
 
         // database
-        db = new SQLiteHandler(getApplicationContext());
+        db = new UserSQLiteHandler(getApplicationContext());
 
         // session manager
         session = new SessionManager(getApplicationContext());
@@ -49,12 +50,12 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         // Fetch user info from sqlite
-        HashMap<String, String> user = db.getUserDetails();
-        name = user.get("name");
-        email = user.get("email");
 
-        textName.setText(name);
-        textEmail.setText(email);
+        HashMap<String, String> userDetails = db.getUserDetails();
+        this.user = new User(userDetails.get("name"), userDetails.get("email"));
+
+        textName.setText(user.getName());
+        textEmail.setText(user.getEmail());
 
         btnLogout.setOnClickListener(this);
         btnPlay.setOnClickListener(this);
@@ -77,7 +78,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onBackPressed() {
-        logoutUser();
+        super.onBackPressed();
+        //logoutUser();
     }
 
     // logout user,

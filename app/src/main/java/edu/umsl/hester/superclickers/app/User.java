@@ -3,34 +3,34 @@ package edu.umsl.hester.superclickers.app;
 
 public class User{
 
-    private String firstName = "", lastName = "";
-    private int studentId;
+    private String name = "";
+    private String email = "";
+    private int id;
 
 
-    public User(String name) {
-        this.firstName = name;
+    public User(String name, String email) {
+        this.name = name;
+        this.email = email;
     }
 
-    User(String firstName, String lastName, int studentId) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.studentId = studentId;
+    User(String name, int studentId) {
+        this.name = name;
+        this.id = studentId;
 
     }
 
 
-    public String getFirstName() { return firstName; }
+    public String getName() { return name; }
 
-    String getLastName() { return lastName; }
+    public String getEmail() { return email; }
 
-    int getStudentId() { return studentId; }
+    int getStudentId() { return id; }
 
     @Override
     public String toString() {
         return "User{" +
-                "firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", studentId=" + studentId +
+                "name='" + name + '\'' +
+                ", studentId=" + id +
                 '}';
     }
 }

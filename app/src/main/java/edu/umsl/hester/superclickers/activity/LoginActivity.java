@@ -27,10 +27,9 @@ import java.util.Map;
 
 import edu.umsl.hester.superclickers.R;
 import edu.umsl.hester.superclickers.app.LoginConfig;
-import edu.umsl.hester.superclickers.app.LoginController;
-import edu.umsl.hester.superclickers.helper.SQLiteHandler;
+import edu.umsl.hester.superclickers.app.AppController;
+import edu.umsl.hester.superclickers.helper.UserSQLiteHandler;
 import edu.umsl.hester.superclickers.helper.SessionManager;
-import edu.umsl.hester.superclickers.app.User;
 
 
 /**
@@ -49,10 +48,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private ProgressDialog pDialog;
     private SessionManager session;
-    private SQLiteHandler db;
-
-    private User user;
-    private String serverMessage;
+    private UserSQLiteHandler db;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -71,7 +67,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         pDialog.setCancelable(false);
 
         // SQL handler
-        db = new SQLiteHandler(getApplicationContext());
+        db = new UserSQLiteHandler(getApplicationContext());
         // Session manager
         session = new SessionManager(getApplicationContext());
 
@@ -201,7 +197,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
 
 
-        LoginController.getInstance().addToRequestQueue(strReq, tag_str_req);
+        AppController.getInstance().addToRequestQueue(strReq, tag_str_req);
     }
 
     private void showDialog() {

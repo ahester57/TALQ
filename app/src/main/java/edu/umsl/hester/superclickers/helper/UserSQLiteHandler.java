@@ -12,11 +12,12 @@ import java.util.HashMap;
 
 /**
  * Created by Austin on 2/4/2017.
+ * 
  */
 
-public class SQLiteHandler extends SQLiteOpenHelper {
+public class UserSQLiteHandler extends SQLiteOpenHelper {
 
-    private static final String TAG = SQLiteHandler.class.getSimpleName();
+    private static final String TAG = UserSQLiteHandler.class.getSimpleName();
 
     // all static
     private static final int DB_VERSION = 1;
@@ -32,7 +33,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     private static final String KEY_UID = "uid";
     private static final String KEY_CREATED_AT = "created_at";
 
-    public SQLiteHandler(Context context) {
+    public UserSQLiteHandler(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
     }
 

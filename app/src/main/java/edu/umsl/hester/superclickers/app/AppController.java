@@ -7,12 +7,12 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
-public class LoginController extends Application {
+public class AppController extends Application {
 
-    public static final String TAG = LoginController.class.getSimpleName();
+    public static final String TAG = AppController.class.getSimpleName();
 
     private RequestQueue mRequestQueue;
-    private static LoginController mInstance;
+    private static AppController mInstance;
 
     @Override
     public void onCreate() {
@@ -20,7 +20,7 @@ public class LoginController extends Application {
         mInstance = this;
     }
 
-    public static synchronized LoginController getInstance() {
+    public static synchronized AppController getInstance() {
         return mInstance;
     }
 
