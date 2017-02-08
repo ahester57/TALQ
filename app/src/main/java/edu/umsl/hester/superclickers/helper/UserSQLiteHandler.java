@@ -26,11 +26,13 @@ public class UserSQLiteHandler extends SQLiteOpenHelper {
     private static final String DB_NAME = "android_api";
     // table name
     private static final String TABLE_USER = "user";
+    private static final String TABLE_GROUP = "groups";
     // table columns
     private static final String KEY_ID = "id";
     private static final String KEY_NAME = "name";
     private static final String KEY_EMAIL = "email";
     private static final String KEY_UID = "uid";
+    private static final String KEY_GUID = "guid";
     private static final String KEY_CREATED_AT = "created_at";
 
     public UserSQLiteHandler(Context context) {
@@ -39,11 +41,16 @@ public class UserSQLiteHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_LOGIN_TABLE = "CREATE TABLE " + TABLE_USER + "("
+        String CREATE_LOGIN_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_USER + "("
                     + KEY_ID + " INTEGER PRIMARY KEY, " + KEY_NAME + " TEXT, "
                     + KEY_EMAIL + " TEXT UNIQUE, " + KEY_UID + " TEXT, "
                     + KEY_CREATED_AT + " TEXT" + ")";
+        String CREATE_GROUP_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_GROUP + "("
+                    + KEY_ID + " INTEGER PRIMARY KEY, " + KEY_NAME + " TEXT, "
+                    + KEY_GUID + " TEXT UNIQUE, " + KEY_CREATED_AT + " TEXT" + ")";
+
         db.execSQL(CREATE_LOGIN_TABLE);
+        db.execSQL(CREATE_GROUP_TABLE);
 
         Log.d(TAG, "Database tables created");
     }
@@ -52,6 +59,7 @@ public class UserSQLiteHandler extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldV, int newV) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_GROUP);
         // drop old tables and...
         // create them again
         onCreate(db);
@@ -72,6 +80,22 @@ public class UserSQLiteHandler extends SQLiteOpenHelper {
         db.close();
 
         Log.d(TAG, "New user inserted into sqlite: " + id);
+    }
+
+    // ad new group to database
+    public void addGroup(String name, String guid, String created_at) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_NAME, name);
+        values.put(KEY_GUID, guid);
+        values.put(KEY_CREATED_AT, created_at);
+
+        //insert row
+        long id = db.insert(TABLE_GROUP, null, values);
+        db.close();
+
+        Log.d(TAG, "New group inserted into sqlite: " + id);
     }
 
     /// get user data

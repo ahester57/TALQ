@@ -47,4 +47,13 @@
         android:layout_marginBottom="48dp"
         android:id="@+id/btnPlay" />
 
+    <Button
+        android:text="Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/btnMakeGroup" />
+
 </RelativeLayout>
