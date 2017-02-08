@@ -42,18 +42,18 @@
         android:text="@string/play"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
         android:layout_marginBottom="48dp"
-        android:id="@+id/btnPlay" />
+        android:id="@+id/btnPlay"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
 
     <Button
-        android:text="Button"
+        android:text="Groups"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/btnGroups"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/btnMakeGroup" />
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>

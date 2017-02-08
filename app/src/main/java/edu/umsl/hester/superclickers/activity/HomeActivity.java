@@ -3,6 +3,7 @@ package edu.umsl.hester.superclickers.activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -57,7 +58,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         textEmail = (TextView) findViewById(R.id.textEmail);
         btnLogout = (Button) findViewById(R.id.btnLogout);
         btnPlay = (Button) findViewById(R.id.btnPlay);
-        btnCreateGroup = (Button) findViewById(R.id.btnMakeGroup);
+        btnCreateGroup = (Button) findViewById(R.id.btnGroups);
 
         pDialog = new ProgressDialog(this);
         pDialog.setCancelable(false);
@@ -69,7 +70,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         session = new SessionManager(getApplicationContext());
 
         if (!session.isLoggedIn()) {
-            logoutUser();
+            //logoutUser();
+            btnCreateGroup.setEnabled(false);
         }
 
         // Fetch user info from sqlite
@@ -98,160 +100,13 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(i);
                 //finish();
                 break;
-            case R.id.btnMakeGroup:
-                createGroup("best group");
+            case R.id.btnGroups:
+                Intent in = new Intent(HomeActivity.this, GroupActivity.class);
+                startActivity(in);
                 break;
         }
     }
 
-    // Store new group, uploads to group URL
-    private void createGroup(final String name) {
-        String tag_str_req = "req_create_group";
-
-        pDialog.setMessage("Makin group...");
-        showDialog();
-        // new string request
-        StringRequest strReq = new StringRequest(Request.Method.POST, LoginConfig.URL_CREATE_GROUP,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.d(TAG, "Group make Response: " + response.toString());
-                        hideDialog();
-
-                        try {
-                            JSONObject jObj = new JSONObject(response);
-                            boolean error = jObj.getBoolean("error");
-
-                            if (!error) {
-                                // group create SUCCESSFUL
-                                // store group in db
-
-                                //store user
-                                String guid = jObj.getString("guid");
-
-                                JSONObject group = jObj.getJSONObject("group");
-                                String name = group.getString("name");
-                                String created_at = group.getString("created_at");
-
-                                // add user to sql database
-                                db.addGroup(name, guid, created_at);
-                                joinGroup(user.getUniqueId(), guid);
-
-                                Toast.makeText(getApplicationContext(), "Group registered", Toast.LENGTH_LONG).show();
-
-
-
-                            } else {
-                                // Error loggin in
-                                String errMessage = jObj.getString("error_msg");
-                                Toast.makeText(getApplicationContext(), errMessage,
-                                        Toast.LENGTH_LONG).show();
-                            }
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Toast.makeText(getApplicationContext(), "JSON error: "
-                                    + e.getMessage(),Toast.LENGTH_LONG).show();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "Create group error: " + error.getMessage());
-                Toast.makeText(getApplicationContext(), error.getMessage(),
-                        Toast.LENGTH_LONG).show();
-                hideDialog();
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                // put params to login url via POST
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("name", name);
-
-                return params;
-            }
-        };
-        // end string request.. phew!
-
-        Log.d(TAG, "we made it");
-
-        AppController.getInstance().addToRequestQueue(strReq, tag_str_req);
-    }
-
-    // add user to group, uploads to group URL
-    private void joinGroup(final String user_id, final String group_id) {
-        String tag_str_req = "req_join_group";
-
-        pDialog.setMessage("Joinin group...");
-        showDialog();
-        // new string request
-        StringRequest strReq = new StringRequest(Request.Method.POST, LoginConfig.URL_JOIN_GROUP,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.d(TAG, "Group add Response: " + response.toString());
-                        hideDialog();
-
-                        try {
-                            JSONObject jObj = new JSONObject(response);
-                            boolean error = jObj.getBoolean("error");
-
-                            if (!error) {
-                                // group add SUCCESSFUL
-                                // store group in db
-
-                                //store user
-
-
-                                JSONObject user_group = jObj.getJSONObject("user_group");
-                                String guid = user_group.getString("group_id");
-                                String created_at = user_group.getString("created_at");
-
-                                db.addUserToGroup(user.getUniqueId(), guid, created_at);
-
-                                Toast.makeText(getApplicationContext(), "Group joined", Toast.LENGTH_LONG).show();
-
-
-
-                            } else {
-                                // Error loggin in
-                                String errMessage = jObj.getString("error_msg");
-                                Toast.makeText(getApplicationContext(), errMessage,
-                                        Toast.LENGTH_LONG).show();
-                            }
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Toast.makeText(getApplicationContext(), "JSON error: "
-                                    + e.getMessage(),Toast.LENGTH_LONG).show();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "Join group error: " + error.getMessage());
-                Toast.makeText(getApplicationContext(), error.getMessage(),
-                        Toast.LENGTH_LONG).show();
-                hideDialog();
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                // put params to login url via POST
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("user_id", user_id);
-                params.put("group_id", group_id);
-
-                return params;
-            }
-        };
-        // end string request.. phew!
-
-        Log.d(TAG, "we made it");
-
-        AppController.getInstance().addToRequestQueue(strReq, tag_str_req);
-    }
 
     private void showDialog() {
         if (!pDialog.isShowing()) {

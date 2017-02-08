@@ -1,7 +1,7 @@
 package edu.umsl.hester.superclickers.app;
 
 
-public class User{
+public class User {
 
     private String name = "";
     private String email = "";
