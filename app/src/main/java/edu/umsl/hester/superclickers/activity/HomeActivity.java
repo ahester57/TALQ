@@ -24,6 +24,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     private final String TAG = HomeActivity.class.getSimpleName();
 
+    private SQLiteHandler db;
     private SessionManager session;
 
     private User user;
@@ -40,7 +41,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         Button btnCreateGroup = (Button) findViewById(R.id.btnGroups);
 
         // database
-        SQLiteHandler db = new SQLiteHandler(getApplicationContext());
+        db = new SQLiteHandler(getApplicationContext());
 
         // session manager
         session = new SessionManager(getApplicationContext());
@@ -94,7 +95,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     private void logoutUser() {
         session.setLogin(false);
 
-        //db.deleteAllUsers();
+        db.deleteAllUsers();
         // Go to login activity
         Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
         startActivity(intent);

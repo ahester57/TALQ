@@ -151,6 +151,7 @@ public class GroupActivity extends AppCompatActivity implements View.OnClickList
                 // put params to login url via POST
                 Map<String, String> params = new HashMap<>();
                 params.put("name", name);
+                params.put("user_id", user.getUniqueId());
 
                 return params;
             }
