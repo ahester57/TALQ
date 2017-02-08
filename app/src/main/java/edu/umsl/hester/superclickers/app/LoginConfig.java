@@ -3,18 +3,15 @@ package edu.umsl.hester.superclickers.app;
 /**
  * Created by Austin on 2/4/2017.
  *
- * This requires having a server running on your local network.
- * I have WampServer running on my machine with some php scripts
- * to handle registering and logging in.
  *
- * I also have a database setup up on my local machine, but it can
+ * I also have a database setup up on but it can
  * be put somewhere more accessable in production.
  *
  * I've setup a database on my server. You can now register;
  *
  *  Test user for log in:
- *      fart@johnson.com
- *      fart
+ *     email:   '.'   // literally just dots
+ *     pwd:     '.'
  *
  *  Hopefully they will  have a server we can run the php and database on.
  */

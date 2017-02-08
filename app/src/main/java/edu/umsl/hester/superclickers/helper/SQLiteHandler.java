@@ -156,6 +156,17 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         return user;
     }
 
+
+    public String getGroupId(String name) {
+        // @TODO
+        return name;
+    }
+
+    public String[] getAllGroups() {
+        // @TODO
+        return new String[] {"abra", "kadabra", "alakazam"};
+    }
+
     public void deleteUsersByEmail(String... emails) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_USER, "WHERE email = ", emails);

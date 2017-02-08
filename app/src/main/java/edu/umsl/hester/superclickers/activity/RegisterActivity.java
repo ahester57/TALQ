@@ -24,8 +24,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import edu.umsl.hester.superclickers.R;
-import edu.umsl.hester.superclickers.app.LoginConfig;
 import edu.umsl.hester.superclickers.app.AppController;
+import edu.umsl.hester.superclickers.app.LoginConfig;
 import edu.umsl.hester.superclickers.helper.SQLiteHandler;
 import edu.umsl.hester.superclickers.helper.SessionManager;
 
@@ -117,7 +117,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Log.d(TAG, "Register Response: " + response.toString());
+                        Log.d(TAG, "Register Response: " + response);
                         hideDialog();
 
                         try {
@@ -172,7 +172,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 // put params to login url via POST
-                Map<String, String> params = new HashMap<String, String>();
+                Map<String, String> params = new HashMap<>();
                 params.put("name", name);
                 params.put("email", email);
                 params.put("password", password);

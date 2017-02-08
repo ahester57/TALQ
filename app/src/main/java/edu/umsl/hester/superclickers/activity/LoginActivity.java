@@ -2,7 +2,6 @@ package edu.umsl.hester.superclickers.activity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -26,20 +25,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 import edu.umsl.hester.superclickers.R;
-import edu.umsl.hester.superclickers.app.LoginConfig;
 import edu.umsl.hester.superclickers.app.AppController;
+import edu.umsl.hester.superclickers.app.LoginConfig;
 import edu.umsl.hester.superclickers.helper.SQLiteHandler;
 import edu.umsl.hester.superclickers.helper.SessionManager;
 
 
 /**
  * Created by Austin on 2/2/2017.
+ *
  */
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener{
     private static final String TAG = LoginActivity.class.getSimpleName();
 
-    private TextView serverText;
     private EditText userEmail;
     private EditText userPass;
     private Button login;
@@ -60,7 +59,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         skip = (Button) findViewById(R.id.btnSkip);
         userEmail = (EditText) findViewById(R.id.editEmail);
         userPass = (EditText) findViewById(R.id.editPwd);
-        serverText = (TextView) findViewById(R.id.serverText);
 
         // progress dialog
         pDialog = new ProgressDialog(this);
@@ -131,7 +129,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
-                            Log.d(TAG, "Login Response: " + response.toString());
+                            Log.d(TAG, "Login Response: " + response);
                             hideDialog();
 
                             try {
@@ -186,7 +184,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 // put params to login url via POST
-                Map<String, String> params = new HashMap<String, String>();
+                Map<String, String> params = new HashMap<>();
                 params.put("email", email);
                 params.put("password", password);
 

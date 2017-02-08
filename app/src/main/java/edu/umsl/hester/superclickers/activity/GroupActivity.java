@@ -31,11 +31,13 @@ import edu.umsl.hester.superclickers.helper.SQLiteHandler;
 
 /**
  * Created by Austin on 2/7/2017.
+ *
  */
 
 public class GroupActivity extends AppCompatActivity implements View.OnClickListener {
 
     private final String TAG = GroupActivity.class.getSimpleName();
+
     private Button btnCreate, btnJoin;
     private EditText editGroupName;
 
@@ -96,7 +98,7 @@ public class GroupActivity extends AppCompatActivity implements View.OnClickList
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Log.d(TAG, "Group make Response: " + response.toString());
+                        Log.d(TAG, "Group make Response: " + response);
                         hideDialog();
 
                         try {
@@ -147,7 +149,7 @@ public class GroupActivity extends AppCompatActivity implements View.OnClickList
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 // put params to login url via POST
-                Map<String, String> params = new HashMap<String, String>();
+                Map<String, String> params = new HashMap<>();
                 params.put("name", name);
 
                 return params;
@@ -171,7 +173,7 @@ public class GroupActivity extends AppCompatActivity implements View.OnClickList
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Log.d(TAG, "Group add Response: " + response.toString());
+                        Log.d(TAG, "Group add Response: " + response);
                         hideDialog();
 
                         try {
@@ -220,7 +222,7 @@ public class GroupActivity extends AppCompatActivity implements View.OnClickList
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 // put params to login url via POST
-                Map<String, String> params = new HashMap<String, String>();
+                Map<String, String> params = new HashMap<>();
                 params.put("user_id", user_id);
                 params.put("group_id", group_id);
 
