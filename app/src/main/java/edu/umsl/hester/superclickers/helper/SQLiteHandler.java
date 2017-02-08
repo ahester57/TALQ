@@ -15,9 +15,9 @@ import java.util.HashMap;
  * 
  */
 
-public class UserSQLiteHandler extends SQLiteOpenHelper {
+public class SQLiteHandler extends SQLiteOpenHelper {
 
-    private static final String TAG = UserSQLiteHandler.class.getSimpleName();
+    private static final String TAG = SQLiteHandler.class.getSimpleName();
 
     // all static
     private static final int DB_VERSION = 1;
@@ -27,6 +27,7 @@ public class UserSQLiteHandler extends SQLiteOpenHelper {
     // table name
     private static final String TABLE_USER = "user";
     private static final String TABLE_GROUP = "groups";
+    private static final String TABLE_USER_GROUPS = "user_groups";
     // table columns
     private static final String KEY_ID = "id";
     private static final String KEY_NAME = "name";
@@ -35,7 +36,7 @@ public class UserSQLiteHandler extends SQLiteOpenHelper {
     private static final String KEY_GUID = "guid";
     private static final String KEY_CREATED_AT = "created_at";
 
-    public UserSQLiteHandler(Context context) {
+    public SQLiteHandler(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
     }
 
@@ -48,9 +49,13 @@ public class UserSQLiteHandler extends SQLiteOpenHelper {
         String CREATE_GROUP_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_GROUP + "("
                     + KEY_ID + " INTEGER PRIMARY KEY, " + KEY_NAME + " TEXT, "
                     + KEY_GUID + " TEXT UNIQUE, " + KEY_CREATED_AT + " TEXT" + ")";
+        String CREATE_RELATION_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_USER_GROUPS
+                    + "(" + KEY_ID + " INTEGER PRIMARY KEY, " + KEY_UID + " TEXT, "
+                    + KEY_GUID + " TEXT, " + KEY_CREATED_AT + " TEXT" + ")";
 
         db.execSQL(CREATE_LOGIN_TABLE);
         db.execSQL(CREATE_GROUP_TABLE);
+        db.execSQL(CREATE_RELATION_TABLE);
 
         Log.d(TAG, "Database tables created");
     }
@@ -60,6 +65,7 @@ public class UserSQLiteHandler extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldV, int newV) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_GROUP);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER_GROUPS);
         // drop old tables and...
         // create them again
         onCreate(db);
@@ -86,6 +92,13 @@ public class UserSQLiteHandler extends SQLiteOpenHelper {
     public void addGroup(String name, String guid, String created_at) {
         SQLiteDatabase db = this.getWritableDatabase();
 
+
+
+        String CREATE_GROUP_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_GROUP + "("
+                + KEY_ID + " INTEGER PRIMARY KEY, " + KEY_NAME + " TEXT, "
+                + KEY_GUID + " TEXT UNIQUE, " + KEY_CREATED_AT + " TEXT" + ")";
+        db.execSQL(CREATE_GROUP_TABLE);
+
         ContentValues values = new ContentValues();
         values.put(KEY_NAME, name);
         values.put(KEY_GUID, guid);
@@ -96,6 +109,28 @@ public class UserSQLiteHandler extends SQLiteOpenHelper {
         db.close();
 
         Log.d(TAG, "New group inserted into sqlite: " + id);
+    }
+
+    // add user to a group
+    public void addUserToGroup(String uid, String guid, String created_at) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String CREATE_RELATION_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_USER_GROUPS
+                + "(" + KEY_ID + " INTEGER PRIMARY KEY, " + KEY_UID + " TEXT, "
+                + KEY_GUID + " TEXT, " + KEY_CREATED_AT + " TEXT" + ")";
+
+        db.execSQL(CREATE_RELATION_TABLE);
+        ContentValues values = new ContentValues();
+        values.put(KEY_UID, uid);
+        values.put(KEY_GUID, guid);
+        values.put(KEY_CREATED_AT, created_at);
+
+        //insert row
+        long id = db.insert(TABLE_USER_GROUPS, null, values);
+        db.close();
+
+        Log.d(TAG, "User " + uid + " added to group " + guid);
+
     }
 
     /// get user data

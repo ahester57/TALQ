@@ -5,18 +5,13 @@ public class User{
 
     private String name = "";
     private String email = "";
-    private int id;
+    private String id = "";
 
 
-    public User(String name, String email) {
+    public User(String name, String email, String unique_id) {
         this.name = name;
         this.email = email;
-    }
-
-    User(String name, int studentId) {
-        this.name = name;
-        this.id = studentId;
-
+        this.id = unique_id;
     }
 
 
@@ -24,7 +19,7 @@ public class User{
 
     public String getEmail() { return email; }
 
-    int getStudentId() { return id; }
+    public String getUniqueId() { return id; }
 
     @Override
     public String toString() {

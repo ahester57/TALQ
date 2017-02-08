@@ -26,7 +26,7 @@ import java.util.Map;
 import edu.umsl.hester.superclickers.R;
 import edu.umsl.hester.superclickers.app.LoginConfig;
 import edu.umsl.hester.superclickers.app.AppController;
-import edu.umsl.hester.superclickers.helper.UserSQLiteHandler;
+import edu.umsl.hester.superclickers.helper.SQLiteHandler;
 import edu.umsl.hester.superclickers.helper.SessionManager;
 
 /**
@@ -45,7 +45,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     private ProgressDialog pDialog;
     private SessionManager session;
-    private UserSQLiteHandler db;
+    private SQLiteHandler db;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -64,7 +64,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
         session = new SessionManager(getApplicationContext());
 
-        db = new UserSQLiteHandler(getApplicationContext());
+        db = new SQLiteHandler(getApplicationContext());
 
         if (session.isLoggedIn()) {
             Intent intent = new Intent(RegisterActivity.this, QuizActivity.class);

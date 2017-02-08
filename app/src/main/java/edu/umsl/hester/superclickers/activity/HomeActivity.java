@@ -27,7 +27,7 @@ import edu.umsl.hester.superclickers.R;
 import edu.umsl.hester.superclickers.app.AppController;
 import edu.umsl.hester.superclickers.app.LoginConfig;
 import edu.umsl.hester.superclickers.app.User;
-import edu.umsl.hester.superclickers.helper.UserSQLiteHandler;
+import edu.umsl.hester.superclickers.helper.SQLiteHandler;
 import edu.umsl.hester.superclickers.helper.SessionManager;
 
 /**
@@ -42,7 +42,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     private Button btnLogout, btnPlay, btnCreateGroup;
 
     private ProgressDialog pDialog;
-    private UserSQLiteHandler db;
+    private SQLiteHandler db;
     private SessionManager session;
 
 
@@ -63,7 +63,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         pDialog.setCancelable(false);
 
         // database
-        db = new UserSQLiteHandler(getApplicationContext());
+        db = new SQLiteHandler(getApplicationContext());
 
         // session manager
         session = new SessionManager(getApplicationContext());
@@ -75,7 +75,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         // Fetch user info from sqlite
 
         HashMap<String, String> userDetails = db.getUserDetails();
-        this.user = new User(userDetails.get("name"), userDetails.get("email"));
+        this.user = new User(userDetails.get("name"), userDetails.get("email"), userDetails.get("uid"));
 
         textName.setText(user.getName());
         textEmail.setText(user.getEmail());
@@ -135,6 +135,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
                                 // add user to sql database
                                 db.addGroup(name, guid, created_at);
+                                joinGroup(user.getUniqueId(), guid);
 
                                 Toast.makeText(getApplicationContext(), "Group registered", Toast.LENGTH_LONG).show();
 
@@ -167,6 +168,80 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 // put params to login url via POST
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("name", name);
+
+                return params;
+            }
+        };
+        // end string request.. phew!
+
+        Log.d(TAG, "we made it");
+
+        AppController.getInstance().addToRequestQueue(strReq, tag_str_req);
+    }
+
+    // add user to group, uploads to group URL
+    private void joinGroup(final String user_id, final String group_id) {
+        String tag_str_req = "req_join_group";
+
+        pDialog.setMessage("Joinin group...");
+        showDialog();
+        // new string request
+        StringRequest strReq = new StringRequest(Request.Method.POST, LoginConfig.URL_JOIN_GROUP,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d(TAG, "Group add Response: " + response.toString());
+                        hideDialog();
+
+                        try {
+                            JSONObject jObj = new JSONObject(response);
+                            boolean error = jObj.getBoolean("error");
+
+                            if (!error) {
+                                // group add SUCCESSFUL
+                                // store group in db
+
+                                //store user
+
+
+                                JSONObject user_group = jObj.getJSONObject("user_group");
+                                String guid = user_group.getString("group_id");
+                                String created_at = user_group.getString("created_at");
+
+                                db.addUserToGroup(user.getUniqueId(), guid, created_at);
+
+                                Toast.makeText(getApplicationContext(), "Group joined", Toast.LENGTH_LONG).show();
+
+
+
+                            } else {
+                                // Error loggin in
+                                String errMessage = jObj.getString("error_msg");
+                                Toast.makeText(getApplicationContext(), errMessage,
+                                        Toast.LENGTH_LONG).show();
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getApplicationContext(), "JSON error: "
+                                    + e.getMessage(),Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "Join group error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(), error.getMessage(),
+                        Toast.LENGTH_LONG).show();
+                hideDialog();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                // put params to login url via POST
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("user_id", user_id);
+                params.put("group_id", group_id);
 
                 return params;
             }
