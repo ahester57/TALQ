@@ -49,15 +49,13 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         if (!session.isLoggedIn()) {
             //logoutUser();
             btnCreateGroup.setEnabled(false);
+        } else {
+            // Fetch user info from sqlite
+            HashMap<String, String> userDetails = db.getUserDetails();
+            this.user = new User(userDetails.get("name"), userDetails.get("email"), userDetails.get("uid"));
+            textName.setText(user.getName());
+            textEmail.setText(user.getEmail());
         }
-
-        // Fetch user info from sqlite
-
-        HashMap<String, String> userDetails = db.getUserDetails();
-        this.user = new User(userDetails.get("name"), userDetails.get("email"), userDetails.get("uid"));
-
-        textName.setText(user.getName());
-        textEmail.setText(user.getEmail());
 
         btnLogout.setOnClickListener(this);
         btnPlay.setOnClickListener(this);
