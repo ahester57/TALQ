@@ -1,4 +1,4 @@
-package edu.umsl.hester.superclickers.app;
+package edu.umsl.hester.superclickers.Model;
 
 import java.util.ArrayList;
 

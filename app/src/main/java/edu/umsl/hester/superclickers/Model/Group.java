@@ -1,9 +1,10 @@
-package edu.umsl.hester.superclickers.app;
+package edu.umsl.hester.superclickers.Model;
 
 import java.util.ArrayList;
 
 
-class Group{
+
+public class Group{
 
     private String groupName;
     private int groupId;

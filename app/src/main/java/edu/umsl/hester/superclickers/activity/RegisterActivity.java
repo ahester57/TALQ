@@ -31,6 +31,7 @@ import edu.umsl.hester.superclickers.helper.SessionManager;
 
 /**
  * Created by Austin on 2/4/2017.
+ *
  */
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
@@ -87,11 +88,15 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 String name = inName.getText().toString().trim();
                 String email = inEmail.getText().toString().trim();
                 String password = inPassword.getText().toString().trim();
-                //String confirm = inConfrim.getText().toString().trim();
+                String confirm = inConfrim.getText().toString().trim();
 
                 if (!name.isEmpty() && !email.isEmpty() && !password.isEmpty()) {
-                    //register
-                    registerUser(name, email, password);
+                    if (password.equals(confirm)) {
+                        registerUser(name, email, password);
+                    } else {
+                        Toast.makeText(getApplicationContext(),
+                                "Ya done goofed. Passwords don't match.", Toast.LENGTH_LONG).show();
+                    }
                 } else {
                     Toast.makeText(getApplicationContext(),
                             "Enter your credentials now.", Toast.LENGTH_LONG).show();

@@ -25,7 +25,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     // db name
     private static final String DB_NAME = "android_api";
     // table name
-    private static final String TABLE_USER = "user";
+    private static final String TABLE_USER = "users";
     private static final String TABLE_GROUP = "groups";
     private static final String TABLE_USER_GROUPS = "user_groups";
     // table columns
@@ -74,6 +74,12 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     // add new user to database
     public void addUser(String name, String email, String uid, String created_at) {
         SQLiteDatabase db = this.getWritableDatabase();
+
+        String CREATE_LOGIN_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_USER + "("
+                + KEY_ID + " INTEGER PRIMARY KEY, " + KEY_NAME + " TEXT, "
+                + KEY_EMAIL + " TEXT UNIQUE, " + KEY_UID + " TEXT, "
+                + KEY_CREATED_AT + " TEXT" + ")";
+        db.execSQL(CREATE_LOGIN_TABLE);
 
         ContentValues values = new ContentValues();
         values.put(KEY_NAME, name);
@@ -135,7 +141,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 
     /// get user data
     public HashMap<String, String> getUserDetails() {
-        HashMap<String, String> user = new HashMap<String, String>();
+        HashMap<String, String> user = new HashMap<>();
         String selectQuery = "SELECT * FROM " + TABLE_USER;
 
         SQLiteDatabase db = this.getReadableDatabase();

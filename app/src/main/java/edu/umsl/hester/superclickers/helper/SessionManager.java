@@ -4,21 +4,16 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import java.io.IOException;
-import java.net.InetAddress;
-
-import edu.umsl.hester.superclickers.app.LoginConfig;
-
 
 public class SessionManager {
 
     private static String TAG = SessionManager.class.getSimpleName();
 
-    SharedPreferences pref;
+    private SharedPreferences pref;
 
-    Context _context;
+    private Context _context;
 
-    int PRIVATE_MODE = 0;
+    private final int PRIVATE_MODE = 0;
 
     //file name
     private static final String PREF_NAME = "AndroidQuizLogin";
@@ -40,23 +35,7 @@ public class SessionManager {
     }
 
     public boolean isLoggedIn() {
-        Thread test = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                InetAddress inet = null;
-                try {
-                    inet = InetAddress.getByName(LoginConfig.URL_LOGIN);
-
-                } catch (IOException e) {
-                    //setLogin(false);
-                }
-            }
-        });
-        //test.start();
-
-
-
-
         return pref.getBoolean(KEY_IS_LOGGEDIN, false);
     }
+
 }

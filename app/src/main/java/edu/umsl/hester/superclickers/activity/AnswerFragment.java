@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import edu.umsl.hester.superclickers.R;
-import edu.umsl.hester.superclickers.app.Question;
+import edu.umsl.hester.superclickers.Model.Question;
 
 /**
  * Created by stin on 1/31/17.

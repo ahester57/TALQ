@@ -26,7 +26,7 @@ import java.util.Map;
 import edu.umsl.hester.superclickers.R;
 import edu.umsl.hester.superclickers.app.AppController;
 import edu.umsl.hester.superclickers.app.LoginConfig;
-import edu.umsl.hester.superclickers.app.User;
+import edu.umsl.hester.superclickers.Model.User;
 import edu.umsl.hester.superclickers.helper.SQLiteHandler;
 
 /**

@@ -11,7 +11,7 @@ import android.widget.TextView;
 import java.util.HashMap;
 
 import edu.umsl.hester.superclickers.R;
-import edu.umsl.hester.superclickers.app.User;
+import edu.umsl.hester.superclickers.Model.User;
 import edu.umsl.hester.superclickers.helper.SQLiteHandler;
 import edu.umsl.hester.superclickers.helper.SessionManager;
 

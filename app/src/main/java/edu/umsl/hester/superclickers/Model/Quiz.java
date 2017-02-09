@@ -1,8 +1,7 @@
-package edu.umsl.hester.superclickers.app;
+package edu.umsl.hester.superclickers.Model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-
 
 
 public class Quiz implements Serializable{
