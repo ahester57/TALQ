@@ -162,10 +162,8 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         return user;
     }
 
-
-    public String getGroupId(String name) {
-        // @TODO
-        return name;
+    public boolean isUserInAGroup() {
+        return false; // @TODO
     }
 
     public String[] getAllGroups() {

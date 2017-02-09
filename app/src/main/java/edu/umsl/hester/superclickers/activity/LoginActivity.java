@@ -212,17 +212,4 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
 
 
-    /*
-    I think I am going to abandon this asynctask. Instead, I am going
-    to move towards a webservice, as that seems like a better way to
-    communicate with a server throughout the application's lifecycle.
-
-    Plus, this only allows one concurrent connection at one time.
-    We will want to have an entire classroom connected simultaneously.
-
-
- */
-
-
-
 }
