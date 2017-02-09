@@ -46,6 +46,8 @@ public class GroupActivity extends AppCompatActivity implements View.OnClickList
 
     private User user;
 
+    // @TODO if user is in a group, then show groups + members
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,8 +79,16 @@ public class GroupActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btnCreate:
-                if (!editGroupName.getText().toString().equals("")) {
+                if (!editGroupName.getText().toString().trim().equals("")) {
                     createGroup(editGroupName.getText().toString());
+                } else {
+                    Toast.makeText(getApplicationContext(), "Enter a group name, I say!",
+                            Toast.LENGTH_LONG).show();
+                }
+                break;
+            case R.id.btnJoin:
+                if (!editGroupName.getText().toString().trim().equals("")) {
+                    joinGroup(user.getUniqueId(), editGroupName.getText().toString());
                 } else {
                     Toast.makeText(getApplicationContext(), "Enter a group name, I say!",
                             Toast.LENGTH_LONG).show();
@@ -118,7 +128,7 @@ public class GroupActivity extends AppCompatActivity implements View.OnClickList
 
                                 // add user to sql database
                                 db.addGroup(name, guid, created_at);
-                                joinGroup(user.getUniqueId(), guid);
+                                joinGroup(user.getUniqueId(), name);
 
                                 Toast.makeText(getApplicationContext(), "Group registered", Toast.LENGTH_LONG).show();
 
@@ -164,7 +174,7 @@ public class GroupActivity extends AppCompatActivity implements View.OnClickList
     }
 
     // add user to group, uploads to group URL
-    private void joinGroup(final String user_id, final String group_id) {
+    private void joinGroup(final String user_id, final String name) {
         String tag_str_req = "req_join_group";
 
         pDialog.setMessage("Joinin group...");
@@ -225,7 +235,7 @@ public class GroupActivity extends AppCompatActivity implements View.OnClickList
                 // put params to login url via POST
                 Map<String, String> params = new HashMap<>();
                 params.put("user_id", user_id);
-                params.put("group_id", group_id);
+                params.put("name", name);
 
                 return params;
             }

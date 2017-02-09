@@ -15,14 +15,15 @@ import edu.umsl.hester.superclickers.Model.Question;
 
 /**
  * Created by stin on 1/31/17.
+ *
  */
 
 public class AnswerFragment extends Fragment implements View.OnClickListener{
 
     private AnswerListener activity;
 
-    Button buttonA, buttonB, buttonC, buttonD, buttonNext;
-    Question curQuestion;
+    private Button buttonA, buttonB, buttonC, buttonD, buttonNext;
+    private Question curQuestion;
 
     // QuizActivity must implement these methods
     // This will be our way of communicating to the main activity from fragments

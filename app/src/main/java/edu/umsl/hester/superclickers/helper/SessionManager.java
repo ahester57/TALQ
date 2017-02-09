@@ -7,7 +7,7 @@ import android.util.Log;
 
 public class SessionManager {
 
-    private static String TAG = SessionManager.class.getSimpleName();
+    private final static String TAG = SessionManager.class.getSimpleName();
 
     private SharedPreferences pref;
 

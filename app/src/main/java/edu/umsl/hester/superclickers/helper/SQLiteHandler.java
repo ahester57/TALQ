@@ -173,7 +173,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         return new String[] {"abra", "kadabra", "alakazam"};
     }
 
-    public void deleteUsersByEmail(String... emails) {
+    private void deleteUsersByEmail(String... emails) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_USER, "WHERE email = ", emails);
         db.close();
