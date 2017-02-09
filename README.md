@@ -10,7 +10,7 @@ git clone http://umsl.vigilantestudio.com/superClickers/superClickers.git
 
 Added a database system (not yet fully implemented)
 
-@TODO [02/04/17]
+@DONE [02/07/17]
 
 	- Implement webservice for communicating with Question database
 
@@ -18,11 +18,18 @@ Added a database system (not yet fully implemented)
 
 	- registration / login service using above
 
-- [02/05/17]
+@DONE [02/08/17]
 
-- database setup
+	- database setup
 
-- login / register done (use fart@johnson.com password: fart)
+	- login / register done (use test password: test)
 
-- added home activity
+	- added home activity, group activity
 
+@TODO [02/09/17]
+
+	- leave groups
+
+	- show groups
+	
+	- question / quiz database
