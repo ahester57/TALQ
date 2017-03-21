@@ -1,4 +1,4 @@
-package edu.umsl.hester.superclickers.activity;
+package edu.umsl.hester.superclickers.activity.quiz;
 
 import android.app.Fragment;
 import android.graphics.Color;
@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import edu.umsl.hester.superclickers.R;
-import edu.umsl.hester.superclickers.Model.Question;
+import edu.umsl.hester.superclickers.quizdata.Question;
 
 /**
  * Created by stin on 1/31/17.

@@ -1,4 +1,4 @@
-package edu.umsl.hester.superclickers.Model;
+package edu.umsl.hester.superclickers.quizdata;
 
 import java.io.Serializable;
 import java.util.ArrayList;

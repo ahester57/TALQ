@@ -1,4 +1,4 @@
-package edu.umsl.hester.superclickers.activity;
+package edu.umsl.hester.superclickers.activity.home;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,9 +11,11 @@ import android.widget.TextView;
 import java.util.HashMap;
 
 import edu.umsl.hester.superclickers.R;
-import edu.umsl.hester.superclickers.Model.User;
-import edu.umsl.hester.superclickers.helper.SQLiteHandler;
-import edu.umsl.hester.superclickers.helper.SessionManager;
+import edu.umsl.hester.superclickers.activity.quiz.QuizActivity;
+import edu.umsl.hester.superclickers.activity.login.LoginActivity;
+import edu.umsl.hester.superclickers.userdata.User;
+import edu.umsl.hester.superclickers.database.SQLiteHandler;
+import edu.umsl.hester.superclickers.app.SessionManager;
 
 /**
  * Created by Austin on 2/4/2017.

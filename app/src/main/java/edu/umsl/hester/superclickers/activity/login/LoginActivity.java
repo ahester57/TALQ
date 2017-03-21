@@ -1,5 +1,6 @@
-package edu.umsl.hester.superclickers.activity;
+package edu.umsl.hester.superclickers.activity.login;
 
+import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,25 +25,26 @@ import java.util.HashMap;
 import java.util.Map;
 
 import edu.umsl.hester.superclickers.R;
+import edu.umsl.hester.superclickers.activity.home.HomeActivity;
 import edu.umsl.hester.superclickers.app.AppController;
 import edu.umsl.hester.superclickers.app.LoginConfig;
-import edu.umsl.hester.superclickers.helper.SQLiteHandler;
-import edu.umsl.hester.superclickers.helper.SessionManager;
+import edu.umsl.hester.superclickers.database.SQLiteHandler;
+import edu.umsl.hester.superclickers.app.SessionManager;
+
 
 /**
- * Created by Austin on 2/4/2017.
+ * Created by Austin on 2/2/2017.
  *
  */
 
-public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
-    private static final String TAG = RegisterActivity.class.getSimpleName();
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener{
+    private static final String TAG = LoginActivity.class.getSimpleName();
 
-    private Button btnRegister;
-    private Button btnBack;
-    private EditText inName;
-    private EditText inEmail;
-    private EditText inPassword;
-    private EditText inConfrim;
+    private EditText userEmail;
+    private EditText userPass;
+    private Button login;
+    private Button register;
+    private Button skip;
 
     private ProgressDialog pDialog;
     private SessionManager session;
@@ -51,32 +53,41 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
+        setContentView(R.layout.activity_login);
 
-        inName = (EditText) findViewById(R.id.registerName);
-        inEmail = (EditText) findViewById(R.id.registerEmail);
-        inPassword = (EditText) findViewById(R.id.registerPassword);
-        //inConfrim = (EditText) findViewById(R.id.registerConfirm);
-        btnBack = (Button) findViewById(R.id.btnBack);
-        btnRegister = (Button) findViewById(R.id.btnRegister);
+        login = (Button) findViewById(R.id.buttonLogin);
+        register = (Button) findViewById(R.id.goToRegister);
+        skip = (Button) findViewById(R.id.btnSkip);
+        userEmail = (EditText) findViewById(R.id.editEmail);
+        userPass = (EditText) findViewById(R.id.editPwd);
 
+        // progress dialog
         pDialog = new ProgressDialog(this);
         pDialog.setCancelable(false);
 
+        // SQL handler
+        db = new SQLiteHandler(getApplicationContext());
+        // Session manager
         session = new SessionManager(getApplicationContext());
 
-        db = new SQLiteHandler(getApplicationContext());
-
         if (session.isLoggedIn()) {
-            Intent intent = new Intent(RegisterActivity.this, QuizActivity.class);
+            // user logged in
+            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
             startActivity(intent);
             finish();
         }
 
-        btnBack.setOnClickListener(this);
-        btnRegister.setOnClickListener(this);
+        LoginFragment loginFragment = new LoginFragment();
+        FragmentManager fm = getFragmentManager();
+        fm.beginTransaction()
+                .add(loginFragment, "LOGIN_FRAGMENT")
+                .commit();
 
 
+
+        login.setOnClickListener(this);
+        register.setOnClickListener(this);
+        skip.setOnClickListener(this);
 
     }
 
@@ -84,45 +95,47 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View view) {
 
         switch (view.getId()){
-            case R.id.btnRegister:
-                String name = inName.getText().toString().trim();
-                String email = inEmail.getText().toString().trim();
-                String password = inPassword.getText().toString().trim();
-                String confirm = inConfrim.getText().toString().trim();
+            case R.id.buttonLogin:
+                String email = userEmail.getText().toString().trim();
+                String password = userPass.getText().toString().trim();
 
-                if (!name.isEmpty() && !email.isEmpty() && !password.isEmpty()) {
-                    if (password.equals(confirm)) {
-                        registerUser(name, email, password);
-                    } else {
-                        Toast.makeText(getApplicationContext(),
-                                "Ya done goofed. Passwords don't match.", Toast.LENGTH_LONG).show();
-                    }
+                if (!email.isEmpty() && !password.isEmpty()) {
+                    //login
+                    checkLogin(email, password);
                 } else {
                     Toast.makeText(getApplicationContext(),
-                            "Enter your credentials now.", Toast.LENGTH_LONG).show();
+                            "Enter some credentials now.", Toast.LENGTH_LONG).show();
                 }
                 break;
-            case R.id.btnBack:
-                Intent i = new Intent(getApplicationContext(), LoginActivity.class);
+            case R.id.goToRegister:
+                Intent i = new Intent(getApplicationContext(), RegisterActivity.class);
                 startActivity(i);
+
+                break;
+            case R.id.btnSkip:
+                Toast.makeText(getApplicationContext(), "Continuing without loggin in...",
+                        Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                startActivity(intent);
                 finish();
                 break;
         }
     }
 
 
-    // Store new user, uploads to register URL
-    private void registerUser(final String name, final String email, final String password) {
-        String tag_str_req = "req_register";
+    // verify login credentials
+    private void checkLogin(final String email, final String password) {
+        String tag_str_req = "req_login";
 
-        pDialog.setMessage("Registerin...");
+        pDialog.setMessage("Loggin in...");
         showDialog();
+
         // new string request
-        StringRequest strReq = new StringRequest(Request.Method.POST, LoginConfig.URL_REGISTER,
+        StringRequest strReq = new StringRequest(Request.Method.POST, LoginConfig.URL_LOGIN,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Log.d(TAG, "Register Response: " + response);
+                        Log.d(TAG, "Login Response: " + response);
                         hideDialog();
 
                         try {
@@ -130,8 +143,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                             boolean error = jObj.getBoolean("error");
 
                             if (!error) {
-                                // REGISTER SUCCESSFUL
-                                // store user in db
+                                // LOGIN SUCCESSFUL
+                                // create session
+                                session.setLogin(true);
 
                                 //store user
                                 String uid = jObj.getString("uid");
@@ -144,10 +158,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                                 // add user to sql database
                                 db.addUser(name, email, uid, created_at);
 
-                                Toast.makeText(getApplicationContext(), "User registered", Toast.LENGTH_LONG).show();
-
                                 // Go to Quiz
-                                Intent quizIntent = new Intent(RegisterActivity.this, LoginActivity.class);
+                                Intent quizIntent = new Intent(LoginActivity.this, HomeActivity.class);
+                                quizIntent.putExtra("USER_NAME", userEmail.getText().toString());
                                 startActivity(quizIntent);
                                 finish();
 
@@ -168,7 +181,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "Registration error: " + error.getMessage());
+                Log.e(TAG, "Login error: " + error.getMessage());
                 Toast.makeText(getApplicationContext(), error.getMessage(),
                         Toast.LENGTH_LONG).show();
                 hideDialog();
@@ -178,7 +191,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             protected Map<String, String> getParams() throws AuthFailureError {
                 // put params to login url via POST
                 Map<String, String> params = new HashMap<>();
-                params.put("name", name);
                 params.put("email", email);
                 params.put("password", password);
 
@@ -187,7 +199,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         };
         // end string request.. phew!
 
-        Log.d(TAG, "we made it");
+
 
         AppController.getInstance().addToRequestQueue(strReq, tag_str_req);
     }
@@ -204,5 +216,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-}
 
+
+
+}

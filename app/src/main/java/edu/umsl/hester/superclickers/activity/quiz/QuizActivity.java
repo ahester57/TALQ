@@ -1,4 +1,4 @@
-package edu.umsl.hester.superclickers.activity;
+package edu.umsl.hester.superclickers.activity.quiz;
 
 
 import android.os.Bundle;
@@ -8,9 +8,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import edu.umsl.hester.superclickers.R;
-import edu.umsl.hester.superclickers.Model.Question;
-import edu.umsl.hester.superclickers.Model.Quiz;
-import edu.umsl.hester.superclickers.Model.User;
+import edu.umsl.hester.superclickers.quizdata.Question;
+import edu.umsl.hester.superclickers.quizdata.Quiz;
+import edu.umsl.hester.superclickers.userdata.User;
 
 
 public class QuizActivity extends AppCompatActivity implements View.OnClickListener, AnswerFragment.AnswerListener {

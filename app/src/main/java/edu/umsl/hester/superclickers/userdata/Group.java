@@ -1,7 +1,6 @@
-package edu.umsl.hester.superclickers.Model;
+package edu.umsl.hester.superclickers.userdata;
 
 import java.util.ArrayList;
-
 
 
 public class Group{

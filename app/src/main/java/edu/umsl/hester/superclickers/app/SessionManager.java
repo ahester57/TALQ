@@ -1,4 +1,4 @@
-package edu.umsl.hester.superclickers.helper;
+package edu.umsl.hester.superclickers.app;
 
 import android.content.Context;
 import android.content.SharedPreferences;

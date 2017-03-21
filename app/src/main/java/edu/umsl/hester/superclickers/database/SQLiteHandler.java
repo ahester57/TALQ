@@ -1,4 +1,4 @@
-package edu.umsl.hester.superclickers.helper;
+package edu.umsl.hester.superclickers.database;
 
 import android.content.ContentValues;
 import android.content.Context;

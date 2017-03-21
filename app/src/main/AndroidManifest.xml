@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         >
-        <activity android:name=".activity.LoginActivity"
+        <activity android:name=".activity.login.LoginActivity"
                     android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,19 +22,19 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activity.QuizActivity"
+        <activity android:name=".activity.quiz.QuizActivity"
         android:screenOrientation="portrait">
         </activity>
 
-        <activity android:name=".activity.RegisterActivity"
+        <activity android:name=".activity.login.RegisterActivity"
             android:screenOrientation="portrait">
         </activity>
 
-        <activity android:name=".activity.HomeActivity"
+        <activity android:name=".activity.home.HomeActivity"
             android:screenOrientation="portrait">
         </activity>
 
-        <activity android:name=".activity.GroupActivity"
+        <activity android:name=".activity.home.GroupActivity"
             android:screenOrientation="portrait">
         </activity>
 

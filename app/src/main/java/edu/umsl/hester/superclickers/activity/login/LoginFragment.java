@@ -1,4 +1,4 @@
-package edu.umsl.hester.superclickers.activity;
+package edu.umsl.hester.superclickers.activity.login;
 
 import android.app.Fragment;
 

@@ -1,4 +1,4 @@
-package edu.umsl.hester.superclickers.activity;
+package edu.umsl.hester.superclickers.activity.home;
 
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
@@ -26,8 +26,8 @@ import java.util.Map;
 import edu.umsl.hester.superclickers.R;
 import edu.umsl.hester.superclickers.app.AppController;
 import edu.umsl.hester.superclickers.app.LoginConfig;
-import edu.umsl.hester.superclickers.Model.User;
-import edu.umsl.hester.superclickers.helper.SQLiteHandler;
+import edu.umsl.hester.superclickers.userdata.User;
+import edu.umsl.hester.superclickers.database.SQLiteHandler;
 
 /**
  * Created by Austin on 2/7/2017.
