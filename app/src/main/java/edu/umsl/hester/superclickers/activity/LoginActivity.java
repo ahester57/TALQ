@@ -1,5 +1,6 @@
 package edu.umsl.hester.superclickers.activity;
 
+import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -75,6 +76,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             finish();
         }
 
+        LoginFragment loginFragment = new LoginFragment();
+        FragmentManager fm = getFragmentManager();
+        fm.beginTransaction()
+                .add(loginFragment, "LOGIN_FRAGMENT")
+                .commit();
 
 
 
@@ -126,60 +132,60 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         // new string request
         StringRequest strReq = new StringRequest(Request.Method.POST, LoginConfig.URL_LOGIN,
                 new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            Log.d(TAG, "Login Response: " + response);
-                            hideDialog();
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d(TAG, "Login Response: " + response);
+                        hideDialog();
 
-                            try {
-                                JSONObject jObj = new JSONObject(response);
-                                boolean error = jObj.getBoolean("error");
+                        try {
+                            JSONObject jObj = new JSONObject(response);
+                            boolean error = jObj.getBoolean("error");
 
-                                if (!error) {
-                                    // LOGIN SUCCESSFUL
-                                    // create session
-                                    session.setLogin(true);
+                            if (!error) {
+                                // LOGIN SUCCESSFUL
+                                // create session
+                                session.setLogin(true);
 
-                                    //store user
-                                    String uid = jObj.getString("uid");
+                                //store user
+                                String uid = jObj.getString("uid");
 
-                                    JSONObject user = jObj.getJSONObject("user");
-                                    String name = user.getString("name");
-                                    String email = user.getString("email");
-                                    String created_at = user.getString("created_at");
+                                JSONObject user = jObj.getJSONObject("user");
+                                String name = user.getString("name");
+                                String email = user.getString("email");
+                                String created_at = user.getString("created_at");
 
-                                    // add user to sql database
-                                    db.addUser(name, email, uid, created_at);
+                                // add user to sql database
+                                db.addUser(name, email, uid, created_at);
 
-                                    // Go to Quiz
-                                    Intent quizIntent = new Intent(LoginActivity.this, HomeActivity.class);
-                                    quizIntent.putExtra("USER_NAME", userEmail.getText().toString());
-                                    startActivity(quizIntent);
-                                    finish();
+                                // Go to Quiz
+                                Intent quizIntent = new Intent(LoginActivity.this, HomeActivity.class);
+                                quizIntent.putExtra("USER_NAME", userEmail.getText().toString());
+                                startActivity(quizIntent);
+                                finish();
 
 
-                                } else {
-                                    // Error loggin in
-                                    String errMessage = jObj.getString("error_msg");
-                                    Toast.makeText(getApplicationContext(), errMessage,
-                                            Toast.LENGTH_LONG).show();
-                                }
-
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                                Toast.makeText(getApplicationContext(), "JSON error: "
-                                        + e.getMessage(),Toast.LENGTH_LONG).show();
+                            } else {
+                                // Error loggin in
+                                String errMessage = jObj.getString("error_msg");
+                                Toast.makeText(getApplicationContext(), errMessage,
+                                        Toast.LENGTH_LONG).show();
                             }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getApplicationContext(), "JSON error: "
+                                    + e.getMessage(),Toast.LENGTH_LONG).show();
                         }
+                    }
                 }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Log.e(TAG, "Login error: " + error.getMessage());
-                            Toast.makeText(getApplicationContext(), error.getMessage(),
-                                    Toast.LENGTH_LONG).show();
-                            hideDialog();
-                        }
-                }) {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "Login error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(), error.getMessage(),
+                        Toast.LENGTH_LONG).show();
+                hideDialog();
+            }
+        }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 // put params to login url via POST

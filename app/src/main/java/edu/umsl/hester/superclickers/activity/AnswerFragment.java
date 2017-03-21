@@ -27,7 +27,7 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
 
     // QuizActivity must implement these methods
     // This will be our way of communicating to the main activity from fragments
-    public interface AnswerListener{
+    interface AnswerListener{
         Question getQuestion();
         void nextQuestion();
     }
