@@ -18,44 +18,47 @@ import java.util.HashMap;
 public class SQLiteHandler extends SQLiteOpenHelper {
 
     private static final String TAG = SQLiteHandler.class.getSimpleName();
-
-    // all static
-    private static final int DB_VERSION = 1;
-
+    
     // db name
     private static final String DB_NAME = "android_api";
-    // table name
-    private static final String TABLE_USER = "users";
-    private static final String TABLE_GROUP = "groups";
-    private static final String TABLE_USER_GROUPS = "user_groups";
-    // table columns
-    private static final String KEY_ID = "id";
-    private static final String KEY_NAME = "name";
-    private static final String KEY_EMAIL = "email";
-    private static final String KEY_UID = "uid";
-    private static final String KEY_GUID = "guid";
-    private static final String KEY_CREATED_AT = "created_at";
+    private static final int DB_VERSION = 1;
 
     public SQLiteHandler(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
     }
 
+    private String createLoginTable() {
+        return "CREATE TABLE IF NOT EXISTS " + TableSchema.TABLE_USER + "("
+                + UserSchema.KEY_ID + " INTEGER PRIMARY KEY, "
+                + UserSchema.KEY_NAME + " TEXT, "
+                + UserSchema.KEY_EMAIL + " TEXT UNIQUE, "
+                + UserSchema.KEY_UID + " TEXT, "
+                + UserSchema.KEY_CREATED_AT + " TEXT" + ")";
+    }
+
+    private String createGroupTable() {
+        return "CREATE TABLE IF NOT EXISTS " + TableSchema.TABLE_GROUP + "("
+                + GroupSchema.KEY_ID + " INTEGER PRIMARY KEY, "
+                + GroupSchema.KEY_NAME + " TEXT, "
+                + GroupSchema.KEY_GUID + " TEXT UNIQUE, "
+                + GroupSchema.KEY_CREATED_AT + " TEXT" + ")";
+    }
+
+    private String createRelationTable() {
+        return "CREATE TABLE IF NOT EXISTS " + TableSchema.TABLE_USER_GROUPS
+                + "(" + GroupSchema.KEY_ID + " INTEGER PRIMARY KEY, "
+                + UserSchema.KEY_UID + " TEXT, "
+                + GroupSchema.KEY_GUID + " TEXT, "
+                + GroupSchema.KEY_CREATED_AT + " TEXT" + ")";
+    }
+
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_LOGIN_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_USER + "("
-                    + KEY_ID + " INTEGER PRIMARY KEY, " + KEY_NAME + " TEXT, "
-                    + KEY_EMAIL + " TEXT UNIQUE, " + KEY_UID + " TEXT, "
-                    + KEY_CREATED_AT + " TEXT" + ")";
-        String CREATE_GROUP_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_GROUP + "("
-                    + KEY_ID + " INTEGER PRIMARY KEY, " + KEY_NAME + " TEXT, "
-                    + KEY_GUID + " TEXT UNIQUE, " + KEY_CREATED_AT + " TEXT" + ")";
-        String CREATE_RELATION_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_USER_GROUPS
-                    + "(" + KEY_ID + " INTEGER PRIMARY KEY, " + KEY_UID + " TEXT, "
-                    + KEY_GUID + " TEXT, " + KEY_CREATED_AT + " TEXT" + ")";
 
-        db.execSQL(CREATE_LOGIN_TABLE);
-        db.execSQL(CREATE_GROUP_TABLE);
-        db.execSQL(CREATE_RELATION_TABLE);
+
+        db.execSQL(createLoginTable());
+        db.execSQL(createGroupTable());
+        db.execSQL(createRelationTable());
 
         Log.d(TAG, "Database tables created");
     }
@@ -63,9 +66,9 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldV, int newV) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_GROUP);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER_GROUPS);
+        db.execSQL("DROP TABLE IF EXISTS " + TableSchema.TABLE_USER);
+        db.execSQL("DROP TABLE IF EXISTS " + TableSchema.TABLE_GROUP);
+        db.execSQL("DROP TABLE IF EXISTS " + TableSchema.TABLE_USER_GROUPS);
         // drop old tables and...
         // create them again
         onCreate(db);
@@ -75,20 +78,16 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     public void addUser(String name, String email, String uid, String created_at) {
         SQLiteDatabase db = this.getWritableDatabase();
 
-        String CREATE_LOGIN_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_USER + "("
-                + KEY_ID + " INTEGER PRIMARY KEY, " + KEY_NAME + " TEXT, "
-                + KEY_EMAIL + " TEXT UNIQUE, " + KEY_UID + " TEXT, "
-                + KEY_CREATED_AT + " TEXT" + ")";
-        db.execSQL(CREATE_LOGIN_TABLE);
+        db.execSQL(createLoginTable());
 
         ContentValues values = new ContentValues();
-        values.put(KEY_NAME, name);
-        values.put(KEY_EMAIL, email);
-        values.put(KEY_UID, uid);
-        values.put(KEY_CREATED_AT, created_at);
+        values.put(UserSchema.KEY_NAME, name);
+        values.put(UserSchema.KEY_EMAIL, email);
+        values.put(UserSchema.KEY_UID, uid);
+        values.put(UserSchema.KEY_CREATED_AT, created_at);
 
         // inserting row
-        long id = db.insert(TABLE_USER ,null, values);
+        long id = db.insert(TableSchema.TABLE_USER ,null, values);
         db.close();
 
         Log.d(TAG, "New user inserted into sqlite: " + id);
@@ -98,20 +97,15 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     public void addGroup(String name, String guid, String created_at) {
         SQLiteDatabase db = this.getWritableDatabase();
 
-
-
-        String CREATE_GROUP_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_GROUP + "("
-                + KEY_ID + " INTEGER PRIMARY KEY, " + KEY_NAME + " TEXT, "
-                + KEY_GUID + " TEXT UNIQUE, " + KEY_CREATED_AT + " TEXT" + ")";
-        db.execSQL(CREATE_GROUP_TABLE);
+        db.execSQL(createGroupTable());
 
         ContentValues values = new ContentValues();
-        values.put(KEY_NAME, name);
-        values.put(KEY_GUID, guid);
-        values.put(KEY_CREATED_AT, created_at);
+        values.put(GroupSchema.KEY_NAME, name);
+        values.put(GroupSchema.KEY_GUID, guid);
+        values.put(GroupSchema.KEY_CREATED_AT, created_at);
 
         //insert row
-        long id = db.insert(TABLE_GROUP, null, values);
+        long id = db.insert(TableSchema.TABLE_GROUP, null, values);
         db.close();
 
         Log.d(TAG, "New group inserted into sqlite: " + id);
@@ -121,18 +115,15 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     public void addUserToGroup(String uid, String guid, String created_at) {
         SQLiteDatabase db = this.getWritableDatabase();
 
-        String CREATE_RELATION_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_USER_GROUPS
-                + "(" + KEY_ID + " INTEGER PRIMARY KEY, " + KEY_UID + " TEXT, "
-                + KEY_GUID + " TEXT, " + KEY_CREATED_AT + " TEXT" + ")";
+        db.execSQL(createRelationTable());
 
-        db.execSQL(CREATE_RELATION_TABLE);
         ContentValues values = new ContentValues();
-        values.put(KEY_UID, uid);
-        values.put(KEY_GUID, guid);
-        values.put(KEY_CREATED_AT, created_at);
+        values.put(UserSchema.KEY_UID, uid);
+        values.put(GroupSchema.KEY_GUID, guid);
+        values.put(GroupSchema.KEY_CREATED_AT, created_at);
 
         //insert row
-        long id = db.insert(TABLE_USER_GROUPS, null, values);
+        long id = db.insert(TableSchema.TABLE_USER_GROUPS, null, values);
         db.close();
 
         Log.d(TAG, "User " + uid + " added to group " + guid);
@@ -142,7 +133,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     /// get user data
     public HashMap<String, String> getUserDetails() {
         HashMap<String, String> user = new HashMap<>();
-        String selectQuery = "SELECT * FROM " + TABLE_USER;
+        String selectQuery = "SELECT * FROM " + TableSchema.TABLE_USER;
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
@@ -173,20 +164,20 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 
     private void deleteUsersByEmail(String... emails) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_USER, "WHERE email = ", emails);
+        db.delete(TableSchema.TABLE_USER, "WHERE email = ", emails);
         db.close();
 
-        Log.d(TAG, "Deleted " + Arrays.toString(emails) + "from database" + TABLE_USER);
+        Log.d(TAG, "Deleted " + Arrays.toString(emails) + "from database" + TableSchema.TABLE_USER);
     }
 
     public void deleteAllUsers() {
         SQLiteDatabase db = this.getWritableDatabase();
         // delete all users
         // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        db.delete(TABLE_USER, null, null);
+        db.delete(TableSchema.TABLE_USER, null, null);
         db.close();
 
-        Log.d(TAG, "Deleted all users from database" + TABLE_USER);
+        Log.d(TAG, "Deleted all users from database" + TableSchema.TABLE_USER);
     }
 
 
