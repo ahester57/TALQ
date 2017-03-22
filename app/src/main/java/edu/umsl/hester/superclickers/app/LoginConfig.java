@@ -19,10 +19,7 @@ package edu.umsl.hester.superclickers.app;
 public class LoginConfig {
 
     public static String URL_LOGIN = "http://stin.tech/android_login_api/login.php";
-
     public static String URL_REGISTER = "http://stin.tech/android_login_api/register.php";
-
     public static String URL_CREATE_GROUP = "http://stin.tech/android_login_api/create_group.php";
-
     public static String URL_JOIN_GROUP = "http://stin.tech/android_login_api/join_group.php";
 }

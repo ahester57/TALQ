@@ -1,6 +1,7 @@
 package edu.umsl.hester.superclickers.activity.login;
 
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -46,7 +47,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private Button register;
     private Button skip;
 
-    private ProgressDialog pDialog;
+    private LoginController lController;
+
+    private ProgressDialog pDialog; //////
     private SessionManager session;
     private SQLiteHandler db;
 
@@ -78,11 +81,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
 
         LoginFragment loginFragment = new LoginFragment();
-        FragmentManager fm = getFragmentManager();
-        fm.beginTransaction()
-                .add(loginFragment, "LOGIN_FRAGMENT")
-                .commit();
+        lController = new LoginController();
+        lController.setContext(getApplicationContext());
 
+        FragmentManager fm = getFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+
+        ft.add(loginFragment, "LOGIN_FRAGMENT");
+        ft.add(lController, "LOGIN_CONTROLLER");
+        ft.commit();
 
 
         login.setOnClickListener(this);
@@ -122,7 +129,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-
+/////////////
     // verify login credentials
     private void checkLogin(final String email, final String password) {
         String tag_str_req = "req_login";
@@ -203,13 +210,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         AppController.getInstance().addToRequestQueue(strReq, tag_str_req);
     }
-
+//////////
     private void showDialog() {
         if (!pDialog.isShowing()) {
             pDialog.show();
         }
     }
-
+////////////////
     private void hideDialog() {
         if (pDialog.isShowing()) {
             pDialog.dismiss();

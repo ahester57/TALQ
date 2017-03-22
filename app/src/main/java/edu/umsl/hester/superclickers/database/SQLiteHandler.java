@@ -18,7 +18,7 @@ import java.util.HashMap;
 public class SQLiteHandler extends SQLiteOpenHelper {
 
     private static final String TAG = SQLiteHandler.class.getSimpleName();
-    
+
     // db name
     private static final String DB_NAME = "android_api";
     private static final int DB_VERSION = 1;
@@ -126,12 +126,12 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         long id = db.insert(TableSchema.TABLE_USER_GROUPS, null, values);
         db.close();
 
-        Log.d(TAG, "User " + uid + " added to group " + guid);
+        Log.d(TAG, "User " + uid + " added to group " + guid + ": " + id);
 
     }
 
     /// get user data
-    public HashMap<String, String> getUserDetails() {
+    public HashMap<String, String> getUserDetails() { // change to return user object
         HashMap<String, String> user = new HashMap<>();
         String selectQuery = "SELECT * FROM " + TableSchema.TABLE_USER;
 
@@ -153,23 +153,6 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         return user;
     }
 
-    public boolean isUserInAGroup() {
-        return false; // @TODO
-    }
-
-    public String[] getAllGroups() {
-        // @TODO
-        return new String[] {"abra", "kadabra", "alakazam"};
-    }
-
-    private void deleteUsersByEmail(String... emails) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TableSchema.TABLE_USER, "WHERE email = ", emails);
-        db.close();
-
-        Log.d(TAG, "Deleted " + Arrays.toString(emails) + "from database" + TableSchema.TABLE_USER);
-    }
-
     public void deleteAllUsers() {
         SQLiteDatabase db = this.getWritableDatabase();
         // delete all users
@@ -180,5 +163,21 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         Log.d(TAG, "Deleted all users from database" + TableSchema.TABLE_USER);
     }
 
+    private void deleteUsersByEmail(String... emails) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TableSchema.TABLE_USER, "WHERE email = ", emails);
+        db.close();
+
+        Log.d(TAG, "Deleted " + Arrays.toString(emails) + "from database" + TableSchema.TABLE_USER);
+    }
+
+    public boolean isUserInAGroup() {
+        return false; // implemented in api
+    }
+
+    public String[] getAllGroups() {
+        // @TODO
+        return new String[] {"abra", "kadabra", "alakazam"};
+    }
 
 }

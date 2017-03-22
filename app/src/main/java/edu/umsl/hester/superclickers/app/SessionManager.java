@@ -9,10 +9,9 @@ public class SessionManager {
 
     private final static String TAG = SessionManager.class.getSimpleName();
 
+    // Shared preferences for storing user login 'token'
     private SharedPreferences pref;
-
     private Context _context;
-
     private final int PRIVATE_MODE = 0;
 
     //file name
