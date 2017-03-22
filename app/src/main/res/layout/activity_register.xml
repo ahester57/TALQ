@@ -9,7 +9,7 @@
         android:inputType="textPersonName"
         android:ems="10"
         android:layout_alignParentTop="true"
-        android:id="@+id/registerName"
+        android:id="@+id/reg_name_text_edit"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
@@ -21,9 +21,9 @@
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
         android:ems="10"
-        android:id="@+id/registerEmail"
+        android:id="@+id/reg_email_text_edit"
         android:hint="@string/email"
-        android:layout_below="@+id/registerName"
+        android:layout_below="@+id/reg_name_text_edit"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
@@ -35,44 +35,44 @@
         android:inputType="textPassword"
         android:ems="10"
         android:layout_marginTop="20dp"
-        android:id="@+id/registerPassword"
+        android:id="@+id/reg_pwd_edit"
         android:hint="@string/pwd"
-        android:layout_below="@+id/registerEmail"
+        android:layout_below="@+id/reg_email_text_edit"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
     <EditText
+        android:id="@+id/reg_pwd_confirm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:ems="10"
-        android:id="@+id/registerConfirm"
-        android:layout_below="@+id/registerPassword"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:hint="@string/confirm" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/reg_pwd_edit"
+        android:ems="10"
+        android:hint="@string/confirm"
+        android:inputType="textPassword" />
 
     <Button
-        android:text="@string/go"
+        android:id="@+id/reg_back_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:layout_marginBottom="18dp"
         android:layout_marginLeft="23dp"
         android:layout_marginStart="23dp"
-        android:layout_marginBottom="18dp"
-        android:id="@+id/btnBack" />
+        android:text="@string/go" />
 
     <Button
-        android:text="@string/register"
+        android:id="@+id/register_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:id="@+id/btnRegister" />
+        android:layout_centerVertical="true"
+        android:text="@string/register" />
 </RelativeLayout>

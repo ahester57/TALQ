@@ -58,11 +58,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        login = (Button) findViewById(R.id.buttonLogin);
-        register = (Button) findViewById(R.id.goToRegister);
-        skip = (Button) findViewById(R.id.btnSkip);
-        userEmail = (EditText) findViewById(R.id.editEmail);
-        userPass = (EditText) findViewById(R.id.editPwd);
+        login = (Button) findViewById(R.id.login_button);
+        register = (Button) findViewById(R.id.new_user_button);
+        skip = (Button) findViewById(R.id.skip_login_button);
+        userEmail = (EditText) findViewById(R.id.email_text_edit);
+        userPass = (EditText) findViewById(R.id.pwd_text_edit);
 
         // progress dialog
         pDialog = new ProgressDialog(this);
@@ -102,7 +102,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View view) {
 
         switch (view.getId()){
-            case R.id.buttonLogin:
+            case R.id.login_button:
                 String email = userEmail.getText().toString().trim();
                 String password = userPass.getText().toString().trim();
 
@@ -114,12 +114,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             "Enter some credentials now.", Toast.LENGTH_LONG).show();
                 }
                 break;
-            case R.id.goToRegister:
+            case R.id.new_user_button:
                 Intent i = new Intent(getApplicationContext(), RegisterActivity.class);
                 startActivity(i);
 
                 break;
-            case R.id.btnSkip:
+            case R.id.skip_login_button:
                 Toast.makeText(getApplicationContext(), "Continuing without loggin in...",
                         Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
