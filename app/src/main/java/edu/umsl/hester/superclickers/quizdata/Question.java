@@ -5,62 +5,47 @@ import java.util.ArrayList;
 
 public class Question {
 
-    private String question;
-    private ArrayList<String> choices;
-    private String answer;
-
-    Question() {
-        question = "What is 10 * log_10 (1000)?";
-        choices = new ArrayList<>();
-
-        choices.add("10");
-        choices.add("20");
-        choices.add("30");
-        choices.add("100");
-
-        answer = "30";
+    private String id;
+    private String title;
+    private String text;
+    private int pointsPossible;
+    private ArrayList<Answer> availableAnswers;
 
 
-
-        // later, we will get this information from a server somewhere
-
-    }
-
-    Question(String s) {
-        question = s;
-        choices = new ArrayList<>();
-        choices.add("its");
-        choices.add("over");
-        choices.add("good");
-        choices.add("luck");
-
-        answer = "over";
+    public Question(String id, String title, String text, int pointsPossible, ArrayList<Answer> availableAnswers) {
+        this.id = id;
+        this.title = title;
+        this.text = text;
+        this.pointsPossible = pointsPossible;
+        this.availableAnswers = availableAnswers;
     }
 
     public boolean check(String guess) {
-        return answer.equalsIgnoreCase(guess);
+        return true; //answer.equalsIgnoreCase(guess);
     }
 
 
-    public String getQuestion() { return question; }
+    public String getQuestion() { return text; }
 
     //ArrayList<String> getChoices() { return choices; }
 
-    public String getA() {
-        return choices.get(0);
+    public Answer getA() {
+        return availableAnswers.get(0);
     }
 
-    public String getB() {
-        return choices.get(1);
+    public Answer getB() {
+        return availableAnswers.get(1);
     }
 
-    public String getC() {
-        return choices.get(2);
+    public Answer getC() {
+        return availableAnswers.get(2);
     }
 
-    public String getD() {
-        return choices.get(3);
+    public Answer getD() {
+        return availableAnswers.get(3);
     }
 
-    String getAnswer() { return answer; }
+    String getAnswer() {
+        return "yo";//answer;
+    }
 }
