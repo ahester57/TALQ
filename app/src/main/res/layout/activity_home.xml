@@ -56,4 +56,14 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
+    <Spinner
+        android:id="@+id/quiz_select_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btnPlay"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="27dp"
+        android:spinnerMode="dialog" />
+
 </RelativeLayout>

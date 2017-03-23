@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import edu.umsl.hester.superclickers.app.AppController;
+import edu.umsl.hester.superclickers.app.QuizConfig;
 import edu.umsl.hester.superclickers.app.SessionManager;
 import edu.umsl.hester.superclickers.database.AnswerSchema;
 import edu.umsl.hester.superclickers.database.QuestionSchema;
@@ -40,7 +41,6 @@ public class QuizGET extends Fragment {
 
     private SQLiteHandler db;
     private SessionManager session;
-    private String url = "http://stin.tech/learning-api/wrapper.php?id=%1$s";
 
     private QuizGETController qController;
 
@@ -61,7 +61,7 @@ public class QuizGET extends Fragment {
         String tag_str_req = "req_quiz";
 
 
-        String uri = String.format(url, id);
+        String uri = String.format(QuizConfig.URL_GET_QUIZ_BY_ID, id);
         // new string request
         StringRequest strReq = new StringRequest(Request.Method.GET, uri,
 

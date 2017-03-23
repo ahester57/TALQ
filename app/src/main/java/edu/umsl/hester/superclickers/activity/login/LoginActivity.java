@@ -91,6 +91,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         ft.add(lController, "LOGIN_CONTROLLER");
         ft.commit();
 
+        userPass.setOnClickListener(this);
 
         login.setOnClickListener(this);
         register.setOnClickListener(this);
@@ -100,11 +101,24 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View view) {
-
+        String email;
+        String password;
         switch (view.getId()){
             case R.id.login_button:
-                String email = userEmail.getText().toString().trim();
-                String password = userPass.getText().toString().trim();
+                email = userEmail.getText().toString().trim();
+                password = userPass.getText().toString().trim();
+
+                if (!email.isEmpty() && !password.isEmpty()) {
+                    //login
+                    checkLogin(email, password);
+                } else {
+                    Toast.makeText(getApplicationContext(),
+                            "Enter some credentials now.", Toast.LENGTH_LONG).show();
+                }
+                break;
+            case R.id.pwd_text_edit:
+                email = userEmail.getText().toString().trim();
+                password = userPass.getText().toString().trim();
 
                 if (!email.isEmpty() && !password.isEmpty()) {
                     //login

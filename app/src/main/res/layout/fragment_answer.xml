@@ -5,36 +5,36 @@
     android:weightSum="1">
 
     <Button
-        android:text="A"
+        android:id="@+id/A_button"
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:id="@+id/buttonA"
-        android:layout_weight="0.02" />
+        android:layout_weight="0.02"
+        android:text="A" />
 
     <Button
-        android:text="B"
+        android:id="@+id/B_button"
         android:layout_width="match_parent"
-        android:layout_height="71dp"
-        android:id="@+id/buttonB" />
+        android:layout_height="70dp"
+        android:text="B" />
 
     <Button
-        android:text="C"
+        android:id="@+id/C_button"
         android:layout_width="match_parent"
-        android:layout_height="66dp"
-        android:id="@+id/buttonC"
-        android:layout_weight="0.08" />
+        android:layout_height="70dp"
+        android:layout_weight="0.08"
+        android:text="C" />
 
     <Button
-        android:text="D"
+        android:id="@+id/D_button"
         android:layout_width="match_parent"
-        android:layout_height="79dp"
-        android:id="@+id/buttonD" />
+        android:layout_height="70dp"
+        android:text="D" />
 
     <Button
-        android:text="Next Question"
+        android:id="@+id/next_question_button"
         android:layout_width="147dp"
         android:layout_height="wrap_content"
-        android:id="@+id/buttonNext"
         android:layout_weight="0.06"
+        android:text="Next Question"
         android:textAlignment="center" />
 </LinearLayout>

@@ -41,11 +41,11 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
 
         // Initialize buttons from fragment_answer
         // Fragments are awesome and we should use them
-        buttonA = (Button) view.findViewById(R.id.buttonA);
-        buttonB = (Button) view.findViewById(R.id.buttonB);
-        buttonC = (Button) view.findViewById(R.id.buttonC);
-        buttonD = (Button) view.findViewById(R.id.buttonD);
-        buttonNext = (Button) view.findViewById(R.id.buttonNext);
+        buttonA = (Button) view.findViewById(R.id.A_button);
+        buttonB = (Button) view.findViewById(R.id.B_button);
+        buttonC = (Button) view.findViewById(R.id.C_button);
+        buttonD = (Button) view.findViewById(R.id.D_button);
+        buttonNext = (Button) view.findViewById(R.id.next_question_button);
 
         // Set the button texts from whatever the getA,B,C,D() methods in QuizActivity
         // Eventually, we'll move the potential answers somewhere else
@@ -73,7 +73,7 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
 
 
         switch(view.getId()){
-            case R.id.buttonNext:
+            case R.id.next_question_button:
                 //this.getFragmentManager().beginTransaction().remove(this).commit();
                 // loads new question
                 activity.nextQuestion();

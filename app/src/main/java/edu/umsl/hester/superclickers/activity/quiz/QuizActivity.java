@@ -1,6 +1,7 @@
 package edu.umsl.hester.superclickers.activity.quiz;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -22,6 +23,7 @@ public class QuizActivity extends AppCompatActivity implements
         QuizGET.QuizGETController {
 
     private User user;
+    private String quizID;
     private Quiz curQuiz;
     private Question curQuestion;
 
@@ -36,11 +38,12 @@ public class QuizActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
 
-        // test buttons and whatnot
-        test = (Button) findViewById(R.id.testButton);
-        test.setOnClickListener(this);
 
         questionView = (TextView) findViewById(R.id.questionView);
+
+
+        Intent intent = getIntent();
+        quizID = intent.getStringExtra("QUIZ_ID");
 
 
         quizGET = new QuizGET();
@@ -53,7 +56,7 @@ public class QuizActivity extends AppCompatActivity implements
         // Load quiz
         //quizGET.getQuiz("8e21fdc6-2a2a-4023-9a32-6313b3e142b1");    //danger quiz
         //quizGET.getQuiz("0784ae31-8aa4-43c1-9dca-df33a2d5053e");  //superhero quiz
-        quizGET.getQuiz("e74f5367-022e-4b7b-8891-d86b9c1cc0a8");
+        quizGET.getQuiz(quizID);
 
 
 
@@ -65,9 +68,7 @@ public class QuizActivity extends AppCompatActivity implements
     public void onClick(View view) {
         // handle button clicks
         switch (view.getId()) {
-            case (R.id.testButton):
 
-                nextQuestion();
 
         }
     }
