@@ -38,7 +38,7 @@ public class QuizActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
 
-        questionView = (TextView) findViewById(R.id.questionView);
+        questionView = (TextView) findViewById(R.id.question_text_view);
 
         Intent intent = getIntent();
         quizID = intent.getStringExtra("QUIZ_ID");
@@ -83,7 +83,7 @@ public class QuizActivity extends AppCompatActivity implements
         // load answer fragment into answerSection of QuizActivity
         android.app.FragmentManager fm = getFragmentManager();
         android.app.FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(R.id.answerSection, answerFrag);
+        ft.replace(R.id.answer_segment, answerFrag);
         ft.commit();
     }
 

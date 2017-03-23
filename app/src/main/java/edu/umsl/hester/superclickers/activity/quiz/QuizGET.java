@@ -76,10 +76,13 @@ public class QuizGET extends Fragment {
                                 error = "false";
                             }
 
+                            // if no errors
                             if (error.equals("false")) {
                                 // Quiz was found
                                 Quiz quiz = new Quiz(jObj);
                                 qController.setQuiz(quiz);
+
+
 
                             } else {
                                 // Error

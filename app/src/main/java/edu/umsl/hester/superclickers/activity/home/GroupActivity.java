@@ -66,9 +66,9 @@ public class GroupActivity extends AppCompatActivity implements View.OnClickList
         this.user = new User(userDetails.get("name"), userDetails.get("email"), userDetails.get("uid"));
 
         // load fragment ... switch to recycler view
-        GroupFragment gf = new GroupFragment();
+        GroupFragment gFragment = new GroupFragment();
         FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.replace(R.id.frameGroup, gf);
+        ft.replace(R.id.group_frame, gFragment);
         ft.commit();
 
         btnCreate.setOnClickListener(this);

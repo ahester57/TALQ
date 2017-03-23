@@ -14,12 +14,12 @@
         android:id="@+id/join_group_button" />
 
     <RelativeLayout
+        android:id="@+id/group_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
         android:layout_below="@+id/create_group_button"
-        android:id="@+id/frameGroup">
+        android:layout_centerHorizontal="true">
 
     </RelativeLayout>
 
