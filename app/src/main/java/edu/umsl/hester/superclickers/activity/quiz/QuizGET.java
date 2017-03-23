@@ -40,11 +40,13 @@ public class QuizGET extends Fragment {
 
     private SQLiteHandler db;
     private SessionManager session;
+    private String url = "http://stin.tech/learning-api/wrapper.php?id=%1$s";
 
     private QuizGETController qController;
 
     interface QuizGETController {
         void setQuiz(Quiz quiz);
+        void setBSQuiz();
     }
 
     @Override
@@ -59,9 +61,10 @@ public class QuizGET extends Fragment {
         String tag_str_req = "req_quiz";
 
 
-
+        String uri = String.format(url, id);
         // new string request
-        StringRequest strReq = new StringRequest(Request.Method.GET, "http://stin.tech/learning-api/wrapper.php",
+        StringRequest strReq = new StringRequest(Request.Method.GET, uri,
+
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -77,62 +80,22 @@ public class QuizGET extends Fragment {
                                 error = "false";
                             }
 
-                            if (error == "false") {
+                            if (error.equals("false")) {
+                                // Quiz was found
+                                Quiz quiz = parseQuiz(jObj);
 
-
-                                String id = jObj.getString(QuizSchema.KEY_ID);
-                                String desc = jObj.getString(QuizSchema.KEY_DESC);
-                                String text = jObj.getString(QuizSchema.KEY_TEXT);
-                                String avail = jObj.getString(QuizSchema.KEY_AVAIL_DATE);
-                                String exp = jObj.getString(QuizSchema.KEY_EXPIRE_DATE);
-                                JSONArray qArray = jObj.getJSONArray("questions");
-
-                                ArrayList<Question> questions = new ArrayList<>();
-
-                                int i = 0, j = 0;
-
-                                while (i < qArray.length()) {
-                                    JSONObject qObj = qArray.getJSONObject(i);
-                                    String qid = qObj.getString(QuestionSchema.KEY_ID);
-                                    String qtitle = qObj.getString(QuestionSchema.KEY_TITLE);
-                                    String qtext = qObj.getString(QuestionSchema.KEY_TEXT);
-                                    int points = qObj.getInt(QuestionSchema.KEY_POINTS_POSS);
-                                    JSONArray aArray = qObj.getJSONArray(QuestionSchema.KEY_AVAIL_ANSWERS);
-
-                                    ArrayList<Answer> answers = new ArrayList<>();
-                                    j = 0;
-
-                                    while (j < aArray.length()) {
-                                        JSONObject aObj = aArray.getJSONObject(j);
-                                        String aid = aObj.getString(AnswerSchema.KEY_ID);
-                                        String avalue = aObj.getString(AnswerSchema.KEY_VALUE);
-                                        String atext = aObj.getString(AnswerSchema.KEY_TEXT);
-                                        int sortOrder = aObj.getInt(AnswerSchema.KEY_SORT_ORDER);
-
-                                        Answer ans = new Answer(aid, avalue, atext, sortOrder);
-                                        answers.add(ans);
-
-                                        j++;
-                                    }
-
-                                    Question question = new Question(qid, qtitle, qtext, points, answers);
-                                    questions.add(question);
-                                    i++;
+                                if (quiz != null) {
+                                    qController.setQuiz(quiz);
+                                } else {
+                                    qController.setBSQuiz();
                                 }
 
-
-
-                                Quiz quiz = new Quiz(id, desc, text, avail, exp, questions, 0);
-                                qController.setQuiz(quiz);
-
-
                             } else {
-                                // Error loggin in
+                                // Error
                                 String errMessage = jObj.getString("error");
                                 Toast.makeText(getActivity(), errMessage,
                                         Toast.LENGTH_LONG).show();
                             }
-
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Toast.makeText(getActivity(), "JSON error: "
@@ -147,19 +110,63 @@ public class QuizGET extends Fragment {
                         Toast.LENGTH_LONG).show();
 
             }
-        }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                // put params to login url via POST
-                Map<String, String> params = new HashMap<>();
-                params.put("id", id);
-
-                return params;
-            }
-        };
+        });
         // end string request.. phew!
 
 
         AppController.getInstance().addToRequestQueue(strReq, tag_str_req);
+    }
+
+    private Quiz parseQuiz(JSONObject jObj) {
+        try {
+
+            String id = jObj.getString(QuizSchema.KEY_ID);
+            String desc = jObj.getString(QuizSchema.KEY_DESC);
+            String text = jObj.getString(QuizSchema.KEY_TEXT);
+            String avail = jObj.getString(QuizSchema.KEY_AVAIL_DATE);
+            String exp = jObj.getString(QuizSchema.KEY_EXPIRE_DATE);
+            JSONArray qArray = jObj.getJSONArray("questions");
+
+            ArrayList<Question> questions = new ArrayList<>();
+
+            int i = 0, j = 0;
+
+            while (i < qArray.length()) {
+                JSONObject qObj = qArray.getJSONObject(i);
+                String qid = qObj.getString(QuestionSchema.KEY_ID);
+                String qtitle = qObj.getString(QuestionSchema.KEY_TITLE);
+                String qtext = qObj.getString(QuestionSchema.KEY_TEXT);
+                int points = qObj.getInt(QuestionSchema.KEY_POINTS_POSS);
+                JSONArray aArray = qObj.getJSONArray(QuestionSchema.KEY_AVAIL_ANSWERS);
+
+                ArrayList<Answer> answers = new ArrayList<>();
+                j = 0;
+
+                while (j < aArray.length()) {
+                    JSONObject aObj = aArray.getJSONObject(j);
+                    String aid = aObj.getString(AnswerSchema.KEY_ID);
+                    String avalue = aObj.getString(AnswerSchema.KEY_VALUE);
+                    String atext = aObj.getString(AnswerSchema.KEY_TEXT);
+                    int sortOrder = aObj.getInt(AnswerSchema.KEY_SORT_ORDER);
+
+                    Answer ans = new Answer(aid, avalue, atext, sortOrder);
+                    answers.add(ans);
+
+                    j++;
+                }
+
+                Question question = new Question(qid, qtitle, qtext, points, answers);
+                questions.add(question);
+                i++;
+            }
+
+            Quiz quiz = new Quiz(id, desc, text, avail, exp, questions, 0);
+            return quiz;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Toast.makeText(getActivity(), "JSON error: "
+                + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+        return null;
     }
 }

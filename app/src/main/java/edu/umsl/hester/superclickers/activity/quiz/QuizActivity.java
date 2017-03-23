@@ -50,8 +50,11 @@ public class QuizActivity extends AppCompatActivity implements
                 .add(quizGET, "QUIZ_GET")
                 .commit();
 
-        quizGET.getQuiz("8e21fdc6-2a2a-4023-9a32-6313b3e142b1");
         // Load quiz
+        //quizGET.getQuiz("8e21fdc6-2a2a-4023-9a32-6313b3e142b1");    //danger quiz
+        //quizGET.getQuiz("0784ae31-8aa4-43c1-9dca-df33a2d5053e");  //superhero quiz
+        quizGET.getQuiz("e74f5367-022e-4b7b-8891-d86b9c1cc0a8");
+
 
 
         nextQuestion();

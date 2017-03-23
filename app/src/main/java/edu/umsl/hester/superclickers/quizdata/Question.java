@@ -2,7 +2,6 @@ package edu.umsl.hester.superclickers.quizdata;
 
 import java.util.ArrayList;
 
-
 public class Question {
 
     private String id;
@@ -49,7 +48,7 @@ public class Question {
         try {
             return availableAnswers.get(2);
         } catch (IndexOutOfBoundsException e) {
-            return new Answer(null, "C: ", "", 2);
+            return new Answer(null, "D: ", "", 3);
         }
     }
 
