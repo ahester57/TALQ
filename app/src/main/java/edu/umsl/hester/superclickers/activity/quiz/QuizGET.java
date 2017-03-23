@@ -12,15 +12,23 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import edu.umsl.hester.superclickers.app.AppController;
 import edu.umsl.hester.superclickers.app.SessionManager;
+import edu.umsl.hester.superclickers.database.AnswerSchema;
+import edu.umsl.hester.superclickers.database.QuestionSchema;
+import edu.umsl.hester.superclickers.database.QuizSchema;
 import edu.umsl.hester.superclickers.database.SQLiteHandler;
+import edu.umsl.hester.superclickers.quizdata.Answer;
+import edu.umsl.hester.superclickers.quizdata.Question;
+import edu.umsl.hester.superclickers.quizdata.Quiz;
 
 /**
  * Created by Austin on 3/22/2017.
@@ -33,15 +41,22 @@ public class QuizGET extends Fragment {
     private SQLiteHandler db;
     private SessionManager session;
 
+    private QuizGETController qController;
+
+    interface QuizGETController {
+        void setQuiz(Quiz quiz);
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         db = new SQLiteHandler(getActivity());
         session = new SessionManager(getActivity());
+        qController = (QuizGETController) getActivity();
     }
 
     void getQuiz(final String id) {
-        String tag_str_req = "req_login";
+        String tag_str_req = "req_quiz";
 
 
 
@@ -58,27 +73,57 @@ public class QuizGET extends Fragment {
                             String error = jObj.getString("error");
 
                             if (error != null) {
-                                // LOGIN SUCCESSFUL
-                                // create session
-                                session.setLogin(true);
-
-                                //store user
-                                String uid = jObj.getString("uid");
-
-                                JSONObject user = jObj.getJSONObject("user");
-                                String name = user.getString("name");
-                                String email = user.getString("email");
-                                String created_at = user.getString("created_at");
-
-                                // add user to sql database
-                                db.addUser(name, email, uid, created_at);
 
 
+                                String id = jObj.getString(QuizSchema.KEY_ID);
+                                String desc = jObj.getString(QuizSchema.KEY_DESC);
+                                String text = jObj.getString(QuizSchema.KEY_TEXT);
+                                String avail = jObj.getString(QuizSchema.KEY_AVAIL_DATE);
+                                String exp = jObj.getString(QuizSchema.KEY_EXPIRE_DATE);
+                                JSONArray qArray = jObj.getJSONArray("questions");
+
+                                ArrayList<Question> questions = new ArrayList<>();
+
+                                int i = 0, j = 0;
+
+                                while (qArray.getJSONObject(i) != null) {
+                                    JSONObject qObj = qArray.getJSONObject(i);
+                                    String qid = qObj.getString(QuestionSchema.KEY_ID);
+                                    String qtitle = qObj.getString(QuestionSchema.KEY_TITLE);
+                                    String qtext = qObj.getString(QuestionSchema.KEY_TEXT);
+                                    int points = qObj.getInt(QuestionSchema.KEY_POINTS_POSS);
+                                    JSONArray aArray = qObj.getJSONArray(QuestionSchema.KEY_AVAIL_ANSWERS);
+
+                                    ArrayList<Answer> answers = new ArrayList<>();
+                                    j = 0;
+
+                                    while (aArray.getJSONObject(j) != null) {
+                                        JSONObject aObj = aArray.getJSONObject(j);
+                                        String aid = aObj.getString(AnswerSchema.KEY_ID);
+                                        String avalue = aObj.getString(AnswerSchema.KEY_VALUE);
+                                        String atext = aObj.getString(AnswerSchema.KEY_TEXT);
+                                        int sortOrder = aObj.getInt(AnswerSchema.KEY_SORT_ORDER);
+
+                                        Answer ans = new Answer(aid, avalue, atext, sortOrder);
+                                        answers.add(ans);
+
+                                        j++;
+                                    }
+
+                                    Question question = new Question(qid, qtitle, qtext, points, answers);
+                                    questions.add(question);
+                                    i++;
+                                }
+
+
+
+                                Quiz quiz = new Quiz(id, desc, text, avail, exp, questions, 0);
+                                qController.setQuiz(quiz);
 
 
                             } else {
                                 // Error loggin in
-                                String errMessage = jObj.getString("error_msg");
+                                String errMessage = jObj.getString("error");
                                 Toast.makeText(getActivity(), errMessage,
                                         Toast.LENGTH_LONG).show();
                             }
@@ -92,9 +137,10 @@ public class QuizGET extends Fragment {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "Login error: " + error.getMessage());
+                Log.e(TAG, "Quiz error: " + error.getMessage());
                 Toast.makeText(getActivity(), error.getMessage(),
                         Toast.LENGTH_LONG).show();
+
             }
         }) {
             @Override

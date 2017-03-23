@@ -5,9 +5,9 @@ package edu.umsl.hester.superclickers.database;
  */
 
 public class QuestionSchema {
-    static final String KEY_ID = "id";
-    static final String KEY_TITLE = "title";
-    static final String KEY_TEXT = "text";
-    static final String KEY_POINTS_POSS = "pointsPossible";
-    static final String KEY_AVAIL_ANSWERS = "availableAnswers";
+    public static final String KEY_ID = "id";
+    public static final String KEY_TITLE = "title";
+    public static final String KEY_TEXT = "text";
+    public static final String KEY_POINTS_POSS = "pointsPossible";
+    public static final String KEY_AVAIL_ANSWERS = "availableAnswers";
 }

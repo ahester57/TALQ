@@ -2,6 +2,7 @@ package edu.umsl.hester.superclickers.activity.quiz;
 
 
 import android.os.Bundle;
+import android.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -16,15 +17,18 @@ import edu.umsl.hester.superclickers.quizdata.Quiz;
 import edu.umsl.hester.superclickers.userdata.User;
 
 
-public class QuizActivity extends AppCompatActivity implements View.OnClickListener, AnswerFragment.AnswerListener {
+public class QuizActivity extends AppCompatActivity implements
+        View.OnClickListener, AnswerFragment.AnswerListener,
+        QuizGET.QuizGETController {
 
     private User user;
-
     private Quiz curQuiz;
     private Question curQuestion;
 
     private Button test;
     private TextView questionView;
+
+    private QuizGET quizGET;
 
 
     @Override
@@ -32,26 +36,34 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
 
-
         // test buttons and whatnot
         test = (Button) findViewById(R.id.testButton);
-        questionView = (TextView) findViewById(R.id.questionView);
-
         test.setOnClickListener(this);
 
+        questionView = (TextView) findViewById(R.id.questionView);
 
-        ArrayList<Answer> answers = new ArrayList<>();
-        answers.add(new Answer("id", "A", "1", 0));
-        answers.add(new Answer("id", "B", "2", 1));
-        answers.add(new Answer("id", "C", "3", 2));
-        answers.add(new Answer("id", "D", "4", 3));
-        Question question = new Question("id", "title", "What is log_10 1000", 22, answers);
-        ArrayList<Question> questions = new ArrayList<>();
-        questions.add(question);
-        curQuiz = new Quiz("ddd", "description", "what is log_10 1000?", "now", "never",
-                questions, 0);
-        nextQuestion();
-        
+
+        quizGET = new QuizGET();
+
+        FragmentManager fm = getFragmentManager();
+        fm.beginTransaction()
+                .add(quizGET, "QUIZ_GET")
+                .commit();
+
+        quizGET.getQuiz("8e21fdc6-2a2a-4023-9a32-6313b3e142b1");
+
+//        ArrayList<Answer> answers = new ArrayList<>();
+//        answers.add(new Answer("id", "A", "1", 0));
+//        answers.add(new Answer("id", "B", "2", 1));
+//        answers.add(new Answer("id", "C", "3", 2));
+//        answers.add(new Answer("id", "D", "4", 3));
+//        Question question = new Question("id", "title", "What is log_10 1000", 22, answers);
+//        ArrayList<Question> questions = new ArrayList<>();
+//        questions.add(question);
+//        curQuiz = new Quiz("ddd", "description", "what is log_10 1000?", "now", "never",
+//                questions, 0);
+//        nextQuestion();
+
         // Load quiz
 
 
@@ -70,6 +82,24 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    @Override
+    public void setQuiz(Quiz quiz) {
+        curQuiz = quiz;
+        nextQuestion();
+    }
+
+    public void setBSQuiz() {
+        ArrayList<Answer> answers = new ArrayList<>();
+        answers.add(new Answer("id", "A", "1", 0));
+        answers.add(new Answer("id", "B", "2", 1));
+        answers.add(new Answer("id", "C", "3", 2));
+        answers.add(new Answer("id", "D", "4", 3));
+        Question question = new Question("id", "title", "What is log_10 1000", 22, answers);
+        ArrayList<Question> questions = new ArrayList<>();
+        questions.add(question);
+        setQuiz(new Quiz("ddd", "description", "what is log_10 1000?", "now", "never",
+                questions, 0));
+    }
 
     // returns current question
     @Override
@@ -79,6 +109,9 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void nextQuestion() {
+        if (curQuiz == null) {
+            setBSQuiz();
+        }
         curQuestion = curQuiz.getNextQuestion();
 
         questionView.setText(curQuestion.getQuestion());

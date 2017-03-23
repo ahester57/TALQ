@@ -6,10 +6,10 @@ package edu.umsl.hester.superclickers.database;
  */
 
 public class QuizSchema {
-    static final String KEY_ID = "id";
-    static final String KEY_DESC = "description";
-    static final String KEY_TEXT = "text";
-    static final String KEY_AVAIL_DATE = "availableDate";
-    static final String KEY_EXPIRE_DATE = "expiryDate";
-    static final String KEY_QUESTIONS = "question";
+    public static final String KEY_ID = "id";
+    public static final String KEY_DESC = "description";
+    public static final String KEY_TEXT = "text";
+    public static final String KEY_AVAIL_DATE = "availableDate";
+    public static final String KEY_EXPIRE_DATE = "expiryDate";
+    public static final String KEY_QUESTIONS = "question";
 }
