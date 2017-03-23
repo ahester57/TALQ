@@ -1,5 +1,10 @@
 package edu.umsl.hester.superclickers.quizdata;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import edu.umsl.hester.superclickers.database.AnswerSchema;
+
 /**
  * Created by Austin on 3/22/2017.
  */
@@ -16,6 +21,23 @@ public class Answer {
         this.value = value;
         this.text = text;
         this.sortOrder = sortOrder;
+    }
+
+    public Answer(JSONObject aObj) throws JSONException {
+        try {
+            String aid = aObj.getString(AnswerSchema.KEY_ID);
+            String avalue = aObj.getString(AnswerSchema.KEY_VALUE);
+            String atext = aObj.getString(AnswerSchema.KEY_TEXT);
+            int sortOrder = aObj.getInt(AnswerSchema.KEY_SORT_ORDER);
+
+            this.id = aid;
+            this.value = avalue;
+            this.text = atext;
+            this.sortOrder = sortOrder;
+
+        } catch (JSONException e) {
+            throw new JSONException(e.getMessage());
+        }
     }
 
     @Override

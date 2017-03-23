@@ -38,13 +38,10 @@ public class QuizActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
 
-
         questionView = (TextView) findViewById(R.id.questionView);
-
 
         Intent intent = getIntent();
         quizID = intent.getStringExtra("QUIZ_ID");
-
 
         quizGET = new QuizGET();
 
@@ -55,8 +52,6 @@ public class QuizActivity extends AppCompatActivity implements
 
         // Load quiz
         quizGET.getQuiz(quizID);
-
-
 
         nextQuestion();
     }
@@ -99,7 +94,6 @@ public class QuizActivity extends AppCompatActivity implements
 
     }
 
-    @Override
     public void setBSQuiz() {
         ArrayList<Answer> answers = new ArrayList<>();
         answers.add(new Answer("id", "A", "1", 0));

@@ -1,6 +1,13 @@
 package edu.umsl.hester.superclickers.quizdata;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+
+import edu.umsl.hester.superclickers.database.AnswerSchema;
+import edu.umsl.hester.superclickers.database.QuestionSchema;
 
 public class Question {
 
@@ -17,6 +24,35 @@ public class Question {
         this.text = text;
         this.pointsPossible = pointsPossible;
         this.availableAnswers = availableAnswers; // sort by sortOrder
+    }
+
+    public Question(JSONObject qObj) throws JSONException {
+        try {
+            String qid = qObj.getString(QuestionSchema.KEY_ID);
+            String qtitle = qObj.getString(QuestionSchema.KEY_TITLE);
+            String qtext = qObj.getString(QuestionSchema.KEY_TEXT);
+            int points = qObj.getInt(QuestionSchema.KEY_POINTS_POSS);
+            JSONArray aArray = qObj.getJSONArray(QuestionSchema.KEY_AVAIL_ANSWERS);
+
+            ArrayList<Answer> answers = new ArrayList<>();
+            int j = 0;
+            while (j < aArray.length()) {
+                JSONObject aObj = aArray.getJSONObject(j);
+
+                answers.add(new Answer(aObj));
+                j++;
+            }
+
+            this.id = qid;
+            this.title = qtitle;
+            this.text = qtext;
+            this.pointsPossible = points;
+            this.availableAnswers = answers;
+
+        } catch (JSONException e) {
+            throw new JSONException(e.getMessage());
+        }
+;
     }
 
     public boolean check(String guess) {

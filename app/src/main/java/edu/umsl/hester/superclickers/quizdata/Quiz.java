@@ -1,7 +1,17 @@
 package edu.umsl.hester.superclickers.quizdata;
 
+import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.Serializable;
 import java.util.ArrayList;
+
+import edu.umsl.hester.superclickers.database.AnswerSchema;
+import edu.umsl.hester.superclickers.database.QuestionSchema;
+import edu.umsl.hester.superclickers.database.QuizSchema;
 
 
 public class Quiz implements Serializable{
@@ -25,6 +35,40 @@ public class Quiz implements Serializable{
         this.questions = questions;
         this.qNum = qNum;
     }
+
+    public Quiz(JSONObject jObj) throws JSONException{
+        try {
+
+            String id = jObj.getString(QuizSchema.KEY_ID);
+            String desc = jObj.getString(QuizSchema.KEY_DESC);
+            String text = jObj.getString(QuizSchema.KEY_TEXT);
+            String avail = jObj.getString(QuizSchema.KEY_AVAIL_DATE);
+            String exp = jObj.getString(QuizSchema.KEY_EXPIRE_DATE);
+            JSONArray qArray = jObj.getJSONArray(QuizSchema.KEY_QUESTIONS);
+
+            ArrayList<Question> questions = new ArrayList<>();
+            int i = 0;
+            while (i < qArray.length()) {
+                JSONObject qObj = qArray.getJSONObject(i);
+
+                questions.add(new Question(qObj));
+                i++;
+            }
+
+            this.id = id;
+            this.description = desc;
+            this.text = text;
+            this.availableDate = avail;
+            this.expiryDate = exp;
+            this.questions = questions;
+            this.qNum = 0;
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            throw new JSONException(e.getMessage());
+        }
+    }
+
 
     // @TODO contructor taking JSONObject
 
