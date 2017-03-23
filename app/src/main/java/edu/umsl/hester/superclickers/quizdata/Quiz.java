@@ -26,12 +26,6 @@ public class Quiz implements Serializable{
         this.qNum = qNum;
     }
 
-    public Quiz() {
-        questions = new ArrayList<>();
-        questions.add(new Question());
-        questions.add(new Question("all clear"));
-        qNum = 0;
-    }
 
     public Question getNextQuestion() {
 

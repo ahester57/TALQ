@@ -18,4 +18,9 @@ public class Answer {
         this.sortOrder = sortOrder;
     }
 
+    @Override
+    public String toString() {
+        return value + ": " + text;
+    }
+
 }

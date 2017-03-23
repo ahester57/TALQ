@@ -7,7 +7,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 import edu.umsl.hester.superclickers.R;
+import edu.umsl.hester.superclickers.quizdata.Answer;
 import edu.umsl.hester.superclickers.quizdata.Question;
 import edu.umsl.hester.superclickers.quizdata.Quiz;
 import edu.umsl.hester.superclickers.userdata.User;
@@ -37,13 +40,20 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         test.setOnClickListener(this);
 
 
-
+        ArrayList<Answer> answers = new ArrayList<>();
+        answers.add(new Answer("id", "A", "1", 0));
+        answers.add(new Answer("id", "B", "2", 1));
+        answers.add(new Answer("id", "C", "3", 2));
+        answers.add(new Answer("id", "D", "4", 3));
+        Question question = new Question("id", "title", "What is log_10 1000", 22, answers);
+        ArrayList<Question> questions = new ArrayList<>();
+        questions.add(question);
+        curQuiz = new Quiz("ddd", "description", "what is log_10 1000?", "now", "never",
+                questions, 0);
+        nextQuestion();
+        
         // Load quiz
-        if (savedInstanceState != null) {
-            curQuiz = new Quiz();
-        } else {
-            curQuiz = new Quiz();
-        }
+
 
         nextQuestion();
     }
@@ -54,7 +64,7 @@ public class QuizActivity extends AppCompatActivity implements View.OnClickListe
         // handle button clicks
         switch (view.getId()) {
             case (R.id.testButton):
-                curQuiz = new Quiz();
+
                 nextQuestion();
 
         }

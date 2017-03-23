@@ -17,7 +17,7 @@ public class Question {
         this.title = title;
         this.text = text;
         this.pointsPossible = pointsPossible;
-        this.availableAnswers = availableAnswers;
+        this.availableAnswers = availableAnswers; // sort by sortOrder
     }
 
     public boolean check(String guess) {

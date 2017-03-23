@@ -111,10 +111,10 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
 
     // set buttons to choices
     private void setButtonText() {
-        buttonA.setText(curQuestion.getA());
-        buttonB.setText(curQuestion.getB());
-        buttonC.setText(curQuestion.getC());
-        buttonD.setText(curQuestion.getD());
+        buttonA.setText(curQuestion.getA().toString());
+        buttonB.setText(curQuestion.getB().toString());
+        buttonC.setText(curQuestion.getC().toString());
+        buttonD.setText(curQuestion.getD().toString());
     }
 
     //disable buttons
