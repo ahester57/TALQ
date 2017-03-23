@@ -26,6 +26,8 @@ public class Quiz implements Serializable{
         this.qNum = qNum;
     }
 
+    // @TODO contructor taking JSONObject
+
 
     public Question getNextQuestion() {
 

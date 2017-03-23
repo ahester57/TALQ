@@ -5,4 +5,6 @@ package edu.umsl.hester.superclickers.database;
  */
 
 public class QuizCursorWrapper {
+
+    // @TODO
 }

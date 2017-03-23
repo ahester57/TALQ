@@ -23,7 +23,7 @@ public class SessionManager {
         pref = _context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
     }
 
-    // @TODO disconnect (logout) if no interent connection
+    // @TODO disconnect (logout) if no internet connection
 
     public void setLogin(boolean isLoggedIn) {
         SharedPreferences.Editor editor = pref.edit();

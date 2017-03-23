@@ -125,7 +125,7 @@ public class QuizGET extends Fragment {
             String text = jObj.getString(QuizSchema.KEY_TEXT);
             String avail = jObj.getString(QuizSchema.KEY_AVAIL_DATE);
             String exp = jObj.getString(QuizSchema.KEY_EXPIRE_DATE);
-            JSONArray qArray = jObj.getJSONArray("questions");
+            JSONArray qArray = jObj.getJSONArray(QuizSchema.KEY_QUESTIONS);
 
             ArrayList<Question> questions = new ArrayList<>();
 
@@ -160,8 +160,8 @@ public class QuizGET extends Fragment {
                 i++;
             }
 
-            Quiz quiz = new Quiz(id, desc, text, avail, exp, questions, 0);
-            return quiz;
+            return new Quiz(id, desc, text, avail, exp, questions, 0);
+
         } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(getActivity(), "JSON error: "

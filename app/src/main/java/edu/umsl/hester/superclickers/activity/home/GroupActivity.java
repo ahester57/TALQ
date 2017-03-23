@@ -53,9 +53,9 @@ public class GroupActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group);
 
-        btnCreate = (Button) findViewById(R.id.btnCreate);
-        btnJoin = (Button) findViewById(R.id.btnJoin);
-        editGroupName = (EditText) findViewById(R.id.editGroupName);
+        btnCreate = (Button) findViewById(R.id.create_group_button);
+        btnJoin = (Button) findViewById(R.id.join_group_button);
+        editGroupName = (EditText) findViewById(R.id.group_name_edit_text);
 
         pDialog = new ProgressDialog(this);
         pDialog.setCancelable(false);
@@ -65,7 +65,7 @@ public class GroupActivity extends AppCompatActivity implements View.OnClickList
         HashMap<String, String> userDetails = db.getUserDetails();
         this.user = new User(userDetails.get("name"), userDetails.get("email"), userDetails.get("uid"));
 
-        // load fragment
+        // load fragment ... switch to recycler view
         GroupFragment gf = new GroupFragment();
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.replace(R.id.frameGroup, gf);
@@ -78,7 +78,7 @@ public class GroupActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.btnCreate:
+            case R.id.create_group_button:
                 if (!editGroupName.getText().toString().trim().equals("")) {
                     createGroup(editGroupName.getText().toString());
                 } else {
@@ -86,7 +86,7 @@ public class GroupActivity extends AppCompatActivity implements View.OnClickList
                             Toast.LENGTH_LONG).show();
                 }
                 break;
-            case R.id.btnJoin:
+            case R.id.join_group_button:
                 if (!editGroupName.getText().toString().trim().equals("")) {
                     joinGroup(user.getUniqueId(), editGroupName.getText().toString());
                 } else {

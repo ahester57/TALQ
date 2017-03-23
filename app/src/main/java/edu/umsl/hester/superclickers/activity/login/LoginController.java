@@ -30,6 +30,7 @@ public class LoginController extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // @TODO put str reqs here
     }
 
 

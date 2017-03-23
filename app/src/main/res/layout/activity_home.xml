@@ -1,69 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <TextView
-        android:text="TextView"
+        android:id="@+id/email_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textName"
-        android:layout_alignRight="@+id/textName"
-        android:layout_alignEnd="@+id/textName"
-        android:layout_marginTop="27dp"
-        android:id="@+id/textEmail" />
+        android:layout_marginTop="28dp"
+        android:text="TextView"
+        android:textAlignment="center"
+        app:layout_constraintLeft_toLeftOf="@+id/name_text_view"
+        app:layout_constraintRight_toRightOf="@+id/name_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/name_text_view"
+        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintTop_creator="1" />
 
     <Button
-        android:text="@string/logout"
+        android:id="@+id/logout_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/btnLogout"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:text="@string/logout"
+        app:layout_constraintBaseline_toBaselineOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:layout_constraintBaseline_creator="1"
+        tools:layout_constraintRight_creator="1" />
 
     <TextView
         android:text="Hello"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/textHi"
-        android:layout_below="@+id/btnLogout"
-        android:layout_centerHorizontal="true" />
+        android:id="@+id/welcome_text_view"
+        tools:layout_constraintTop_creator="1"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="48dp"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="@+id/name_text_view"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="12dp" />
 
     <TextView
         android:text="TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/name_text_view"
+        tools:layout_constraintTop_creator="1"
+        tools:layout_constraintRight_creator="1"
+        app:layout_constraintRight_toRightOf="parent"
         android:layout_marginTop="40dp"
-        android:id="@+id/textName"
-        android:layout_below="@+id/textHi"
-        android:layout_centerHorizontal="true" />
+        app:layout_constraintTop_toBottomOf="@+id/welcome_text_view"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="parent" />
 
     <Button
+        android:id="@+id/play_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="27dp"
         android:text="@string/play"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="48dp"
-        android:id="@+id/btnPlay"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/quiz_select_spinner"
+        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintTop_creator="1" />
 
     <Button
-        android:text="Groups"
+        android:id="@+id/groups_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/btnGroups"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:text="Groups"
+        app:layout_constraintBaseline_toBaselineOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        tools:layout_constraintBaseline_creator="1"
+        tools:layout_constraintLeft_creator="1" />
 
     <Spinner
         android:id="@+id/quiz_select_spinner"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/btnPlay"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="27dp"
-        android:spinnerMode="dialog" />
+        android:spinnerMode="dialog"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintBottom_creator="1"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:layout_constraintLeft_creator="1"
+        android:layout_marginBottom="123dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp" />
 
-</RelativeLayout>
+</android.support.constraint.ConstraintLayout>

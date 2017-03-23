@@ -43,11 +43,11 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        TextView textName = (TextView) findViewById(R.id.textName);
-        TextView textEmail = (TextView) findViewById(R.id.textEmail);
-        Button btnLogout = (Button) findViewById(R.id.btnLogout);
-        Button btnPlay = (Button) findViewById(R.id.btnPlay);
-        Button btnCreateGroup = (Button) findViewById(R.id.btnGroups);
+        TextView textName = (TextView) findViewById(R.id.name_text_view);
+        TextView textEmail = (TextView) findViewById(R.id.email_text_view);
+        Button btnLogout = (Button) findViewById(R.id.logout_button);
+        Button btnPlay = (Button) findViewById(R.id.play_button);
+        Button btnCreateGroup = (Button) findViewById(R.id.groups_button);
         quiz_select_spinner = (Spinner) findViewById(R.id.quiz_select_spinner);
 
         // database
@@ -81,16 +81,16 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
 
         switch (view.getId()) {
-            case R.id.btnLogout:
+            case R.id.logout_button:
                 logoutUser();
                 break;
-            case R.id.btnPlay:
+            case R.id.play_button:
                 Intent i = new Intent(HomeActivity.this, QuizActivity.class);
                 i.putExtra("QUIZ_ID", quizID);
                 startActivity(i);
                 //finish();
                 break;
-            case R.id.btnGroups:
+            case R.id.groups_button:
                 Intent in = new Intent(HomeActivity.this, GroupActivity.class);
                 startActivity(in);
                 break;

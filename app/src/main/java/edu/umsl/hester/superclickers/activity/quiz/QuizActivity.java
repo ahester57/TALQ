@@ -19,7 +19,7 @@ import edu.umsl.hester.superclickers.userdata.User;
 
 
 public class QuizActivity extends AppCompatActivity implements
-        View.OnClickListener, AnswerFragment.AnswerListener,
+        AnswerFragment.AnswerListener,
         QuizGET.QuizGETController {
 
     private User user;
@@ -54,8 +54,6 @@ public class QuizActivity extends AppCompatActivity implements
                 .commit();
 
         // Load quiz
-        //quizGET.getQuiz("8e21fdc6-2a2a-4023-9a32-6313b3e142b1");    //danger quiz
-        //quizGET.getQuiz("0784ae31-8aa4-43c1-9dca-df33a2d5053e");  //superhero quiz
         quizGET.getQuiz(quizID);
 
 
@@ -63,33 +61,11 @@ public class QuizActivity extends AppCompatActivity implements
         nextQuestion();
     }
 
-    // put button listeners here
-    @Override
-    public void onClick(View view) {
-        // handle button clicks
-        switch (view.getId()) {
-
-
-        }
-    }
 
     @Override
     public void setQuiz(Quiz quiz) {
         curQuiz = quiz;
         nextQuestion();
-    }
-
-    public void setBSQuiz() {
-        ArrayList<Answer> answers = new ArrayList<>();
-        answers.add(new Answer("id", "A", "1", 0));
-        answers.add(new Answer("id", "B", "2", 1));
-        answers.add(new Answer("id", "C", "3", 2));
-        answers.add(new Answer("id", "D", "4", 3));
-        Question question = new Question("id", "title", "What is log_10 1000", 22, answers);
-        ArrayList<Question> questions = new ArrayList<>();
-        questions.add(question);
-        setQuiz(new Quiz("ddd", "description", "what is log_10 1000?", "now", "never",
-                questions, 0));
     }
 
     // returns current question
@@ -121,5 +97,19 @@ public class QuizActivity extends AppCompatActivity implements
         super.onSaveInstanceState(outState);
         outState.putSerializable("QUIZ", curQuiz);
 
+    }
+
+    @Override
+    public void setBSQuiz() {
+        ArrayList<Answer> answers = new ArrayList<>();
+        answers.add(new Answer("id", "A", "1", 0));
+        answers.add(new Answer("id", "B", "2", 1));
+        answers.add(new Answer("id", "C", "3", 2));
+        answers.add(new Answer("id", "D", "4", 3));
+        Question question = new Question("id", "title", "What is log_10 1000", 22, answers);
+        ArrayList<Question> questions = new ArrayList<>();
+        questions.add(question);
+        setQuiz(new Quiz("ddd", "description", "what is log_10 1000?", "now", "never",
+                questions, 0));
     }
 }

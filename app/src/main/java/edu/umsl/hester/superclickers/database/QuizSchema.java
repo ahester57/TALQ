@@ -11,5 +11,5 @@ public class QuizSchema {
     public static final String KEY_TEXT = "text";
     public static final String KEY_AVAIL_DATE = "availableDate";
     public static final String KEY_EXPIRE_DATE = "expiryDate";
-    public static final String KEY_QUESTIONS = "question";
+    public static final String KEY_QUESTIONS = "questions";
 }

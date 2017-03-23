@@ -32,7 +32,7 @@ public class Question {
         try {
             return availableAnswers.get(0);
         } catch (IndexOutOfBoundsException e) {
-            return new Answer(null, "A: ", "", 0);
+            return new Answer(null, "A", "", 0);
         }
     }
 
@@ -40,7 +40,7 @@ public class Question {
         try {
             return availableAnswers.get(1);
         } catch (IndexOutOfBoundsException e) {
-            return new Answer(null, "B: ", "", 1);
+            return new Answer(null, "B", "", 1);
         }
     }
 
@@ -48,7 +48,7 @@ public class Question {
         try {
             return availableAnswers.get(2);
         } catch (IndexOutOfBoundsException e) {
-            return new Answer(null, "C: ", "", 2);
+            return new Answer(null, "C", "", 2);
         }
     }
 
@@ -56,7 +56,7 @@ public class Question {
         try {
             return availableAnswers.get(3);
         } catch (IndexOutOfBoundsException e) {
-            return new Answer(null, "D: ", "", 3);
+            return new Answer(null, "D", "", 3);
         }
     }
 
