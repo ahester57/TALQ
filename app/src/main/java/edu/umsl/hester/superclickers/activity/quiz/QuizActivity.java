@@ -51,19 +51,6 @@ public class QuizActivity extends AppCompatActivity implements
                 .commit();
 
         quizGET.getQuiz("8e21fdc6-2a2a-4023-9a32-6313b3e142b1");
-
-//        ArrayList<Answer> answers = new ArrayList<>();
-//        answers.add(new Answer("id", "A", "1", 0));
-//        answers.add(new Answer("id", "B", "2", 1));
-//        answers.add(new Answer("id", "C", "3", 2));
-//        answers.add(new Answer("id", "D", "4", 3));
-//        Question question = new Question("id", "title", "What is log_10 1000", 22, answers);
-//        ArrayList<Question> questions = new ArrayList<>();
-//        questions.add(question);
-//        curQuiz = new Quiz("ddd", "description", "what is log_10 1000?", "now", "never",
-//                questions, 0);
-//        nextQuestion();
-
         // Load quiz
 
 

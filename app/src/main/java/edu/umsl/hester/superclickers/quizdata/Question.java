@@ -30,19 +30,35 @@ public class Question {
     //ArrayList<String> getChoices() { return choices; }
 
     public Answer getA() {
-        return availableAnswers.get(0);
+        try {
+            return availableAnswers.get(0);
+        } catch (IndexOutOfBoundsException e) {
+            return new Answer(null, "A: ", "", 0);
+        }
     }
 
     public Answer getB() {
-        return availableAnswers.get(1);
+        try {
+            return availableAnswers.get(1);
+        } catch (IndexOutOfBoundsException e) {
+            return new Answer(null, "B: ", "", 1);
+        }
     }
 
     public Answer getC() {
-        return availableAnswers.get(2);
+        try {
+            return availableAnswers.get(2);
+        } catch (IndexOutOfBoundsException e) {
+            return new Answer(null, "C: ", "", 2);
+        }
     }
 
     public Answer getD() {
-        return availableAnswers.get(3);
+        try {
+            return availableAnswers.get(3);
+        } catch (IndexOutOfBoundsException e) {
+            return new Answer(null, "D: ", "", 3);
+        }
     }
 
     String getAnswer() {

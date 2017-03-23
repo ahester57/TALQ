@@ -61,7 +61,7 @@ public class QuizGET extends Fragment {
 
 
         // new string request
-        StringRequest strReq = new StringRequest(Request.Method.GET, "http://localhost:10010/v1/quiz",
+        StringRequest strReq = new StringRequest(Request.Method.GET, "http://stin.tech/learning-api/wrapper.php",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -70,9 +70,14 @@ public class QuizGET extends Fragment {
 
                         try {
                             JSONObject jObj = new JSONObject(response);
-                            String error = jObj.getString("error");
+                            String error;
+                            try {
+                                error = jObj.getString("error");
+                            } catch (JSONException e) {
+                                error = "false";
+                            }
 
-                            if (error != null) {
+                            if (error == "false") {
 
 
                                 String id = jObj.getString(QuizSchema.KEY_ID);
@@ -86,7 +91,7 @@ public class QuizGET extends Fragment {
 
                                 int i = 0, j = 0;
 
-                                while (qArray.getJSONObject(i) != null) {
+                                while (i < qArray.length()) {
                                     JSONObject qObj = qArray.getJSONObject(i);
                                     String qid = qObj.getString(QuestionSchema.KEY_ID);
                                     String qtitle = qObj.getString(QuestionSchema.KEY_TITLE);
@@ -97,7 +102,7 @@ public class QuizGET extends Fragment {
                                     ArrayList<Answer> answers = new ArrayList<>();
                                     j = 0;
 
-                                    while (aArray.getJSONObject(j) != null) {
+                                    while (j < aArray.length()) {
                                         JSONObject aObj = aArray.getJSONObject(j);
                                         String aid = aObj.getString(AnswerSchema.KEY_ID);
                                         String avalue = aObj.getString(AnswerSchema.KEY_VALUE);
