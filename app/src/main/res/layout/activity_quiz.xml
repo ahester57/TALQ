@@ -10,6 +10,30 @@
     tools:layout_editor_absoluteX="0dp">
 
     <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="8dp"
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="0dp">
+
+        <TextView
+            android:text="Confidence Points Remaining: "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/question_points"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:layout_weight="0" />
+
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/answer_segment"
         android:layout_width="366dp"
         android:layout_height="333dp"
@@ -18,7 +42,6 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="0dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -59,6 +82,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:layout_constraintLeft_creator="1"
                 tools:layout_constraintTop_creator="1" />
+
         </LinearLayout>
     </ScrollView>
 

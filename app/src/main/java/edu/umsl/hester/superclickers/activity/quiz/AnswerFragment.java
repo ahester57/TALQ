@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import edu.umsl.hester.superclickers.R;
 import edu.umsl.hester.superclickers.quizdata.Question;
@@ -22,7 +23,8 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
 
     private AnswerListener activity;
 
-    private Button buttonA, buttonB, buttonC, buttonD, buttonNext;
+    private TextView buttonA, buttonB, buttonC, buttonD;
+    private Button buttonNext;
     private Question curQuestion;
 
     // QuizActivity must implement these methods
@@ -35,16 +37,16 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_answer, container, false);
+        View view = inflater.inflate(R.layout.fragment_answer_user, container, false);
 
         activity = (AnswerListener) getActivity();
 
         // Initialize buttons from fragment_answer
         // Fragments are awesome and we should use them
-        buttonA = (Button) view.findViewById(R.id.A_button);
-        buttonB = (Button) view.findViewById(R.id.B_button);
-        buttonC = (Button) view.findViewById(R.id.C_button);
-        buttonD = (Button) view.findViewById(R.id.D_button);
+        buttonA = (TextView) view.findViewById(R.id.A_button);
+        buttonB = (TextView) view.findViewById(R.id.B_button);
+        buttonC = (TextView) view.findViewById(R.id.C_button);
+        buttonD = (TextView) view.findViewById(R.id.D_button);
         buttonNext = (Button) view.findViewById(R.id.next_question_button);
 
         // Set the button texts from whatever the getA,B,C,D() methods in QuizActivity
@@ -52,10 +54,10 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
         curQuestion = activity.getQuestion();
         setButtonText();
 
-        buttonA.setOnClickListener(this);
-        buttonB.setOnClickListener(this);
-        buttonC.setOnClickListener(this);
-        buttonD.setOnClickListener(this);
+        //buttonA.setOnClickListener(this);
+        //buttonB.setOnClickListener(this);
+        //buttonC.setOnClickListener(this);
+        //buttonD.setOnClickListener(this);
 
         buttonNext.setOnClickListener(this);
         buttonNext.setEnabled(false);

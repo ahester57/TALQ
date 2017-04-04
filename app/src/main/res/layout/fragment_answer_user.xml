@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/A_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:
+        android:text="A" />
+
+    <NumberPicker
+        android:id="@+id/A_points"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/B_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="B" />
+
+    <NumberPicker
+        android:id="@+id/B_points"
+        android:text="0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleX="0.5"
+        android:scaleY="0.5"/>
+
+    <TextView
+        android:id="@+id/C_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="C" />
+
+    <NumberPicker
+        android:id="@+id/C_points"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0" />
+
+    <TextView
+        android:id="@+id/D_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="D" />
+
+    <NumberPicker
+        android:id="@+id/D_points"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="0" />
+
+    <Button
+        android:id="@+id/next_question_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Next Question"
+        android:textAlignment="center" />
+</FrameLayout>

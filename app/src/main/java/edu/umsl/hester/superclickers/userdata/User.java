@@ -6,12 +6,14 @@ public class User {
     private String name = "";
     private String email = "";
     private String uid = "";
+    private Stats stats;
 
 
     public User(String name, String email, String unique_id) {
         this.name = name;
         this.email = email;
         this.uid = unique_id;
+        this.stats = new Stats();
     }
 
 

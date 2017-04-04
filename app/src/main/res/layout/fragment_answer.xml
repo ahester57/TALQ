@@ -3,33 +3,32 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:weightSum="1">
-
     <Button
         android:id="@+id/A_button"
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:layout_weight="0.02"
         android:text="A" />
-
+    <NumberPicker
+        android:id="@+id/points"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
     <Button
         android:id="@+id/B_button"
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:text="B" />
-
     <Button
         android:id="@+id/C_button"
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:layout_weight="0.08"
         android:text="C" />
-
     <Button
         android:id="@+id/D_button"
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:text="D" />
-
     <Button
         android:id="@+id/next_question_button"
         android:layout_width="147dp"
