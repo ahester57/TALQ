@@ -37,7 +37,7 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_answer_user, container, false);
+        View view = inflater.inflate(R.layout.fragment_answer, container, false);
 
         activity = (AnswerListener) getActivity();
 
@@ -54,10 +54,10 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
         curQuestion = activity.getQuestion();
         setButtonText();
 
-        //buttonA.setOnClickListener(this);
-        //buttonB.setOnClickListener(this);
-        //buttonC.setOnClickListener(this);
-        //buttonD.setOnClickListener(this);
+        buttonA.setOnClickListener(this);
+        buttonB.setOnClickListener(this);
+        buttonC.setOnClickListener(this);
+        buttonD.setOnClickListener(this);
 
         buttonNext.setOnClickListener(this);
         buttonNext.setEnabled(false);
