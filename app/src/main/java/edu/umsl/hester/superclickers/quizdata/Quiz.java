@@ -14,7 +14,7 @@ import edu.umsl.hester.superclickers.database.QuestionSchema;
 import edu.umsl.hester.superclickers.database.QuizSchema;
 
 
-public class Quiz implements Serializable{
+public class Quiz implements Serializable {
 
     private String id;
     private String description;
@@ -24,7 +24,6 @@ public class Quiz implements Serializable{
     private ArrayList<Question> questions;
 
     private int qNum;
-
 
     public Quiz(String id, String description, String text, String availableDate, String expiryDate, ArrayList<Question> questions, int qNum) {
         this.id = id;
@@ -38,7 +37,6 @@ public class Quiz implements Serializable{
 
     public Quiz(JSONObject jObj) throws JSONException{
         try {
-
             String id = jObj.getString(QuizSchema.KEY_ID);
             String desc = jObj.getString(QuizSchema.KEY_DESC);
             String text = jObj.getString(QuizSchema.KEY_TEXT);
@@ -69,16 +67,27 @@ public class Quiz implements Serializable{
         }
     }
 
-
-    // @TODO contructor taking JSONObject
-
+    public Question getQuestion() {
+        Question q = questions.get(qNum);
+        return q;
+    }
 
     public Question getNextQuestion() {
-
-        Question q = questions.get(qNum);
         qNum = (qNum + 1) % questions.size();
+        Question q = questions.get(qNum);
         return q;
+    }
 
+    public int getqNum() {
+        return qNum;
+    }
 
+    public Question getPrevQuestion() {
+        qNum = (qNum - 1) % questions.size();
+        if(qNum < 0) {
+            qNum += questions.size();
+        }
+        Question q = questions.get(qNum);
+        return q;
     }
 }

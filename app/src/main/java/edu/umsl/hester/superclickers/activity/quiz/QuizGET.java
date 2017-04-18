@@ -61,7 +61,6 @@ public class QuizGET extends Fragment {
         String uri = String.format(QuizConfig.URL_GET_QUIZ_BY_ID, id);
         // new string request
         StringRequest strReq = new StringRequest(Request.Method.GET, uri,
-
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -75,16 +74,13 @@ public class QuizGET extends Fragment {
                             } catch (JSONException e) {
                                 error = "false";
                             }
-
                             // if no errors
                             if (error.equals("false")) {
                                 // Quiz was found
                                 Quiz quiz = new Quiz(jObj);
                                 qController.setQuiz(quiz);
-
-
-
-                            } else {
+                            }
+                            else {
                                 // Error
                                 String errMessage = jObj.getString("error");
                                 Toast.makeText(getActivity(), errMessage,
@@ -96,14 +92,14 @@ public class QuizGET extends Fragment {
                                     + e.getMessage(), Toast.LENGTH_LONG).show();
                         }
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "Quiz error: " + error.getMessage());
-                Toast.makeText(getActivity(), error.getMessage(),
-                        Toast.LENGTH_LONG).show();
-
-            }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e(TAG, "Quiz error: " + error.getMessage());
+                        Toast.makeText(getActivity(), error.getMessage(),
+                                Toast.LENGTH_LONG).show();
+                    }
         });
         // end string request.. phew!
         AppController.getInstance().addToRequestQueue(strReq, tag_str_req);

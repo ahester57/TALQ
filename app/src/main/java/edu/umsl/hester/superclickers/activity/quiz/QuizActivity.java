@@ -1,6 +1,5 @@
 package edu.umsl.hester.superclickers.activity.quiz;
 
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.FragmentManager;
@@ -17,7 +16,6 @@ import edu.umsl.hester.superclickers.quizdata.Question;
 import edu.umsl.hester.superclickers.quizdata.Quiz;
 import edu.umsl.hester.superclickers.userdata.User;
 
-
 public class QuizActivity extends AppCompatActivity implements
         AnswerFragment.AnswerListener,
         QuizGET.QuizGETController {
@@ -26,11 +24,8 @@ public class QuizActivity extends AppCompatActivity implements
     private String quizID;
     private Quiz curQuiz;
     private Question curQuestion;
-
-    private Button test;
     private TextView questionView;
     private TextView pointsView;
-
     private QuizGET quizGET;
 
 
@@ -55,20 +50,35 @@ public class QuizActivity extends AppCompatActivity implements
         // Load quiz
         quizGET.getQuiz(quizID);
 
-        nextQuestion();
+        currQuestion();
     }
 
 
     @Override
     public void setQuiz(Quiz quiz) {
         curQuiz = quiz;
-        nextQuestion();
+        currQuestion();
     }
 
-    // returns current question
     @Override
     public Question getQuestion() {
         return curQuestion;
+    }
+
+    @Override
+    public void currQuestion() {
+        if(curQuiz == null) {
+            setBSQuiz();
+        }
+        curQuestion = curQuiz.getQuestion();
+        pointsView.setText(curQuestion.getPointsPossible());
+        questionView.setText(curQuestion.getQuestion());
+
+        AnswerFragment answerFragment = new AnswerFragment();
+        android.app.FragmentManager fm = getFragmentManager();
+        android.app.FragmentTransaction ft = fm.beginTransaction();
+        ft.replace(R.id.answer_segment, answerFragment);
+        ft.commit();
     }
 
     @Override
@@ -86,6 +96,22 @@ public class QuizActivity extends AppCompatActivity implements
         android.app.FragmentManager fm = getFragmentManager();
         android.app.FragmentTransaction ft = fm.beginTransaction();
         ft.replace(R.id.answer_segment, answerFrag);
+        ft.commit();
+    }
+
+    @Override
+    public void prevQuestion() {
+        if(curQuiz == null) {
+            setBSQuiz();
+        }
+        curQuestion = curQuiz.getPrevQuestion();
+        pointsView.setText(curQuestion.getPointsPossible());
+        questionView.setText(curQuestion.getQuestion());
+
+        AnswerFragment answerFragment = new AnswerFragment();
+        android.app.FragmentManager fm = getFragmentManager();
+        android.app.FragmentTransaction ft = fm.beginTransaction();
+        ft.replace(R.id.answer_segment, answerFragment);
         ft.commit();
     }
 

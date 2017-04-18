@@ -23,7 +23,7 @@ public class Question {
         this.title = title;
         this.text = text;
         this.pointsPossible = pointsPossible;
-        this.availableAnswers = availableAnswers; // sort by sortOrder
+        this.availableAnswers = availableAnswers;
     }
 
     public Question(JSONObject qObj) throws JSONException {
@@ -52,20 +52,15 @@ public class Question {
         } catch (JSONException e) {
             throw new JSONException(e.getMessage());
         }
-;
-    }
-
-    public boolean check(String guess) {
-        return true; //answer.equalsIgnoreCase(guess);
     }
 
     public String getPointsPossible() {
         return String.valueOf(pointsPossible);
     }
 
-    public String getQuestion() { return text; }
-
-    //ArrayList<String> getChoices() { return choices; }
+    public String getQuestion() {
+        return text;
+    }
 
     public Answer getA() {
         try {

@@ -27,8 +27,8 @@
 
     <LinearLayout
         android:id="@+id/answer_segment"
-        android:layout_width="366dp"
-        android:layout_height="333dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
@@ -42,7 +42,7 @@
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="wrap_content"
-        android:layout_height="200dp">
+        android:layout_height="100dp">
 
         <LinearLayout
             android:layout_width="wrap_content"

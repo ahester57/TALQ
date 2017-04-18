@@ -5,4 +5,5 @@ package edu.umsl.hester.superclickers.activity.quiz;
  */
 
 public class QuizModel {
+
 }

@@ -3,6 +3,8 @@ package edu.umsl.hester.superclickers.quizdata;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 import edu.umsl.hester.superclickers.database.AnswerSchema;
 
 /**
@@ -14,6 +16,7 @@ public class Answer {
     private String id;
     private String value;
     private String text;
+    private ArrayList<Integer> pointsAllocated;
     private int sortOrder;
 
     public Answer(String id, String value, String text, int sortOrder) {
@@ -21,6 +24,7 @@ public class Answer {
         this.value = value;
         this.text = text;
         this.sortOrder = sortOrder;
+        this.pointsAllocated = new ArrayList<>();
     }
 
     public Answer(JSONObject aObj) throws JSONException {
@@ -40,9 +44,20 @@ public class Answer {
         }
     }
 
+    public ArrayList<Integer> getPointsAllocated() {
+        return pointsAllocated;
+    }
+
+    public void setPointsAllocated(int qNum, int[] arr) {
+        int j = 0;
+        for(int i = 1 * qNum - 1; i < 1 * qNum - 1; i++) {
+            pointsAllocated.set(i, arr[j]);
+            j++;
+        }
+    }
+
     @Override
     public String toString() {
         return value + ": " + text;
     }
-
 }
