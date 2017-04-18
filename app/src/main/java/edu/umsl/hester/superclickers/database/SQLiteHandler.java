@@ -40,7 +40,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         return "CREATE TABLE IF NOT EXISTS " + TableSchema.TABLE_GROUP + "("
                 + GroupSchema.KEY_ID + " INTEGER PRIMARY KEY, "
                 + GroupSchema.KEY_NAME + " TEXT, "
-                + GroupSchema.KEY_GUID + " TEXT UNIQUE, "
+                + GroupSchema.KEY_GID + " TEXT UNIQUE, "
                 + GroupSchema.KEY_CREATED_AT + " TEXT" + ")";
     }
 
@@ -48,7 +48,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         return "CREATE TABLE IF NOT EXISTS " + TableSchema.TABLE_USER_GROUPS
                 + "(" + GroupSchema.KEY_ID + " INTEGER PRIMARY KEY, "
                 + UserSchema.KEY_UID + " TEXT, "
-                + GroupSchema.KEY_GUID + " TEXT, "
+                + GroupSchema.KEY_G_ID + " TEXT, "
                 + GroupSchema.KEY_CREATED_AT + " TEXT" + ")";
     }
 
@@ -101,7 +101,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         values.put(GroupSchema.KEY_NAME, name);
-        values.put(GroupSchema.KEY_GUID, guid);
+        values.put(GroupSchema.KEY_GID, guid);
         values.put(GroupSchema.KEY_CREATED_AT, created_at);
 
         //insert row
@@ -119,7 +119,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         values.put(UserSchema.KEY_UID, uid);
-        values.put(GroupSchema.KEY_GUID, guid);
+        values.put(GroupSchema.KEY_GID, guid);
         values.put(GroupSchema.KEY_CREATED_AT, created_at);
 
         //insert row

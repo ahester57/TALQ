@@ -46,6 +46,7 @@ public class QuizGET extends Fragment {
 
     interface QuizGETController {
         void setQuiz(Quiz quiz);
+        void setToken(String token);
     }
 
     @Override
@@ -56,9 +57,12 @@ public class QuizGET extends Fragment {
         qController = (QuizGETController) getActivity();
     }
 
-    void getQuiz(final String id) {
+    void getQuiz(final String user_id, final String course_id,
+            final String quiz_id, final String token) {
         String tag_str_req = "req_quiz";
-        String uri = String.format(QuizConfig.URL_GET_QUIZ_BY_ID, id);
+        String uri = String.format(QuizConfig.URL_GET_QUIZ, user_id,
+                course_id, quiz_id, token);
+
         // new string request
         StringRequest strReq = new StringRequest(Request.Method.GET, uri,
 
@@ -79,8 +83,65 @@ public class QuizGET extends Fragment {
                             // if no errors
                             if (error.equals("false")) {
                                 // Quiz was found
-                                Quiz quiz = new Quiz(jObj);
+                                JSONObject quizObj = jObj.getJSONObject("quiz");
+                                Quiz quiz = new Quiz(quizObj);
                                 qController.setQuiz(quiz);
+
+
+
+                            } else {
+                                // Error
+                                String errMessage = jObj.getString("error");
+                                Toast.makeText(getActivity(), errMessage,
+                                        Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getActivity(), "JSON error: "
+                                    + e.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "Quiz error: " + error.getMessage());
+                Toast.makeText(getActivity(), error.getMessage(),
+                        Toast.LENGTH_LONG).show();
+
+            }
+        });
+        // end string request.. phew!
+        AppController.getInstance().addToRequestQueue(strReq, tag_str_req);
+    }
+
+
+    void getToken(final String id) {
+        String tag_str_req = "req_quiz";
+        String uri = String.format(QuizConfig.URL_QUIZ_TOKEN, id);
+        // new string request
+        StringRequest strReq = new StringRequest(Request.Method.GET, uri,
+
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d(TAG, " Response: " + response);
+
+                        try {
+                            JSONObject jObj = new JSONObject(response);
+                            String error;
+                            try {
+                                error = jObj.getString("error");
+                            } catch (JSONException e) {
+                                error = "false";
+                            }
+
+                            // if no errors
+                            if (error.equals("false")) {
+                                // get token
+
+                                JSONObject token = jObj.getJSONObject("token");
+
+                                qController.setToken(token.getString("accessToken"));
 
 
 

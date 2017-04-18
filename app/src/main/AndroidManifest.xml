@@ -13,8 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         >
-        <activity android:name=".activity.login.LoginActivity"
-                    android:screenOrientation="portrait">
+        <activity android:name=".activity.login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -22,20 +21,16 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activity.quiz.QuizActivity"
-        android:screenOrientation="portrait">
+        <activity android:name=".activity.quiz.QuizActivity">
         </activity>
 
-        <activity android:name=".activity.login.RegisterActivity"
-            android:screenOrientation="portrait">
+        <activity android:name=".activity.login.RegisterActivity">
         </activity>
 
-        <activity android:name=".activity.home.HomeActivity"
-            android:screenOrientation="portrait">
+        <activity android:name=".activity.home.HomeActivity">
         </activity>
 
-        <activity android:name=".activity.home.GroupActivity"
-            android:screenOrientation="portrait">
+        <activity android:name=".activity.home.GroupActivity">
         </activity>
 
     </application>

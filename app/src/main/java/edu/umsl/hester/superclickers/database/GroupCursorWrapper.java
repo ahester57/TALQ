@@ -16,7 +16,7 @@ public class GroupCursorWrapper extends CursorWrapper {
     }
 
     public Group getUser() {
-        String guid = getString(getColumnIndex(GroupSchema.KEY_GUID));
+        String guid = getString(getColumnIndex(GroupSchema.KEY_GID));
         String name = getString(getColumnIndex(UserSchema.KEY_NAME));
         Group group = new Group(name, guid);
         return group;

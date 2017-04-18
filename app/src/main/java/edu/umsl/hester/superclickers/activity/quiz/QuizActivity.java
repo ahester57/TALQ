@@ -23,7 +23,11 @@ public class QuizActivity extends AppCompatActivity implements
         QuizGET.QuizGETController {
 
     private User user;
+    private String userID;
     private String quizID;
+    private String courseID;
+    private String token;
+
     private Quiz curQuiz;
     private Question curQuestion;
 
@@ -44,6 +48,9 @@ public class QuizActivity extends AppCompatActivity implements
 
         Intent intent = getIntent();
         quizID = intent.getStringExtra("QUIZ_ID");
+        userID = intent.getStringExtra("USER_ID");
+        courseID = intent.getStringExtra("COURSE_ID");
+
 
         quizGET = new QuizGET();
 
@@ -52,8 +59,10 @@ public class QuizActivity extends AppCompatActivity implements
                 .add(quizGET, "QUIZ_GET")
                 .commit();
 
-        // Load quiz
-        quizGET.getQuiz(quizID);
+        // Get token
+        quizGET.getToken(quizID);
+
+
 
         nextQuestion();
     }
@@ -63,6 +72,13 @@ public class QuizActivity extends AppCompatActivity implements
     public void setQuiz(Quiz quiz) {
         curQuiz = quiz;
         nextQuestion();
+    }
+
+    @Override
+    public void setToken(String token) {
+        this.token = token;
+        // Load quiz
+        quizGET.getQuiz(userID, courseID, quizID, token);
     }
 
     // returns current question
@@ -98,10 +114,10 @@ public class QuizActivity extends AppCompatActivity implements
 
     public void setBSQuiz() {
         ArrayList<Answer> answers = new ArrayList<>();
-        answers.add(new Answer("id", "A", "1", 0));
-        answers.add(new Answer("id", "B", "2", 1));
-        answers.add(new Answer("id", "C", "3", 2));
-        answers.add(new Answer("id", "D", "4", 3));
+        answers.add(new Answer("A", "1", 0));
+        answers.add(new Answer("B", "2", 1));
+        answers.add(new Answer("C", "3", 2));
+        answers.add(new Answer("D", "4", 3));
         Question question = new Question("id", "title", "What is log_10 1000", 22, answers);
         ArrayList<Question> questions = new ArrayList<>();
         questions.add(question);

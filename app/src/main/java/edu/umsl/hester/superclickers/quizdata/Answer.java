@@ -11,13 +11,11 @@ import edu.umsl.hester.superclickers.database.AnswerSchema;
 
 public class Answer {
 
-    private String id;
     private String value;
     private String text;
     private int sortOrder;
 
-    public Answer(String id, String value, String text, int sortOrder) {
-        this.id = id;
+    public Answer(String value, String text, int sortOrder) {
         this.value = value;
         this.text = text;
         this.sortOrder = sortOrder;
@@ -25,12 +23,10 @@ public class Answer {
 
     public Answer(JSONObject aObj) throws JSONException {
         try {
-            String aid = aObj.getString(AnswerSchema.KEY_ID);
             String avalue = aObj.getString(AnswerSchema.KEY_VALUE);
             String atext = aObj.getString(AnswerSchema.KEY_TEXT);
             int sortOrder = aObj.getInt(AnswerSchema.KEY_SORT_ORDER);
 
-            this.id = aid;
             this.value = avalue;
             this.text = atext;
             this.sortOrder = sortOrder;

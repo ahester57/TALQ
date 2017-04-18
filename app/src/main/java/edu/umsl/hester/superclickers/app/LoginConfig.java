@@ -18,8 +18,13 @@ package edu.umsl.hester.superclickers.app;
 
 public class LoginConfig {
 
+    private static String URL_BASE = "http://tblearn-api.vigilantestudio.com";
+
     public static String URL_LOGIN = "http://stin.tech/android_login_api/login.php";
     public static String URL_REGISTER = "http://stin.tech/android_login_api/register.php";
     public static String URL_CREATE_GROUP = "http://stin.tech/android_login_api/create_group.php";
     public static String URL_JOIN_GROUP = "http://stin.tech/android_login_api/join_group.php";
+
+    public static String URL_USER_BY_SSO = URL_BASE + "/v1/users/%1$s";
+
 }
