@@ -17,12 +17,11 @@ import java.util.HashMap;
 import java.util.List;
 
 import edu.umsl.hester.superclickers.R;
-import edu.umsl.hester.superclickers.activity.quiz.QuizActivity;
 import edu.umsl.hester.superclickers.activity.login.LoginActivity;
-import edu.umsl.hester.superclickers.activity.quiz.QuizGET;
-import edu.umsl.hester.superclickers.userdata.User;
-import edu.umsl.hester.superclickers.database.SQLiteHandler;
+import edu.umsl.hester.superclickers.activity.quiz.QuizActivity;
 import edu.umsl.hester.superclickers.app.SessionManager;
+import edu.umsl.hester.superclickers.database.SQLiteHandler;
+import edu.umsl.hester.superclickers.userdata.User;
 
 /**
  * Created by Austin on 2/4/2017.

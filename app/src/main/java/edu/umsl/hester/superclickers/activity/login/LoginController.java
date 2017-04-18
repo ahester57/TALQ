@@ -4,7 +4,6 @@ package edu.umsl.hester.superclickers.activity.login;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -22,7 +21,6 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import edu.umsl.hester.superclickers.activity.home.HomeActivity;
 import edu.umsl.hester.superclickers.app.AppController;
 import edu.umsl.hester.superclickers.app.LoginConfig;
 import edu.umsl.hester.superclickers.app.SessionManager;

@@ -4,9 +4,6 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -19,13 +16,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
-import edu.umsl.hester.superclickers.R;
 import edu.umsl.hester.superclickers.app.AppController;
 import edu.umsl.hester.superclickers.app.QuizConfig;
 import edu.umsl.hester.superclickers.database.QuizSchema;
-import edu.umsl.hester.superclickers.quizdata.Quiz;
 
 /**
  * Created by stin on 3/23/17.

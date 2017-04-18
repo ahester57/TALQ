@@ -1,14 +1,11 @@
 package edu.umsl.hester.superclickers.quizdata;
 
-import android.widget.Toast;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-
 
 import edu.umsl.hester.superclickers.database.QuizSchema;
 

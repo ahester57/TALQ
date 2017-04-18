@@ -6,29 +6,18 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import edu.umsl.hester.superclickers.app.AppController;
 import edu.umsl.hester.superclickers.app.QuizConfig;
 import edu.umsl.hester.superclickers.app.SessionManager;
-import edu.umsl.hester.superclickers.database.AnswerSchema;
-import edu.umsl.hester.superclickers.database.QuestionSchema;
-import edu.umsl.hester.superclickers.database.QuizSchema;
 import edu.umsl.hester.superclickers.database.SQLiteHandler;
-import edu.umsl.hester.superclickers.quizdata.Answer;
-import edu.umsl.hester.superclickers.quizdata.Question;
 import edu.umsl.hester.superclickers.quizdata.Quiz;
 
 /**

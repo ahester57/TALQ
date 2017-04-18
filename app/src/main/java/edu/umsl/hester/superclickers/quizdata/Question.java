@@ -6,7 +6,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import edu.umsl.hester.superclickers.database.AnswerSchema;
 import edu.umsl.hester.superclickers.database.QuestionSchema;
 
 public class Question {
