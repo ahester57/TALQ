@@ -88,7 +88,7 @@ public class GroupActivity extends AppCompatActivity implements View.OnClickList
                 break;
             case R.id.join_group_button:
                 if (!editGroupName.getText().toString().trim().equals("")) {
-                    joinGroup(user.getUniqueId(), editGroupName.getText().toString());
+                    joinGroup(user.get_id(), editGroupName.getText().toString());
                 } else {
                     Toast.makeText(getApplicationContext(), "Enter a group name, I say!",
                             Toast.LENGTH_LONG).show();
@@ -128,7 +128,7 @@ public class GroupActivity extends AppCompatActivity implements View.OnClickList
 
                                 // add user to sql database
                                 db.addGroup(name, guid, created_at);
-                                joinGroup(user.getUniqueId(), name);
+                                joinGroup(user.get_id(), name);
 
                                 Toast.makeText(getApplicationContext(), "Group registered", Toast.LENGTH_LONG).show();
 
@@ -161,7 +161,7 @@ public class GroupActivity extends AppCompatActivity implements View.OnClickList
                 // put params to login url via POST
                 Map<String, String> params = new HashMap<>();
                 params.put("name", name);
-                params.put("user_id", user.getUniqueId());
+                params.put("user_id", user.get_id());
 
                 return params;
             }
@@ -202,7 +202,7 @@ public class GroupActivity extends AppCompatActivity implements View.OnClickList
                                 String guid = user_group.getString("group_id");
                                 String created_at = user_group.getString("created_at");
 
-                                db.addUserToGroup(user.getUniqueId(), guid, created_at);
+                                db.addUserToGroup(user.get_id(), guid, created_at);
 
                                 Toast.makeText(getApplicationContext(), "Group joined", Toast.LENGTH_LONG).show();
 

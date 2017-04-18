@@ -6,6 +6,7 @@ package edu.umsl.hester.superclickers.database;
 
 public class QuestionSchema {
     public static final String KEY_ID = "id";
+    public static final String KEY_QUID = "_id";
     public static final String KEY_TITLE = "title";
     public static final String KEY_TEXT = "text";
     public static final String KEY_POINTS_POSS = "pointsPossible";

@@ -1,5 +1,6 @@
 package edu.umsl.hester.superclickers.activity.home;
 
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,6 +19,7 @@ import java.util.List;
 import edu.umsl.hester.superclickers.R;
 import edu.umsl.hester.superclickers.activity.quiz.QuizActivity;
 import edu.umsl.hester.superclickers.activity.login.LoginActivity;
+import edu.umsl.hester.superclickers.activity.quiz.QuizGET;
 import edu.umsl.hester.superclickers.userdata.User;
 import edu.umsl.hester.superclickers.database.SQLiteHandler;
 import edu.umsl.hester.superclickers.app.SessionManager;
@@ -27,14 +29,24 @@ import edu.umsl.hester.superclickers.app.SessionManager;
  *
  */
 
-public class HomeActivity extends AppCompatActivity implements View.OnClickListener {
+public class HomeActivity extends AppCompatActivity implements
+        View.OnClickListener, HomeFragment.HomeController {
 
     private final String TAG = HomeActivity.class.getSimpleName();
+
+    private String userId = "arh5w6";
     private String quizID;
+    private String courseId;
 
     private Spinner quiz_select_spinner;
     private SQLiteHandler db;
     private SessionManager session;
+    private HomeFragment hFragment;
+
+    private ArrayList<String> quizzes;
+    private HashMap<String, String> quizMap;
+
+    private ArrayList<String> courseIds;
 
     private User user;
 
@@ -67,8 +79,15 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             textEmail.setText(user.getEmail());
         }
 
+        hFragment = new HomeFragment();
 
-        setQuizSpinner();
+        FragmentManager fm = getFragmentManager();
+        fm.beginTransaction()
+                .add(hFragment, "HOME_GET")
+                .commit();
+
+        hFragment.getQuiz("arh5w6");
+
 
 
         btnLogout.setOnClickListener(this);
@@ -87,6 +106,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.play_button:
                 Intent i = new Intent(HomeActivity.this, QuizActivity.class);
                 i.putExtra("QUIZ_ID", quizID);
+                i.putExtra("USER_ID", userId);
+                i.putExtra("COURSE_ID", courseId);
                 startActivity(i);
                 //finish();
                 break;
@@ -97,31 +118,49 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    @Override
+    public void setQuizzes(ArrayList<String> quizzes, ArrayList<String> quizIds, ArrayList<String> courseIds) {
+        quizMap = new HashMap<>();
+        this.quizzes = quizzes;
+        this.courseIds = courseIds;
+
+        for (int i = 0; i < quizzes.size(); i++) {
+            quizMap.put(quizzes.get(i), quizIds.get(i));
+        }
+        setQuizSpinner();
+    }
+
     void setQuizSpinner() {
-        List<String> quizzes = new ArrayList<>();
-        quizzes.add("Danger Quiz");
-        quizzes.add("Superhero Quiz");
-        quizzes.add("Coffee Quiz");
-        quizzes.add("Common Sense Quiz");
+        final List<String> spinQuizzes = this.quizzes;
+
+//
+//
+//        quizzes.add("Danger Quiz");
+//        quizzes.add("Superhero Quiz");
+//        quizzes.add("Coffee Quiz");
+//        quizzes.add("Common Sense Quiz");
+
+
+
         ArrayAdapter<String> quizAdapter = new ArrayAdapter<>(this,
-                R.layout.support_simple_spinner_dropdown_item, quizzes);
+                R.layout.support_simple_spinner_dropdown_item, spinQuizzes);
         quizAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         quiz_select_spinner.setAdapter(quizAdapter);
         quiz_select_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String col = parent.getItemAtPosition(position).toString();
-                setActiveQuiz(col);
+                setActiveQuiz(col, position);
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                setActiveQuiz("Danger Quiz");
+                setActiveQuiz(spinQuizzes.get(0), 0);
             }
         });
     }
 
-    void setActiveQuiz(String quiz) {
+    void setActiveQuiz(String quiz, int pos) {
         switch (quiz) {
             case "Danger Quiz":
                 quizID = "8e21fdc6-2a2a-4023-9a32-6313b3e142b1";
@@ -139,6 +178,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 quizID = "8e21fdc6-2a2a-4023-9a32-6313b3e142b1";
 
         }
+        quizID = quizMap.get(quiz);
+        courseId = courseIds.get(pos);
     }
 
 

@@ -11,7 +11,7 @@ import edu.umsl.hester.superclickers.database.QuestionSchema;
 
 public class Question {
 
-    private String id;
+    private String _id;
     private String title;
     private String text;
     private int pointsPossible;
@@ -19,7 +19,7 @@ public class Question {
 
 
     public Question(String id, String title, String text, int pointsPossible, ArrayList<Answer> availableAnswers) {
-        this.id = id;
+        this._id = id;
         this.title = title;
         this.text = text;
         this.pointsPossible = pointsPossible;
@@ -28,7 +28,7 @@ public class Question {
 
     public Question(JSONObject qObj) throws JSONException {
         try {
-            String qid = qObj.getString(QuestionSchema.KEY_ID);
+            String qid = qObj.getString(QuestionSchema.KEY_QUID);
             String qtitle = qObj.getString(QuestionSchema.KEY_TITLE);
             String qtext = qObj.getString(QuestionSchema.KEY_TEXT);
             int points = qObj.getInt(QuestionSchema.KEY_POINTS_POSS);
@@ -43,7 +43,7 @@ public class Question {
                 j++;
             }
 
-            this.id = qid;
+            this._id = qid;
             this.title = qtitle;
             this.text = qtext;
             this.pointsPossible = points;
@@ -68,7 +68,7 @@ public class Question {
         try {
             return availableAnswers.get(0);
         } catch (IndexOutOfBoundsException e) {
-            return new Answer(null, "A", "", 0);
+            return new Answer("A", "", 0);
         }
     }
 
@@ -76,7 +76,7 @@ public class Question {
         try {
             return availableAnswers.get(1);
         } catch (IndexOutOfBoundsException e) {
-            return new Answer(null, "B", "", 1);
+            return new Answer("B", "", 1);
         }
     }
 
@@ -84,7 +84,7 @@ public class Question {
         try {
             return availableAnswers.get(2);
         } catch (IndexOutOfBoundsException e) {
-            return new Answer(null, "C", "", 2);
+            return new Answer("C", "", 2);
         }
     }
 
@@ -92,7 +92,7 @@ public class Question {
         try {
             return availableAnswers.get(3);
         } catch (IndexOutOfBoundsException e) {
-            return new Answer(null, "D", "", 3);
+            return new Answer("D", "", 3);
         }
     }
 

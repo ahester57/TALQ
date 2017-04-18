@@ -9,14 +9,13 @@ import org.json.JSONObject;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import edu.umsl.hester.superclickers.database.AnswerSchema;
-import edu.umsl.hester.superclickers.database.QuestionSchema;
+
 import edu.umsl.hester.superclickers.database.QuizSchema;
 
 
 public class Quiz implements Serializable{
 
-    private String id;
+    private String _id;
     private String description;
     private String text;
     private String availableDate;
@@ -27,7 +26,7 @@ public class Quiz implements Serializable{
 
 
     public Quiz(String id, String description, String text, String availableDate, String expiryDate, ArrayList<Question> questions, int qNum) {
-        this.id = id;
+        this._id = id;
         this.description = description;
         this.text = text;
         this.availableDate = availableDate;
@@ -39,11 +38,11 @@ public class Quiz implements Serializable{
     public Quiz(JSONObject jObj) throws JSONException{
         try {
 
-            String id = jObj.getString(QuizSchema.KEY_ID);
+            String id = jObj.getString(QuizSchema.KEY_QID);
             String desc = jObj.getString(QuizSchema.KEY_DESC);
             String text = jObj.getString(QuizSchema.KEY_TEXT);
             String avail = jObj.getString(QuizSchema.KEY_AVAIL_DATE);
-            String exp = jObj.getString(QuizSchema.KEY_EXPIRE_DATE);
+            String exp = jObj.getString(QuizSchema.KEY_EXPIRY_DATE);
             JSONArray qArray = jObj.getJSONArray(QuizSchema.KEY_QUESTIONS);
 
             ArrayList<Question> questions = new ArrayList<>();
@@ -55,7 +54,7 @@ public class Quiz implements Serializable{
                 i++;
             }
 
-            this.id = id;
+            this._id = id;
             this.description = desc;
             this.text = text;
             this.availableDate = avail;
