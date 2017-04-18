@@ -18,7 +18,7 @@ import edu.umsl.hester.superclickers.quizdata.Question;
  *
  */
 
-public class AnswerFragment extends Fragment implements View.OnClickListener{
+public class AnswerFragmentUser extends Fragment implements View.OnClickListener{
 
     private AnswerListener activity;
     private Button A, B, C, D, buttonPrevious, buttonNext;

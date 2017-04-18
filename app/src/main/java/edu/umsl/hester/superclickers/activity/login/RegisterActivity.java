@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import edu.umsl.hester.superclickers.R;
-import edu.umsl.hester.superclickers.activity.quiz.QuizActivity;
+import edu.umsl.hester.superclickers.activity.quiz.QuizActivityUser;
 import edu.umsl.hester.superclickers.app.AppController;
 import edu.umsl.hester.superclickers.app.LoginConfig;
 import edu.umsl.hester.superclickers.database.SQLiteHandler;
@@ -69,7 +69,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         db = new SQLiteHandler(getApplicationContext());
 
         if (session.isLoggedIn()) {
-            Intent intent = new Intent(RegisterActivity.this, QuizActivity.class);
+            Intent intent = new Intent(RegisterActivity.this, QuizActivityUser.class);
             startActivity(intent);
             finish();
         }

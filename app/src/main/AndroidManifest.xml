@@ -21,7 +21,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activity.quiz.QuizActivity">
+        <activity android:name=".activity.quiz.QuizActivityUser">
         </activity>
 
         <activity android:name=".activity.login.RegisterActivity">
