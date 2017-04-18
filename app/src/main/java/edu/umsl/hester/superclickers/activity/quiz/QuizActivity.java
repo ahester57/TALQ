@@ -25,7 +25,6 @@ public class QuizActivity extends AppCompatActivity implements
     private Quiz curQuiz;
     private Question curQuestion;
     private TextView questionView;
-    private TextView pointsView;
     private QuizGET quizGET;
 
 
@@ -35,7 +34,6 @@ public class QuizActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_quiz);
 
         questionView = (TextView) findViewById(R.id.question_text_view);
-        pointsView = (TextView) findViewById(R.id.question_points);
 
         Intent intent = getIntent();
         quizID = intent.getStringExtra("QUIZ_ID");
@@ -71,7 +69,6 @@ public class QuizActivity extends AppCompatActivity implements
             setBSQuiz();
         }
         curQuestion = curQuiz.getQuestion();
-        pointsView.setText(curQuestion.getPointsPossible());
         questionView.setText(curQuestion.getQuestion());
 
         AnswerFragment answerFragment = new AnswerFragment();
@@ -87,7 +84,6 @@ public class QuizActivity extends AppCompatActivity implements
             setBSQuiz();
         }
         curQuestion = curQuiz.getNextQuestion();
-        pointsView.setText(curQuestion.getPointsPossible());
         questionView.setText(curQuestion.getQuestion());
 
         // create instance of the answer fragment
@@ -105,7 +101,6 @@ public class QuizActivity extends AppCompatActivity implements
             setBSQuiz();
         }
         curQuestion = curQuiz.getPrevQuestion();
-        pointsView.setText(curQuestion.getPointsPossible());
         questionView.setText(curQuestion.getQuestion());
 
         AnswerFragment answerFragment = new AnswerFragment();

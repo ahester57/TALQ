@@ -57,7 +57,9 @@ public class Question {
     public String getPointsPossible() {
         return String.valueOf(pointsPossible);
     }
-
+    public void setPointsPossible(int newPoints) {
+        this.pointsPossible = newPoints;
+    }
     public String getQuestion() {
         return text;
     }
