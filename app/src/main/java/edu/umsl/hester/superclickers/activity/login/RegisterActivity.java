@@ -12,7 +12,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import edu.umsl.hester.superclickers.R;
-import edu.umsl.hester.superclickers.activity.quiz.QuizActivity;
+import edu.umsl.hester.superclickers.activity.quiz.QuizActivityUser;
 import edu.umsl.hester.superclickers.app.SessionManager;
 
 /**
@@ -49,7 +49,7 @@ public class RegisterActivity extends AppCompatActivity implements
 
         SessionManager session = new SessionManager(getApplicationContext());
         if (session.isLoggedIn()) {
-            Intent intent = new Intent(RegisterActivity.this, QuizActivity.class);
+            Intent intent = new Intent(RegisterActivity.this, QuizActivityUser.class);
             startActivity(intent);
             finish();
         }

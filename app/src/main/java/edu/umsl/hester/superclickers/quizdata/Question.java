@@ -62,9 +62,12 @@ public class Question {
         return String.valueOf(pointsPossible);
     }
 
+    public void setPointsPossible(int newPoints) {
+        this.pointsPossible = newPoints;
+    }
+
     public String getQuestion() { return text; }
 
-    //ArrayList<String> getChoices() { return choices; }
 
     public Answer getA() {
         try {

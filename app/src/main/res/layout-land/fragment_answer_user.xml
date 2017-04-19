@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/answer_container"
     android:orientation="vertical"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
@@ -10,15 +9,15 @@
         android:text="Confidence Points Remaining: "
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="5dp"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        android:layout_weight="1" />
 
     <TextView
         android:id="@+id/question_points"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="14sp"
-        android:layout_toEndOf="@+id/points_remaining" />
+        android:layout_toRightOf="@+id/points_remaining"/>
 
     <ScrollView
         android:layout_below="@+id/question_points"
@@ -26,13 +25,15 @@
         android:layout_height="wrap_content">
 
         <RelativeLayout
+            android:id="@+id/answer_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
             <Button
                 android:id="@+id/A_button"
-                android:layout_marginStart="20dp"
-                android:layout_width="300dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_width="280dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
@@ -40,55 +41,59 @@
 
             <Button
                 android:id="@+id/B_button"
-                android:layout_marginStart="20dp"
-                android:layout_width="300dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_width="280dp"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/A_button"
+                android:enabled="false" />
+
+            <Button
+                android:id="@+id/C_button"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_width="280dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/A_button"
                 android:enabled="false" />
 
             <Button
-                android:id="@+id/C_button"
-                android:layout_marginStart="20dp"
-                android:layout_width="300dp"
+                android:id="@+id/D_button"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_width="280dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/B_button"
-                android:enabled="false" />
-
-            <Button
-                android:id="@+id/D_button"
-                android:layout_marginStart="20dp"
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/C_button"
+                android:layout_toRightOf="@+id/C_button"
                 android:enabled="false" />
 
             <SeekBar
                 android:id="@+id/A_points"
-                android:layout_width="300dp"
+                android:layout_width="280dp"
                 android:layout_height="wrap_content"
                 android:layout_alignLeft="@+id/A_button"
-                android:layout_alignBottom="@id/A_button"/>
+                android:layout_alignBottom="@+id/A_button"/>
 
             <SeekBar
                 android:id="@+id/B_points"
-                android:layout_width="300dp"
+                android:layout_width="280dp"
                 android:layout_height="wrap_content"
                 android:layout_alignLeft="@+id/B_button"
-                android:layout_alignBottom="@id/B_button"/>
+                android:layout_alignBottom="@+id/B_button"/>
 
             <SeekBar
                 android:id="@+id/C_points"
-                android:layout_width="300dp"
+                android:layout_width="280dp"
                 android:layout_height="wrap_content"
                 android:layout_alignLeft="@+id/C_button"
-                android:layout_alignBottom="@id/C_button"/>
+                android:layout_alignBottom="@+id/C_button"/>
 
             <SeekBar
                 android:id="@+id/D_points"
-                android:layout_width="300dp"
+                android:layout_width="280dp"
                 android:layout_height="wrap_content"
                 android:layout_alignLeft="@+id/D_button"
-                android:layout_alignBottom="@id/D_button"/>
+                android:layout_alignBottom="@+id/D_button"/>
         </RelativeLayout>
     </ScrollView>
 

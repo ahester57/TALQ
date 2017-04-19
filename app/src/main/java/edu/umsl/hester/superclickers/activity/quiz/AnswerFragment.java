@@ -27,7 +27,7 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
     private Button buttonNext;
     private Question curQuestion;
 
-    // QuizActivity must implement these methods
+    // QuizActivityUser must implement these methods
     // This will be our way of communicating to the main activity from fragments
     interface AnswerListener{
         Question getQuestion();
@@ -49,7 +49,7 @@ public class AnswerFragment extends Fragment implements View.OnClickListener{
         buttonD = (TextView) view.findViewById(R.id.D_button);
         buttonNext = (Button) view.findViewById(R.id.next_question_button);
 
-        // Set the button texts from whatever the getA,B,C,D() methods in QuizActivity
+        // Set the button texts from whatever the getA,B,C,D() methods in QuizActivityUser
         // Eventually, we'll move the potential answers somewhere else
         curQuestion = activity.getQuestion();
         setButtonText();

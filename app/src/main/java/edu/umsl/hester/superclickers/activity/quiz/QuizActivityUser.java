@@ -5,20 +5,24 @@ import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import edu.umsl.hester.superclickers.R;
+import edu.umsl.hester.superclickers.activity.home.HomeActivity;
 import edu.umsl.hester.superclickers.quizdata.Answer;
 import edu.umsl.hester.superclickers.quizdata.Question;
 import edu.umsl.hester.superclickers.quizdata.Quiz;
 import edu.umsl.hester.superclickers.userdata.User;
 
 
-public class QuizActivity extends AppCompatActivity implements
-        AnswerFragment.AnswerListener,
+public class QuizActivityUser extends AppCompatActivity implements
+        View.OnClickListener,
+        AnswerFragmentUser.AnswerListener,
         QuizGET.QuizGETController {
 
     private User user;
@@ -30,12 +34,17 @@ public class QuizActivity extends AppCompatActivity implements
     private Quiz curQuiz;
     private Question curQuestion;
 
-    private Button test;
+    private Button submit;
     private TextView questionView;
-    private TextView pointsView;
-
     private QuizGET quizGET;
 
+    @Override
+    public void onClick(View view) {
+        Intent quizIntent = new Intent(QuizActivityUser.this, HomeActivity.class);
+        Toast.makeText(getApplicationContext(), "Quiz Submitted", Toast.LENGTH_LONG).show();
+        startActivity(quizIntent);
+        finish();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,13 +52,12 @@ public class QuizActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_quiz);
 
         questionView = (TextView) findViewById(R.id.question_text_view);
-        pointsView = (TextView) findViewById(R.id.question_points);
-
+        submit = (Button) findViewById(R.id.submit_button);
+        submit.setOnClickListener(this);
         Intent intent = getIntent();
         quizID = intent.getStringExtra("QUIZ_ID");
         userID = intent.getStringExtra("USER_ID");
         courseID = intent.getStringExtra("COURSE_ID");
-
 
         quizGET = new QuizGET();
 
@@ -58,32 +66,43 @@ public class QuizActivity extends AppCompatActivity implements
                 .add(quizGET, "QUIZ_GET")
                 .commit();
 
-        // Get token
+        // Load quiz
         quizGET.getToken(quizID);
 
-
-
-        nextQuestion();
+        currQuestion();
     }
 
 
     @Override
     public void setQuiz(Quiz quiz) {
         curQuiz = quiz;
-        nextQuestion();
+        currQuestion();
     }
 
     @Override
     public void setToken(String token) {
         this.token = token;
-        // Load quiz
         quizGET.getQuiz(userID, courseID, quizID, token);
     }
 
-    // returns current question
     @Override
     public Question getQuestion() {
         return curQuestion;
+    }
+
+    @Override
+    public void currQuestion() {
+        if(curQuiz == null) {
+            setBSQuiz();
+        }
+        curQuestion = curQuiz.getQuestion();
+        questionView.setText(curQuestion.getQuestion());
+
+        AnswerFragmentUser answerFragment = new AnswerFragmentUser();
+        android.app.FragmentManager fm = getFragmentManager();
+        android.app.FragmentTransaction ft = fm.beginTransaction();
+        ft.replace(R.id.answer_segment, answerFragment);
+        ft.commit();
     }
 
     @Override
@@ -92,15 +111,29 @@ public class QuizActivity extends AppCompatActivity implements
             setBSQuiz();
         }
         curQuestion = curQuiz.getNextQuestion();
-        pointsView.setText(curQuestion.getPointsPossible());
         questionView.setText(curQuestion.getQuestion());
 
         // create instance of the answer fragment
-        AnswerFragment answerFrag = new AnswerFragment();
-        // load answer fragment into answerSection of QuizActivity
+        AnswerFragmentUser answerFrag = new AnswerFragmentUser();
+        // load answer fragment into answerSection of QuizActivityUser
         android.app.FragmentManager fm = getFragmentManager();
         android.app.FragmentTransaction ft = fm.beginTransaction();
         ft.replace(R.id.answer_segment, answerFrag);
+        ft.commit();
+    }
+
+    @Override
+    public void prevQuestion() {
+        if(curQuiz == null) {
+            setBSQuiz();
+        }
+        curQuestion = curQuiz.getPrevQuestion();
+        questionView.setText(curQuestion.getQuestion());
+
+        AnswerFragmentUser answerFragment = new AnswerFragmentUser();
+        android.app.FragmentManager fm = getFragmentManager();
+        android.app.FragmentTransaction ft = fm.beginTransaction();
+        ft.replace(R.id.answer_segment, answerFragment);
         ft.commit();
     }
 

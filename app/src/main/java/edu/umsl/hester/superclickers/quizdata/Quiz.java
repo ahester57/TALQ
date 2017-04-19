@@ -65,16 +65,27 @@ public class Quiz implements Serializable{
         }
     }
 
-
-    // @TODO contructor taking JSONObject
-
+    public Question getQuestion() {
+        Question q = questions.get(qNum);
+        return q;
+    }
 
     public Question getNextQuestion() {
-
         Question q = questions.get(qNum);
         qNum = (qNum + 1) % questions.size();
         return q;
+    }
 
+    public int getqNum() {
+        return qNum;
+    }
 
+    public Question getPrevQuestion() {
+        qNum = (qNum - 1) % questions.size();
+        if(qNum < 0) {
+            qNum += questions.size();
+        }
+        Question q = questions.get(qNum);
+        return q;
     }
 }

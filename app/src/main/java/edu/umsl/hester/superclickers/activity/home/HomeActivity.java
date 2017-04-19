@@ -18,7 +18,7 @@ import java.util.List;
 
 import edu.umsl.hester.superclickers.R;
 import edu.umsl.hester.superclickers.activity.login.LoginActivity;
-import edu.umsl.hester.superclickers.activity.quiz.QuizActivity;
+import edu.umsl.hester.superclickers.activity.quiz.QuizActivityUser;
 import edu.umsl.hester.superclickers.app.SessionManager;
 import edu.umsl.hester.superclickers.database.SQLiteHandler;
 import edu.umsl.hester.superclickers.userdata.User;
@@ -101,7 +101,7 @@ public class HomeActivity extends AppCompatActivity implements
                 logoutUser();
                 break;
             case R.id.play_button:
-                Intent i = new Intent(HomeActivity.this, QuizActivity.class);
+                Intent i = new Intent(HomeActivity.this, QuizActivityUser.class);
                 i.putExtra("QUIZ_ID", quizID);
                 i.putExtra("USER_ID", userId);
                 i.putExtra("COURSE_ID", courseId);

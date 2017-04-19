@@ -58,7 +58,6 @@ public class LoginActivity extends AppCompatActivity implements
             finish();
         }
 
-        LoginFragment loginFragment = new LoginFragment();
 
         lController = new LoginController();
         lController.setContext(getApplicationContext());
@@ -66,7 +65,7 @@ public class LoginActivity extends AppCompatActivity implements
         FragmentManager fm = getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
 
-        ft.add(loginFragment, "LOGIN_FRAGMENT");
+
         ft.add(lController, "LOGIN_CONTROLLER");
         ft.commit();
 

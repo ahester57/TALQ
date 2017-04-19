@@ -8,24 +8,16 @@ from there:
 
 git clone http://umsl.vigilantestudio.com/superClickers/superClickers.git
 
-Added a database system (not yet fully implemented)
 
-
-@DONE [02/08/17]
-
-	- database setup
-	- login / register done (use test password: test)
-	- added home activity, group activity
-
-@TODO [02/09/17]
-
-	- leave groups
-	- show groups
-	- question / quiz database
-	
-@TODO [03/09/17]
+@TODO [04/18/17]
 
 	- make groupViewFragment
-	- switch to learning-api
 	- make it look nice
-	- user / quiz SQLite handler
+	- visual timer for quizzes
+	- display progress, i.e. 5/10
+	- change login
+	- input token to unlock quiz
+	- get more quiz info and sessionID
+	- Build WaitingRoom --> Then QuizActivityGroup
+	- submit quizzes for grading
+	- set leader to first user finished
