@@ -26,7 +26,7 @@ import java.util.Map;
 import edu.umsl.hester.superclickers.R;
 import edu.umsl.hester.superclickers.app.AppController;
 import edu.umsl.hester.superclickers.app.LoginConfig;
-import edu.umsl.hester.superclickers.database.SQLiteHandler;
+import edu.umsl.hester.superclickers.database.SQLiteHandlerUsers;
 import edu.umsl.hester.superclickers.userdata.User;
 
 /**
@@ -42,7 +42,7 @@ public class GroupActivity extends AppCompatActivity implements View.OnClickList
     private EditText editGroupName;
 
     private ProgressDialog pDialog;
-    private SQLiteHandler db;
+    private SQLiteHandlerUsers db;
 
     private User user;
 
@@ -61,7 +61,7 @@ public class GroupActivity extends AppCompatActivity implements View.OnClickList
         pDialog.setCancelable(false);
 
         // database stuff
-        db = new SQLiteHandler(getApplicationContext());
+        db = new SQLiteHandlerUsers(getApplicationContext());
         HashMap<String, String> userDetails = db.getUserDetails();
         this.user = new User(userDetails.get("name"), userDetails.get("email"), userDetails.get("uid"));
 

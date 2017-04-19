@@ -20,7 +20,7 @@ import edu.umsl.hester.superclickers.quizdata.Question;
 
 public class AnswerFragmentUser extends Fragment implements View.OnClickListener{
 
-    private AnswerListener activity;
+    private AnswerListener aListener;
     private Button A, B, C, D, buttonPrevious, buttonNext;
     private SeekBar aP, bP, cP, dP;
     private int[] prevProgress;
@@ -40,24 +40,59 @@ public class AnswerFragmentUser extends Fragment implements View.OnClickListener
         View view = inflater.inflate(R.layout.fragment_answer_user, container, false);
 
         prevProgress = new int[4];
-        activity = (AnswerListener) getActivity();
+        aListener = (AnswerListener) getActivity();
 
         pointsView = (TextView) view.findViewById(R.id.question_points);
-
 
         A = (Button) view.findViewById(R.id.A_button);
         B = (Button) view.findViewById(R.id.B_button);
         C = (Button) view.findViewById(R.id.C_button);
         D = (Button) view.findViewById(R.id.D_button);
 
-        buttonNext = (Button) view.findViewById(R.id.next_question_button);
-        buttonPrevious = (Button) view.findViewById(R.id.prev_question_button);
-
         aP = (SeekBar) view.findViewById(R.id.A_points);
         bP = (SeekBar) view.findViewById(R.id.B_points);
         cP = (SeekBar) view.findViewById(R.id.C_points);
         dP = (SeekBar) view.findViewById(R.id.D_points);
 
+        buttonNext = (Button) view.findViewById(R.id.next_question_button);
+        buttonPrevious = (Button) view.findViewById(R.id.prev_question_button);
+
+        setSeekBarListeners();
+
+
+        curQuestion = aListener.getQuestion();
+        pointsView.setText(curQuestion.getPointsPossible());
+        setAnswerText();
+
+        buttonPrevious.setOnClickListener(this);
+        buttonNext.setOnClickListener(this);
+
+        return view;
+    }
+
+    @Override
+    public void onClick(View view) {
+
+        switch(view.getId()) {
+            case R.id.next_question_button:
+                aListener.nextQuestion();
+                break;
+            case R.id.prev_question_button:
+                aListener.prevQuestion();
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void setAnswerText() {
+        A.setText(curQuestion.getA().toString());
+        B.setText(curQuestion.getB().toString());
+        C.setText(curQuestion.getC().toString());
+        D.setText(curQuestion.getD().toString());
+    }
+
+    private void setSeekBarListeners() {
         aP.setMax(4);
         bP.setMax(4);
         cP.setMax(4);
@@ -158,36 +193,5 @@ public class AnswerFragmentUser extends Fragment implements View.OnClickListener
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {}
         });
-        
-        curQuestion = activity.getQuestion();
-        pointsView.setText(curQuestion.getPointsPossible());
-        setAnswerText();
-
-        buttonPrevious.setOnClickListener(this);
-        buttonNext.setOnClickListener(this);
-
-        return view;
-    }
-
-    @Override
-    public void onClick(View view) {
-
-        switch(view.getId()) {
-            case R.id.next_question_button:
-                activity.nextQuestion();
-                break;
-            case R.id.prev_question_button:
-                activity.prevQuestion();
-                break;
-            default:
-                break;
-        }
-    }
-
-    private void setAnswerText() {
-        A.setText(curQuestion.getA().toString());
-        B.setText(curQuestion.getB().toString());
-        C.setText(curQuestion.getC().toString());
-        D.setText(curQuestion.getD().toString());
     }
 }

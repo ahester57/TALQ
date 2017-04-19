@@ -17,7 +17,7 @@ import org.json.JSONObject;
 import edu.umsl.hester.superclickers.app.AppController;
 import edu.umsl.hester.superclickers.app.QuizConfig;
 import edu.umsl.hester.superclickers.app.SessionManager;
-import edu.umsl.hester.superclickers.database.SQLiteHandler;
+import edu.umsl.hester.superclickers.database.SQLiteHandlerUsers;
 import edu.umsl.hester.superclickers.quizdata.Quiz;
 
 /**
@@ -28,7 +28,7 @@ public class QuizGET extends Fragment {
 
     private final String TAG = this.getClass().getSimpleName();
 
-    private SQLiteHandler db;
+    private SQLiteHandlerUsers db;
     private SessionManager session;
 
     private QuizGETController qController;
@@ -41,7 +41,7 @@ public class QuizGET extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        db = new SQLiteHandler(getActivity());
+        db = new SQLiteHandlerUsers(getActivity());
         session = new SessionManager(getActivity());
         qController = (QuizGETController) getActivity();
     }

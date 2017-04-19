@@ -26,8 +26,7 @@ public class RegisterActivity extends AppCompatActivity implements
 
     private static final String TAG = RegisterActivity.class.getSimpleName();
 
-    private EditText inName;
-    private EditText inEmail;
+    private EditText inSSO;
     private EditText inPassword;
     private EditText inConfirm;
 
@@ -40,8 +39,7 @@ public class RegisterActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        inName = (EditText) findViewById(R.id.reg_name_text_edit);
-        inEmail = (EditText) findViewById(R.id.reg_email_text_edit);
+        inSSO = (EditText) findViewById(R.id.reg_sso_text_edit);
         inPassword = (EditText) findViewById(R.id.reg_pwd_edit);
         inConfirm = (EditText) findViewById(R.id.reg_pwd_confirm);
         Button btnBack = (Button) findViewById(R.id.reg_back_button);
@@ -64,8 +62,11 @@ public class RegisterActivity extends AppCompatActivity implements
         btnBack.setOnClickListener(this);
         btnRegister.setOnClickListener(this);
 
+    }
 
-
+    @Override
+    public void registerUser(final String name, final String ssoId, final String pwd) {
+        rController.registerUser(name, ssoId, pwd);
     }
 
     @Override
@@ -73,14 +74,16 @@ public class RegisterActivity extends AppCompatActivity implements
 
         switch (view.getId()){
             case R.id.register_button:
-                String name = inName.getText().toString().trim();
-                String email = inEmail.getText().toString().trim();
+                String ssoId = inSSO.getText().toString().trim();
                 String password = inPassword.getText().toString().trim();
                 String confirm = inConfirm.getText().toString().trim();
 
-                if (!name.isEmpty() && !email.isEmpty() && !password.isEmpty()) {
+                if (!ssoId.isEmpty() && !password.isEmpty()) {
                     if (password.equals(confirm)) {
-                        rController.registerUser(name, email, password);
+
+                        rController.getUserDetails(ssoId, password);
+
+
                     } else {
                         Toast.makeText(getApplicationContext(),
                                 "Ya done goofed. Passwords don't match.", Toast.LENGTH_LONG).show();

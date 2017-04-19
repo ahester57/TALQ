@@ -69,6 +69,8 @@ public class QuizActivityUser extends AppCompatActivity implements
         // Load quiz
         quizGET.getToken(quizID);
 
+        // @TODO save quiz to SQLite
+
         currQuestion();
     }
 

@@ -19,7 +19,7 @@ public class GroupFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_answer, container, false);
+        View view = inflater.inflate(R.layout.fragment_answer_user, container, false);
         // @TODO
         // put recycler view here with groups and group members
 

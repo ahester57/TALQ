@@ -27,7 +27,7 @@ public class LoginActivity extends AppCompatActivity implements
 
     private final String TAG = LoginActivity.class.getSimpleName();
 
-    private EditText userEmail;
+    private EditText ssoId;
     private EditText userPass;
     private Button login;
     private Button register;
@@ -44,7 +44,7 @@ public class LoginActivity extends AppCompatActivity implements
         login = (Button) findViewById(R.id.login_button);
         register = (Button) findViewById(R.id.new_user_button);
         skip = (Button) findViewById(R.id.skip_login_button);
-        userEmail = (EditText) findViewById(R.id.email_text_edit);
+        ssoId = (EditText) findViewById(R.id.sso_text_edit);
         userPass = (EditText) findViewById(R.id.pwd_text_edit);
 
 
@@ -103,7 +103,7 @@ public class LoginActivity extends AppCompatActivity implements
     }
 
     private void tryLogin() {
-        String email = userEmail.getText().toString().trim();
+        String email = ssoId.getText().toString().trim();
         String password = userPass.getText().toString().trim();
 
         if (!email.isEmpty() && !password.isEmpty()) {
@@ -119,7 +119,7 @@ public class LoginActivity extends AppCompatActivity implements
     public void goToHome() {
         // Go to Quiz
         Intent quizIntent = new Intent(LoginActivity.this, HomeActivity.class);
-        quizIntent.putExtra("USER_NAME", userEmail.getText().toString());
+        quizIntent.putExtra("USER_NAME", ssoId.getText().toString());
         startActivity(quizIntent);
         finish();
     }

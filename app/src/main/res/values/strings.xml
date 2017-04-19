@@ -4,6 +4,7 @@
     <string name="connecting">Connecting....</string>
     <string name="name">Name</string>
     <string name="email">Email</string>
+    <string name="ssoId">SSO ID</string>
     <string name="pwd">Enter password</string>
     <string name="login">Login</string>
     <string name="logout">Logout</string>

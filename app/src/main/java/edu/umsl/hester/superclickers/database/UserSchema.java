@@ -7,10 +7,10 @@ package edu.umsl.hester.superclickers.database;
 
 public class UserSchema {
     // user table column names
-    static final String KEY_ID = "id";
-    static final String KEY_UID = "_id";
-    static final String KEY_USER_ID = "userID";
-    static final String KEY_EMAIL = "email";
-    static final String KEY_NAME = "name";
-    static final String KEY_CREATED_AT = "created_at";
+    public static final String KEY_ID = "id";
+    public static final String KEY_UID = "_id";
+    public static final String KEY_USER_ID = "userID";
+    public static final String KEY_EMAIL = "email";
+    public static final String KEY_NAME = "name";
+    public static final String KEY_CREATED_AT = "created_at";
 }

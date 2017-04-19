@@ -24,7 +24,7 @@ import java.util.Map;
 import edu.umsl.hester.superclickers.app.AppController;
 import edu.umsl.hester.superclickers.app.LoginConfig;
 import edu.umsl.hester.superclickers.app.SessionManager;
-import edu.umsl.hester.superclickers.database.SQLiteHandler;
+import edu.umsl.hester.superclickers.database.SQLiteHandlerUsers;
 
 /**
  * Created by Austin on 3/21/2017.
@@ -38,7 +38,7 @@ public class LoginController extends Fragment {
 
     private ProgressDialog pDialog; //////
     private SessionManager session;
-    private SQLiteHandler db;
+    private SQLiteHandlerUsers db;
 
     private LoginListener lDelegate;
 
@@ -59,7 +59,7 @@ public class LoginController extends Fragment {
         pDialog = new ProgressDialog(getActivity());
         pDialog.setCancelable(false);
         // SQL handler
-        db = new SQLiteHandler(getActivity());
+        db = new SQLiteHandlerUsers(getActivity());
         // Session manager
         session = new SessionManager(getActivity());
     }

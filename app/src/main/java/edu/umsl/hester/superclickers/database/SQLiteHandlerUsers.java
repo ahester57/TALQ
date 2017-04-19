@@ -15,19 +15,20 @@ import java.util.HashMap;
  * 
  */
 
-public class SQLiteHandler extends SQLiteOpenHelper {
+public class SQLiteHandlerUsers extends SQLiteOpenHelper {
 
-    private static final String TAG = SQLiteHandler.class.getSimpleName();
+    private static final String TAG = SQLiteHandlerUsers.class.getSimpleName();
 
     // db name
-    private static final String DB_NAME = "android_api";
+    private static final String DB_NAME = "tbl_users";
     private static final int DB_VERSION = 1;
 
-    public SQLiteHandler(Context context) {
+    public SQLiteHandlerUsers(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
     }
 
     private String createLoginTable() {
+
         return "CREATE TABLE IF NOT EXISTS " + TableSchema.TABLE_USER + "("
                 + UserSchema.KEY_ID + " INTEGER PRIMARY KEY, "
                 + UserSchema.KEY_NAME + " TEXT, "
@@ -78,6 +79,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     public void addUser(String name, String email, String uid, String created_at) {
         SQLiteDatabase db = this.getWritableDatabase();
 
+        db.execSQL("DROP TABLE IF EXISTS " + TableSchema.TABLE_USER);
         db.execSQL(createLoginTable());
 
         ContentValues values = new ContentValues();
@@ -97,6 +99,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     public void addGroup(String name, String guid, String created_at) {
         SQLiteDatabase db = this.getWritableDatabase();
 
+        db.execSQL("DROP TABLE IF EXISTS " + TableSchema.TABLE_GROUP);
         db.execSQL(createGroupTable());
 
         ContentValues values = new ContentValues();

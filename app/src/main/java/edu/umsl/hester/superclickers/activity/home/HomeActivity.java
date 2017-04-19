@@ -20,7 +20,8 @@ import edu.umsl.hester.superclickers.R;
 import edu.umsl.hester.superclickers.activity.login.LoginActivity;
 import edu.umsl.hester.superclickers.activity.quiz.QuizActivityUser;
 import edu.umsl.hester.superclickers.app.SessionManager;
-import edu.umsl.hester.superclickers.database.SQLiteHandler;
+import edu.umsl.hester.superclickers.database.SQLiteHandlerUsers;
+import edu.umsl.hester.superclickers.database.UserSchema;
 import edu.umsl.hester.superclickers.userdata.User;
 
 /**
@@ -38,7 +39,7 @@ public class HomeActivity extends AppCompatActivity implements
     private String courseId;
 
     private Spinner quiz_select_spinner;
-    private SQLiteHandler db;
+    private SQLiteHandlerUsers db;
     private SessionManager session;
     private HomeFragment hFragment;
 
@@ -61,8 +62,8 @@ public class HomeActivity extends AppCompatActivity implements
         Button btnCreateGroup = (Button) findViewById(R.id.groups_button);
         quiz_select_spinner = (Spinner) findViewById(R.id.quiz_select_spinner);
 
-        // database
-        db = new SQLiteHandler(getApplicationContext());
+        // databasearh53
+        db = new SQLiteHandlerUsers(getApplicationContext());
 
         // session manager
         session = new SessionManager(getApplicationContext());
@@ -73,7 +74,8 @@ public class HomeActivity extends AppCompatActivity implements
         } else {
             // Fetch user info from sqlite
             HashMap<String, String> userDetails = db.getUserDetails();
-            this.user = new User(userDetails.get("name"), userDetails.get("email"), userDetails.get("uid"));
+            this.user = new User(userDetails.get(UserSchema.KEY_NAME),
+                    userDetails.get(UserSchema.KEY_EMAIL), userDetails.get(UserSchema.KEY_UID));
             textName.setText(user.getName());
             textEmail.setText(user.getEmail());
         }
@@ -86,6 +88,7 @@ public class HomeActivity extends AppCompatActivity implements
 
         hFragment.getQuizzesFor(userId);
 
+        // @TODO download group info and put it SQLite
 
         btnLogout.setOnClickListener(this);
         btnPlay.setOnClickListener(this);
