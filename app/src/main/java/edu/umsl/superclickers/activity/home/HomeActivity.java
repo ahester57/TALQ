@@ -62,9 +62,8 @@ public class HomeActivity extends AppCompatActivity implements
         Button btnCreateGroup = (Button) findViewById(R.id.groups_button);
         quiz_select_spinner = (Spinner) findViewById(R.id.quiz_select_spinner);
 
-        // databasearh53
+        // database
         db = new SQLiteHandlerUsers(getApplicationContext());
-
         // session manager
         session = new SessionManager(getApplicationContext());
 
@@ -74,8 +73,13 @@ public class HomeActivity extends AppCompatActivity implements
         } else {
             // Fetch user info from sqlite
             HashMap<String, String> userDetails = db.getUserDetails();
-            this.user = new User(userDetails.get(UserSchema.KEY_NAME),
-                    userDetails.get(UserSchema.KEY_EMAIL), userDetails.get(UserSchema.KEY_UID));
+
+            this.user = new User(userDetails.get(UserSchema.KEY_FIRST),
+                    userDetails.get(UserSchema.KEY_LAST),
+                    userDetails.get(UserSchema.KEY_USER_ID),
+                    userDetails.get(UserSchema.KEY_EMAIL),
+                    userDetails.get(UserSchema.KEY_UID));
+
             textName.setText(user.getName());
             textEmail.setText(user.getEmail());
         }
@@ -132,7 +136,6 @@ public class HomeActivity extends AppCompatActivity implements
 
     void setQuizSpinner() {
         final List<String> spinQuizzes = this.quizzes;
-
 
         ArrayAdapter<String> quizAdapter = new ArrayAdapter<>(this,
                 R.layout.support_simple_spinner_dropdown_item, spinQuizzes);

@@ -12,5 +12,7 @@ public class UserSchema {
     public static final String KEY_USER_ID = "userID";
     public static final String KEY_EMAIL = "email";
     public static final String KEY_NAME = "name";
+    public static final String KEY_FIRST = "first";
+    public static final String KEY_LAST = "last";
     public static final String KEY_CREATED_AT = "created_at";
 }

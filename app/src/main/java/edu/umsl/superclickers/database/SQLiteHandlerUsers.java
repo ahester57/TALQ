@@ -10,6 +10,8 @@ import android.util.Log;
 import java.util.Arrays;
 import java.util.HashMap;
 
+import edu.umsl.superclickers.userdata.User;
+
 /**
  * Created by Austin on 2/4/2017.
  * 
@@ -23,6 +25,15 @@ public class SQLiteHandlerUsers extends SQLiteOpenHelper {
     private static final String DB_NAME = "tbl_users";
     private static final int DB_VERSION = 1;
 
+    private static SQLiteHandlerUsers sPersistence;
+
+    public static SQLiteHandlerUsers sharedInstance(Context context) {
+        if (sPersistence == null) {
+            sPersistence = new SQLiteHandlerUsers(context);
+        }
+        return sPersistence;
+    }
+
     public SQLiteHandlerUsers(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
     }
@@ -31,10 +42,11 @@ public class SQLiteHandlerUsers extends SQLiteOpenHelper {
 
         return "CREATE TABLE IF NOT EXISTS " + TableSchema.TABLE_USER + "("
                 + UserSchema.KEY_ID + " INTEGER PRIMARY KEY, "
-                + UserSchema.KEY_NAME + " TEXT, "
+                + UserSchema.KEY_FIRST + " TEXT, "
+                + UserSchema.KEY_LAST + " TEXT, "
+                + UserSchema.KEY_USER_ID + " TEXT, "
                 + UserSchema.KEY_EMAIL + " TEXT UNIQUE, "
-                + UserSchema.KEY_UID + " TEXT, "
-                + UserSchema.KEY_CREATED_AT + " TEXT" + ")";
+                + UserSchema.KEY_UID + " TEXT" + ")";
     }
 
     private String createGroupTable() {
@@ -75,18 +87,20 @@ public class SQLiteHandlerUsers extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+
     // add new user to database
-    public void addUser(String name, String email, String uid, String created_at) {
+    public void addUser(User user) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         db.execSQL("DROP TABLE IF EXISTS " + TableSchema.TABLE_USER);
         db.execSQL(createLoginTable());
 
         ContentValues values = new ContentValues();
-        values.put(UserSchema.KEY_NAME, name);
-        values.put(UserSchema.KEY_EMAIL, email);
-        values.put(UserSchema.KEY_UID, uid);
-        values.put(UserSchema.KEY_CREATED_AT, created_at);
+        values.put(UserSchema.KEY_FIRST, user.getFirst());
+        values.put(UserSchema.KEY_LAST, user.getLast());
+        values.put(UserSchema.KEY_USER_ID, user.getUserId());
+        values.put(UserSchema.KEY_EMAIL, user.getEmail());
+        values.put(UserSchema.KEY_UID, user.get_id());
 
         // inserting row
         long id = db.insert(TableSchema.TABLE_USER ,null, values);
@@ -143,10 +157,11 @@ public class SQLiteHandlerUsers extends SQLiteOpenHelper {
 
         cursor.moveToFirst();
         if (cursor.getCount() > 0) {
-            user.put(UserSchema.KEY_NAME, cursor.getString(1));
-            user.put(UserSchema.KEY_EMAIL, cursor.getString(2));
-            user.put(UserSchema.KEY_UID, cursor.getString(3));
-            user.put(UserSchema.KEY_CREATED_AT, cursor.getString(4));
+            user.put(UserSchema.KEY_FIRST, cursor.getString(1));
+            user.put(UserSchema.KEY_LAST, cursor.getString(2));
+            user.put(UserSchema.KEY_USER_ID, cursor.getString(3));
+            user.put(UserSchema.KEY_EMAIL, cursor.getString(4));
+            user.put(UserSchema.KEY_UID, cursor.getString(5));
         }
         cursor.close();
         db.close();

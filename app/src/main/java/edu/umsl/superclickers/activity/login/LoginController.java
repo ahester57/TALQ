@@ -15,6 +15,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -25,6 +26,7 @@ import edu.umsl.superclickers.app.AppController;
 import edu.umsl.superclickers.app.LoginConfig;
 import edu.umsl.superclickers.app.SessionManager;
 import edu.umsl.superclickers.database.SQLiteHandlerUsers;
+import edu.umsl.superclickers.userdata.User;
 
 /**
  * Created by Austin on 3/21/2017.
@@ -34,11 +36,8 @@ public class LoginController extends Fragment {
 
     private final String TAG = getClass().getSimpleName();
 
-    private Context lContext;
-
     private ProgressDialog pDialog; //////
     private SessionManager session;
-    private SQLiteHandlerUsers db;
 
     private LoginListener lDelegate;
 
@@ -46,9 +45,6 @@ public class LoginController extends Fragment {
         void goToHome();
     }
 
-    public void setContext(Context context) {
-        lContext = context;
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,14 +54,14 @@ public class LoginController extends Fragment {
         // progress dialog
         pDialog = new ProgressDialog(getActivity());
         pDialog.setCancelable(false);
-        // SQL handler
-        db = new SQLiteHandlerUsers(getActivity());
+
+
         // Session manager
         session = new SessionManager(getActivity());
     }
 
     // verify login credentials
-    void checkLogin(final String email, final String password) {
+    void checkLogin(final String ssoId, final String password) {
         String tag_str_req = "req_login";
 
         pDialog.setMessage("Loggin in...");
@@ -88,18 +84,10 @@ public class LoginController extends Fragment {
                                 // create session
                                 session.setLogin(true);
 
-                                //store user
-                                String uid = jObj.getString("uid");
-
                                 JSONObject user = jObj.getJSONObject("user");
-                                String name = user.getString("name");
-                                String email = user.getString("email");
-                                String created_at = user.getString("created_at");
+                                String ssoId = user.getString("email");
 
-                                // add user to sql database
-                                db.addUser(name, email, uid, created_at);
-
-                                lDelegate.goToHome();
+                                verifyUser(ssoId);
 
 
                             } else {
@@ -128,7 +116,7 @@ public class LoginController extends Fragment {
             protected Map<String, String> getParams() throws AuthFailureError {
                 // put params to login url via POST
                 Map<String, String> params = new HashMap<>();
-                params.put("email", email);
+                params.put("email", ssoId);
                 params.put("password", password);
 
                 return params;
@@ -138,6 +126,81 @@ public class LoginController extends Fragment {
 
 
 
+        AppController.getInstance().addToRequestQueue(strReq, tag_str_req);
+    }
+
+    // checks if valid user and inserts into database
+    void verifyUser(final String user_id) {
+        String tag_str_req = "req_user_details";
+        String uri = String.format(LoginConfig.URL_USER_BY_SSO, user_id);
+        // new string request
+        StringRequest strReq = new StringRequest(Request.Method.GET, uri,
+
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d(TAG, " Response: " + response);
+                        try {
+                            JSONObject jObj = new JSONObject(response);
+
+                            String error;
+                            try {
+                                error = jObj.getString("error");
+                            } catch (JSONException e) {
+                                error = "false";
+                            }
+
+                            // if no errors
+                            if (error.equals("false")) {
+                                // user was found
+
+                                // Extract user details
+                                String _id = jObj.getString("_id");
+                                String userID = jObj.getString("userID");
+                                String email = jObj.getString("email");
+                                String first = jObj.getString("first");
+                                String last = jObj.getString("last");
+
+
+                                JSONArray courseArr = jObj.getJSONArray("enrolledCourses");
+                                // Handle enrolled courses
+                                for (int i = 0; i < courseArr.length(); i++) {
+                                    JSONObject courseObj = courseArr.getJSONObject(i);
+
+
+                                }
+
+                                SQLiteHandlerUsers db = SQLiteHandlerUsers.sharedInstance(getActivity());
+
+                                db.addUser(new User(first, last, userID, email, _id));
+                                //rDelegate.registerUser(name, user_id);
+                                // add user to sql database
+                                lDelegate.goToHome();
+
+
+                            } else {
+                                // Error
+                                String errMessage = "Oops! User not found.";
+                                Toast.makeText(getActivity(), errMessage,
+                                        Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.e(TAG, "JSON error: " + e.getMessage());
+                            Toast.makeText(getActivity(), "Oops! User not found.",
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "Quiz error: " + error.getMessage());
+                Toast.makeText(getActivity(), error.getMessage(),
+                        Toast.LENGTH_LONG).show();
+
+            }
+        });
+        // end string request.. phew!
         AppController.getInstance().addToRequestQueue(strReq, tag_str_req);
     }
 

@@ -5,23 +5,33 @@ public class User {
 
     private String _id = "";
     private String name = "";
+    private String first = "";
+    private String last = "";
+    private String userId = "";
     private String email = "";
-    private String uid = "";
+
     private Stats stats;
 
 
-    public User(String name, String email, String unique_id) {
-        this.name = name;
+    public User(String first, String last, String userId, String email, String unique_id) {
+        this.first = first;
+        this.last = last;
+        this.name = first + " " + last;
+        this.userId = userId;
         this.email = email;
-        this.uid = unique_id;
         this.stats = new Stats();
         this._id = unique_id;
     }
 
+    public String getFirst() { return first; }
+
+    public String getLast() { return last; }
 
     public String getName() { return name; }
 
     public String getEmail() { return email; }
+
+    public String getUserId() { return userId; }
 
     public String get_id() { return _id; }
 

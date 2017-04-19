@@ -13,11 +13,14 @@ import edu.umsl.superclickers.database.QuizSchema;
 public class Quiz implements Serializable{
 
     private String _id;
+    private String sessionId;
     private String description;
     private String text;
     private String availableDate;
     private String expiryDate;
     private ArrayList<Question> questions;
+    private boolean timed;
+    private int timedLength;
 
     private int qNum;
 
@@ -30,9 +33,11 @@ public class Quiz implements Serializable{
         this.expiryDate = expiryDate;
         this.questions = questions;
         this.qNum = qNum;
+        this.timed = false;
+        this.timedLength = 0;
     }
 
-    public Quiz(JSONObject jObj) throws JSONException{
+    public Quiz(JSONObject jObj, String sessionId) throws JSONException{
         try {
 
             String id = jObj.getString(QuizSchema.KEY_QID);
@@ -40,6 +45,8 @@ public class Quiz implements Serializable{
             String text = jObj.getString(QuizSchema.KEY_TEXT);
             String avail = jObj.getString(QuizSchema.KEY_AVAIL_DATE);
             String exp = jObj.getString(QuizSchema.KEY_EXPIRY_DATE);
+            boolean timed = jObj.getBoolean(QuizSchema.KEY_TIMED);
+            int length = jObj.getInt(QuizSchema.KEY_LENGTH);
             JSONArray qArray = jObj.getJSONArray(QuizSchema.KEY_QUESTIONS);
 
             ArrayList<Question> questions = new ArrayList<>();
@@ -51,19 +58,45 @@ public class Quiz implements Serializable{
                 i++;
             }
 
+
             this._id = id;
             this.description = desc;
             this.text = text;
             this.availableDate = avail;
             this.expiryDate = exp;
             this.questions = questions;
+            this.sessionId = sessionId;
             this.qNum = 0;
+            this.timed = timed;
+            this.timedLength = length;
 
         } catch (JSONException e) {
             e.printStackTrace();
             throw new JSONException(e.getMessage());
         }
     }
+
+    public String get_id() {
+        return _id;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public String getAvailableDate() {
+        return availableDate;
+    }
+
+    public String getExpiryDate() {
+        return expiryDate;
+    }
+
+    public String getSessionId() { return sessionId; }
 
     public Question getQuestion() {
         Question q = questions.get(qNum);
@@ -88,4 +121,8 @@ public class Quiz implements Serializable{
         Question q = questions.get(qNum);
         return q;
     }
+
+    public boolean getTimed() { return timed; }
+
+    public int getTimedLength() { return timedLength; }
 }

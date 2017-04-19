@@ -29,27 +29,23 @@ public class LoginActivity extends AppCompatActivity implements
 
     private EditText ssoId;
     private EditText userPass;
-    private Button login;
-    private Button register;
-    private Button skip;
 
     private LoginController lController;
-    private SessionManager session;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        login = (Button) findViewById(R.id.login_button);
-        register = (Button) findViewById(R.id.new_user_button);
-        skip = (Button) findViewById(R.id.skip_login_button);
+        Button login = (Button) findViewById(R.id.login_button);
+        Button register = (Button) findViewById(R.id.new_user_button);
+        Button skip = (Button) findViewById(R.id.skip_login_button);
         ssoId = (EditText) findViewById(R.id.sso_text_edit);
         userPass = (EditText) findViewById(R.id.pwd_text_edit);
 
 
         // Session manager
-        session = new SessionManager(getApplicationContext());
+        SessionManager session = new SessionManager(getApplicationContext());
 
         if (session.isLoggedIn()) {
             // user logged in
@@ -60,17 +56,13 @@ public class LoginActivity extends AppCompatActivity implements
 
 
         lController = new LoginController();
-        lController.setContext(getApplicationContext());
 
         FragmentManager fm = getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-
-
-        ft.add(lController, "LOGIN_CONTROLLER");
-        ft.commit();
+        ft.add(lController, "LOGIN_CONTROLLER")
+            .commit();
 
         userPass.setOnClickListener(this);
-
         login.setOnClickListener(this);
         register.setOnClickListener(this);
         skip.setOnClickListener(this);
@@ -103,12 +95,12 @@ public class LoginActivity extends AppCompatActivity implements
     }
 
     private void tryLogin() {
-        String email = ssoId.getText().toString().trim();
+        String sso = ssoId.getText().toString().trim();
         String password = userPass.getText().toString().trim();
 
-        if (!email.isEmpty() && !password.isEmpty()) {
+        if (!sso.isEmpty() && !password.isEmpty()) {
             //login
-            lController.checkLogin(email, password);
+            lController.checkLogin(sso, password);
         } else {
             Toast.makeText(getApplicationContext(),
                     "Enter some credentials now.", Toast.LENGTH_LONG).show();

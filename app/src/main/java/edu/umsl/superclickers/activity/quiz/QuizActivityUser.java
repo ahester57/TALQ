@@ -14,6 +14,7 @@ import java.util.ArrayList;
 
 import edu.umsl.superclickers.R;
 import edu.umsl.superclickers.activity.home.HomeActivity;
+import edu.umsl.superclickers.database.SQLiteHandlerQuizzes;
 import edu.umsl.superclickers.quizdata.Answer;
 import edu.umsl.superclickers.quizdata.Question;
 import edu.umsl.superclickers.quizdata.Quiz;
@@ -78,6 +79,7 @@ public class QuizActivityUser extends AppCompatActivity implements
     @Override
     public void setQuiz(Quiz quiz) {
         curQuiz = quiz;
+
         currQuestion();
     }
 

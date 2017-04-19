@@ -27,6 +27,7 @@ import edu.umsl.superclickers.R;
 import edu.umsl.superclickers.app.AppController;
 import edu.umsl.superclickers.app.LoginConfig;
 import edu.umsl.superclickers.database.SQLiteHandlerUsers;
+import edu.umsl.superclickers.database.UserSchema;
 import edu.umsl.superclickers.userdata.User;
 
 /**
@@ -61,9 +62,14 @@ public class GroupActivity extends AppCompatActivity implements View.OnClickList
         pDialog.setCancelable(false);
 
         // database stuff
-        db = new SQLiteHandlerUsers(getApplicationContext());
+        db = SQLiteHandlerUsers.sharedInstance(getApplicationContext());
         HashMap<String, String> userDetails = db.getUserDetails();
-        this.user = new User(userDetails.get("name"), userDetails.get("email"), userDetails.get("uid"));
+
+        this.user = new User(userDetails.get(UserSchema.KEY_FIRST),
+                userDetails.get(UserSchema.KEY_LAST),
+                userDetails.get(UserSchema.KEY_USER_ID),
+                userDetails.get(UserSchema.KEY_EMAIL),
+                userDetails.get(UserSchema.KEY_UID));
 
         // load fragment ... switch to recycler view
         GroupFragment gFragment = new GroupFragment();

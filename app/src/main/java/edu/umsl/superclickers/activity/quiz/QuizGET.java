@@ -17,6 +17,8 @@ import org.json.JSONObject;
 import edu.umsl.superclickers.app.AppController;
 import edu.umsl.superclickers.app.QuizConfig;
 import edu.umsl.superclickers.app.SessionManager;
+import edu.umsl.superclickers.database.QuizSchema;
+import edu.umsl.superclickers.database.SQLiteHandlerQuizzes;
 import edu.umsl.superclickers.database.SQLiteHandlerUsers;
 import edu.umsl.superclickers.quizdata.Quiz;
 
@@ -28,9 +30,6 @@ public class QuizGET extends Fragment {
 
     private final String TAG = this.getClass().getSimpleName();
 
-    private SQLiteHandlerUsers db;
-    private SessionManager session;
-
     private QuizGETController qController;
 
     interface QuizGETController {
@@ -41,8 +40,6 @@ public class QuizGET extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        db = new SQLiteHandlerUsers(getActivity());
-        session = new SessionManager(getActivity());
         qController = (QuizGETController) getActivity();
     }
 
@@ -72,8 +69,15 @@ public class QuizGET extends Fragment {
                             // if no errors
                             if (error.equals("false")) {
                                 // Quiz was found
+                                String sessionId = jObj.getString(QuizSchema.KEY_SESSION_ID);
+
                                 JSONObject quizObj = jObj.getJSONObject("quiz");
-                                Quiz quiz = new Quiz(quizObj);
+
+
+                                Quiz quiz = new Quiz(quizObj, sessionId);
+
+                                SQLiteHandlerQuizzes db = SQLiteHandlerQuizzes.sharedInstance(getActivity());
+                                db.addQuiz(quiz);
                                 qController.setQuiz(quiz);
 
 

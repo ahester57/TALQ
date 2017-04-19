@@ -17,9 +17,11 @@ public class UserCursorWrapper extends CursorWrapper{
 
     public User getUser() {
         String uid = getString(getColumnIndex(UserSchema.KEY_UID));
-        String name = getString(getColumnIndex(UserSchema.KEY_NAME));
+        String first = getString(getColumnIndex(UserSchema.KEY_FIRST));
+        String last = getString(getColumnIndex(UserSchema.KEY_LAST));
+        String userId = getString(getColumnIndex(UserSchema.KEY_USER_ID));
         String email = getString(getColumnIndex(UserSchema.KEY_EMAIL));
-        User user = new User(name, email, uid);
+        User user = new User(first, last, userId, email, uid);
         return user;
     }
 

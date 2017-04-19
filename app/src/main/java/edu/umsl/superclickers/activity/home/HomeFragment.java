@@ -21,6 +21,7 @@ import edu.umsl.superclickers.app.AppController;
 import edu.umsl.superclickers.app.QuizConfig;
 import edu.umsl.superclickers.database.QuizSchema;
 
+
 /**
  * Created by stin on 3/23/17.
  */
@@ -59,10 +60,8 @@ public class HomeFragment extends Fragment {
                     @Override
                     public void onResponse(String response) {
                         Log.d(TAG, " Response: " + response);
-
                         try {
                             JSONArray jArr = new JSONArray(response);
-
 
                             String error;
                             try {
@@ -70,7 +69,6 @@ public class HomeFragment extends Fragment {
                             } catch (JSONException e) {
                                 error = "false";
                             }
-
 
                             // if no errors
                             if (error.equals("false")) {
@@ -89,8 +87,6 @@ public class HomeFragment extends Fragment {
                                 }
 
                                 hController.setQuizzes(quizzes, quizIds, courseIds);
-
-
 
                             } else {
                                 // Error
@@ -116,4 +112,7 @@ public class HomeFragment extends Fragment {
         // end string request.. phew!
         AppController.getInstance().addToRequestQueue(strReq, tag_str_req);
     }
+
+
+
 }

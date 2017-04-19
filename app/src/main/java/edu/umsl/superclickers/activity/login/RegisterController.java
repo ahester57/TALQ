@@ -32,8 +32,6 @@ public class RegisterController extends Fragment {
     private final String TAG = getClass().getSimpleName();
 
     private ProgressDialog pDialog;
-    private SQLiteHandlerUsers db;
-
     private RegisterListener rDelegate;
 
     interface RegisterListener {
@@ -47,13 +45,12 @@ public class RegisterController extends Fragment {
         pDialog = new ProgressDialog(getActivity());
         pDialog.setCancelable(false);
 
-        db = new SQLiteHandlerUsers(getActivity());
 
         rDelegate = (RegisterListener) getActivity();
     }
 
     // Store new user, uploads to register URL
-    void registerUser(final String name, final String email, final String password) {
+    void registerUser(final String name, final String ssoId, final String password) {
         String tag_str_req = "req_register";
 
         pDialog.setMessage("Registerin...");
@@ -79,11 +76,9 @@ public class RegisterController extends Fragment {
 
                                 JSONObject user = jObj.getJSONObject("user");
                                 String name = user.getString("name");
-                                String email = user.getString("email");
+                                String ssoId = user.getString("email");
                                 String created_at = user.getString("created_at");
 
-                                // add user to sql database
-                                db.addUser(name, email, uid, created_at);
 
                                 Toast.makeText(getActivity(), "User registered", Toast.LENGTH_LONG).show();
 
@@ -117,7 +112,7 @@ public class RegisterController extends Fragment {
                 // put params to login url via POST
                 Map<String, String> params = new HashMap<>();
                 params.put("name", name);
-                params.put("email", email);
+                params.put("email", ssoId);
                 params.put("password", password);
 
                 return params;
@@ -131,7 +126,7 @@ public class RegisterController extends Fragment {
     }
 
     void getUserDetails(final String ssoID, final String pwd) {
-        String tag_str_req = "req_quiz";
+        String tag_str_req = "req_name";
         String uri = String.format(LoginConfig.URL_USER_BY_SSO, ssoID);
         // new string request
         StringRequest strReq = new StringRequest(Request.Method.GET, uri,
@@ -140,11 +135,8 @@ public class RegisterController extends Fragment {
                     @Override
                     public void onResponse(String response) {
                         Log.d(TAG, " Response: " + response);
-
                         try {
-
                             JSONObject jObj = new JSONObject(response);
-
 
                             String error;
                             try {
@@ -153,15 +145,11 @@ public class RegisterController extends Fragment {
                                 error = "false";
                             }
 
-
                             // if no errors
                             if (error.equals("false")) {
                                 // user was found
 
-
                                 String name = jObj.getString("first") + " " + jObj.getString("last");
-
-
                                 rDelegate.registerUser(name, ssoID, pwd);
 
 
