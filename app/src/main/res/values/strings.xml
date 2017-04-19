@@ -13,4 +13,5 @@
     <string name="confirm">Confirm password</string>
     <string name="skip">Skip</string>
     <string name="play">Play</string>
+    <string name="quiz_service">Quiz Service</string>
 </resources>

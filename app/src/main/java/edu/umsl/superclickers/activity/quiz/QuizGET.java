@@ -40,7 +40,10 @@ public class QuizGET extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        qController = (QuizGETController) getActivity();
+    }
+
+    public void setController(QuizGETController qControl) {
+        qController = qControl;
     }
 
     void getQuiz(final String user_id, final String course_id,

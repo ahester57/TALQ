@@ -2,15 +2,21 @@ package edu.umsl.superclickers.activity.quiz;
 
 
 import android.app.FragmentManager;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import edu.umsl.superclickers.R;
 import edu.umsl.superclickers.activity.home.HomeActivity;
@@ -22,142 +28,142 @@ import edu.umsl.superclickers.userdata.User;
 
 
 public class QuizActivityUser extends AppCompatActivity implements
-        View.OnClickListener,
-        AnswerFragmentUser.AnswerListener,
-        QuizGET.QuizGETController {
+        QuizUserFragment.QuizController {
 
-    private User user;
-    private String userID;
-    private String quizID;
-    private String courseID;
-    private String token;
+    private final String TAG = getClass().getSimpleName();
 
-    private Quiz curQuiz;
-    private Question curQuestion;
 
-    private Button submit;
-    private TextView questionView;
     private QuizGET quizGET;
+    private QuizUserFragment quizUserFragment;
 
     @Override
-    public void onClick(View view) {
+    public void submitQuiz(Quiz quiz) {
         Intent quizIntent = new Intent(QuizActivityUser.this, HomeActivity.class);
         Toast.makeText(getApplicationContext(), "Quiz Submitted", Toast.LENGTH_LONG).show();
         startActivity(quizIntent);
         finish();
     }
 
+
+
+    @Override
+    public void startQuizTimer() {
+        Intent qI = new Intent(this, QuizService.class);
+        qI.putExtra("QUIZ_TIME", getQuizTime());
+
+        startService(qI);
+    }
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
 
-        questionView = (TextView) findViewById(R.id.question_text_view);
-        submit = (Button) findViewById(R.id.submit_button);
-        submit.setOnClickListener(this);
-        Intent intent = getIntent();
-        quizID = intent.getStringExtra("QUIZ_ID");
-        userID = intent.getStringExtra("USER_ID");
-        courseID = intent.getStringExtra("COURSE_ID");
 
-        quizGET = new QuizGET();
+        Intent intent = getIntent();
+        String quizID = intent.getStringExtra("QUIZ_ID");
+        String userID = intent.getStringExtra("USER_ID");
+        String courseID = intent.getStringExtra("COURSE_ID");
+
 
         FragmentManager fm = getFragmentManager();
-        fm.beginTransaction()
-                .add(quizGET, "QUIZ_GET")
-                .commit();
+        if (fm.findFragmentByTag("QUIZ_GET") != null) {
+            quizGET = (QuizGET) fm.findFragmentByTag("QUIZ_GET");
+        } else {
+            quizGET = new QuizGET();
+            fm.beginTransaction()
+                    .add(quizGET, "QUIZ_GET")
+                    .commit();
+        }
+        if (fm.findFragmentByTag("QUIZ_GET") != null) {
+            quizUserFragment = (QuizUserFragment) fm.findFragmentByTag("QUIZ_USER_FRAG");
+        } else {
+            quizUserFragment = new QuizUserFragment();
+            fm.beginTransaction()
+                    .add(R.id.quiz_container, quizUserFragment, "QUIZ_USER_FRAG")
+                    .commit();
+        }
+
+
+
+
+
+
 
         // Load quiz
-        quizGET.getToken(quizID);
+        quizUserFragment.setQuizInfo(quizID, userID, courseID);
+
+
 
         // @TODO save quiz to SQLite
-
-        currQuestion();
     }
 
 
-    @Override
-    public void setQuiz(Quiz quiz) {
-        curQuiz = quiz;
-
-        currQuestion();
+    public int getQuizTime() {
+        return quizUserFragment.getQuizTime();
     }
 
     @Override
-    public void setToken(String token) {
-        this.token = token;
-        quizGET.getQuiz(userID, courseID, quizID, token);
-    }
-
-    @Override
-    public Question getQuestion() {
-        return curQuestion;
-    }
-
-    @Override
-    public void currQuestion() {
-        if(curQuiz == null) {
-            setBSQuiz();
-        }
-        curQuestion = curQuiz.getQuestion();
-        questionView.setText(curQuestion.getQuestion());
-
-        AnswerFragmentUser answerFragment = new AnswerFragmentUser();
-        android.app.FragmentManager fm = getFragmentManager();
-        android.app.FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(R.id.answer_segment, answerFragment);
-        ft.commit();
-    }
-
-    @Override
-    public void nextQuestion() {
-        if (curQuiz == null) {
-            setBSQuiz();
-        }
-        curQuestion = curQuiz.getNextQuestion();
-        questionView.setText(curQuestion.getQuestion());
-
-        // create instance of the answer fragment
-        AnswerFragmentUser answerFrag = new AnswerFragmentUser();
-        // load answer fragment into answerSection of QuizActivityUser
-        android.app.FragmentManager fm = getFragmentManager();
-        android.app.FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(R.id.answer_segment, answerFrag);
-        ft.commit();
-    }
-
-    @Override
-    public void prevQuestion() {
-        if(curQuiz == null) {
-            setBSQuiz();
-        }
-        curQuestion = curQuiz.getPrevQuestion();
-        questionView.setText(curQuestion.getQuestion());
-
-        AnswerFragmentUser answerFragment = new AnswerFragmentUser();
-        android.app.FragmentManager fm = getFragmentManager();
-        android.app.FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(R.id.answer_segment, answerFragment);
-        ft.commit();
+    public QuizGET getQuizGET() {
+        return quizGET;
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable("QUIZ", curQuiz);
+        //outState.putInt("TIME_LEFT", )
+        // @TODO fix timer restarting
+    }
+
+    private BroadcastReceiver br = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateGUITimer(intent);
+        }
+    };
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver(br, new IntentFilter(QuizService.COUNTDOWN_BR));
+        Log.d(TAG, "Registered broadcast reciever");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(br);
+        Log.d(TAG, "Unregistered broadcast reciever");
 
     }
 
-    public void setBSQuiz() {
-        ArrayList<Answer> answers = new ArrayList<>();
-        answers.add(new Answer("A", "1", 0));
-        answers.add(new Answer("B", "2", 1));
-        answers.add(new Answer("C", "3", 2));
-        answers.add(new Answer("D", "4", 3));
-        Question question = new Question("id", "title", "What is log_10 1000", 22, answers);
-        ArrayList<Question> questions = new ArrayList<>();
-        questions.add(question);
-        setQuiz(new Quiz("ddd", "description", "what is log_10 1000?", "now", "never",
-                questions, 0));
+    @Override
+    protected void onStop() {
+        try {
+            unregisterReceiver(br);
+        } catch (Exception e) {
+            // Receiver stopped onPause
+        }
+        super.onStop();
     }
+
+    @Override
+    protected void onDestroy() {
+        stopService(new Intent(this, QuizService.class));
+        Log.d(TAG, "QUiz Activity destoyed");
+        super.onDestroy();
+    }
+
+    void updateGUITimer(Intent intent) {
+        if (intent.getExtras() != null) {
+            long millisUntilFinished = intent.getLongExtra("countdown", 4);
+            int secondsLeft = (int) millisUntilFinished / 1000;
+            int minutesLeft = secondsLeft / 60;
+            secondsLeft = secondsLeft % 60;
+            quizUserFragment.updateGUITimer(minutesLeft, secondsLeft);
+        }
+    }
+
 }

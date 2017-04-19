@@ -33,6 +33,11 @@
         <activity android:name=".activity.home.GroupActivity">
         </activity>
 
+        <service
+            android:name=".activity.quiz.QuizService"
+            android:label="@string/quiz_service">
+        </service>
+
     </application>
 
 </manifest>

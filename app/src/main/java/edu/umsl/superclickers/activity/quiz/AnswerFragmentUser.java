@@ -40,7 +40,7 @@ public class AnswerFragmentUser extends Fragment implements View.OnClickListener
         View view = inflater.inflate(R.layout.fragment_answer_user, container, false);
 
         prevProgress = new int[4];
-        aListener = (AnswerListener) getActivity();
+        aListener = (AnswerListener) getFragmentManager().findFragmentByTag("QUIZ_USER_FRAG");
 
         pointsView = (TextView) view.findViewById(R.id.question_points);
 
