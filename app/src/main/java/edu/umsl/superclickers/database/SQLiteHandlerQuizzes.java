@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import edu.umsl.superclickers.quizdata.Quiz;
-import edu.umsl.superclickers.userdata.User;
 
 /**
  * Created by Austin on 4/18/2017.

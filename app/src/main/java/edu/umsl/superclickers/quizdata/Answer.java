@@ -13,6 +13,7 @@ public class Answer {
 
     private String value;
     private String text;
+    private String questionId;
     private int sortOrder;
 
     public Answer(String value, String text, int sortOrder) {
@@ -21,7 +22,7 @@ public class Answer {
         this.sortOrder = sortOrder;
     }
 
-    public Answer(JSONObject aObj) throws JSONException {
+    public Answer(JSONObject aObj, String questionId) throws JSONException {
         try {
             String avalue = aObj.getString(AnswerSchema.KEY_VALUE);
             String atext = aObj.getString(AnswerSchema.KEY_TEXT);
@@ -30,10 +31,27 @@ public class Answer {
             this.value = avalue;
             this.text = atext;
             this.sortOrder = sortOrder;
+            this.questionId = questionId;
 
         } catch (JSONException e) {
             throw new JSONException(e.getMessage());
         }
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public int getSortOrder() {
+        return sortOrder;
+    }
+
+    public String getQuestionId() {
+        return questionId;
     }
 
     @Override

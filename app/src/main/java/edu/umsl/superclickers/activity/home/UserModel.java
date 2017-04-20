@@ -2,11 +2,9 @@ package edu.umsl.superclickers.activity.home;
 
 import android.content.Context;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import edu.umsl.superclickers.database.SQLiteHandlerUsers;

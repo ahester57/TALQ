@@ -2,14 +2,10 @@ package edu.umsl.superclickers.activity.quiz;
 
 import android.app.Service;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.CountDownTimer;
 import android.os.IBinder;
-import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
 import android.util.Log;
-
-import java.util.Locale;
 
 /**
  * Created by Austin on 4/19/2017.
@@ -52,6 +48,7 @@ public class QuizService extends Service {
             @Override
             public void onFinish() {
                 Log.d(TAG, "Quiz timer finished.");
+
             }
         };
         quizTimer.start();
@@ -66,8 +63,6 @@ public class QuizService extends Service {
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        quizTime = intent.getIntExtra("QUIZ_NAME", 10);
-
         return null;
     }
 }

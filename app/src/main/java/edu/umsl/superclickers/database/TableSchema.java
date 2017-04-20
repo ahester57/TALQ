@@ -10,4 +10,6 @@ public class TableSchema {
     static final String TABLE_GROUP = "groups";
     static final String TABLE_USER_GROUPS = "user_groups";
     static final String TABLE_QUIZ = "quiz";
+    static final String TABLE_QUESTION = "questions";
+    static final String TABLE_ANSWER = "answers";
 }

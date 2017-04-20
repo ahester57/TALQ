@@ -13,6 +13,7 @@ public class Question {
     private String _id;
     private String title;
     private String text;
+    private String sessionId;
     private int pointsPossible;
     private ArrayList<Answer> availableAnswers;
 
@@ -25,7 +26,7 @@ public class Question {
         this.availableAnswers = availableAnswers; // sort by sortOrder
     }
 
-    public Question(JSONObject qObj) throws JSONException {
+    public Question(JSONObject qObj, String sessionId) throws JSONException {
         try {
             String qid = qObj.getString(QuestionSchema.KEY_QUID);
             String qtitle = qObj.getString(QuestionSchema.KEY_TITLE);
@@ -38,7 +39,7 @@ public class Question {
             while (j < aArray.length()) {
                 JSONObject aObj = aArray.getJSONObject(j);
 
-                answers.add(new Answer(aObj));
+                answers.add(new Answer(aObj, qid));
                 j++;
             }
 
@@ -47,6 +48,7 @@ public class Question {
             this.text = qtext;
             this.pointsPossible = points;
             this.availableAnswers = answers;
+            this.sessionId = sessionId;
 
         } catch (JSONException e) {
             throw new JSONException(e.getMessage());
@@ -101,7 +103,31 @@ public class Question {
         }
     }
 
+    public String get_id() {
+        return _id;
+    }
+
+    public String getSessionId() {
+        return sessionId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getText() {
+        return text;
+    }
+
     String getAnswer() {
         return "yo";//answer;
+    }
+
+    @Override
+    public String toString() {
+        return "Question{" +
+                "title='" + title + '\'' +
+                ", text='" + text + '\'' +
+                '}';
     }
 }

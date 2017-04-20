@@ -21,7 +21,6 @@ import java.util.Map;
 
 import edu.umsl.superclickers.app.AppController;
 import edu.umsl.superclickers.app.LoginConfig;
-import edu.umsl.superclickers.database.SQLiteHandlerUsers;
 
 /**
  * Created by Austin on 3/21/2017.

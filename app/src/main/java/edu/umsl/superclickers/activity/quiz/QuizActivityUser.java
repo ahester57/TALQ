@@ -4,29 +4,18 @@ package edu.umsl.superclickers.activity.quiz;
 import android.app.ActivityManager;
 import android.app.FragmentManager;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.ServiceConnection;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.os.IBinder;
-import android.provider.SyncStateContract;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.Locale;
-
 import edu.umsl.superclickers.R;
 import edu.umsl.superclickers.activity.home.HomeActivity;
 import edu.umsl.superclickers.database.SQLiteHandlerQuizzes;
-import edu.umsl.superclickers.quizdata.Answer;
-import edu.umsl.superclickers.quizdata.Question;
 import edu.umsl.superclickers.quizdata.Quiz;
-import edu.umsl.superclickers.userdata.User;
 
 
 public class QuizActivityUser extends AppCompatActivity implements
@@ -148,6 +137,7 @@ public class QuizActivityUser extends AppCompatActivity implements
     protected void onStop() {
         try {
             unregisterReceiver(br);
+            Log.d(TAG, "Unregistered broadcast reciever");
         } catch (Exception e) {
             // Receiver stopped onPause
         }
@@ -167,6 +157,7 @@ public class QuizActivityUser extends AppCompatActivity implements
             int minutesLeft = secondsLeft / 60;
             secondsLeft = secondsLeft % 60;
             quizUserFragment.updateGUITimer(minutesLeft, secondsLeft);
+
         }
     }
 
@@ -174,9 +165,11 @@ public class QuizActivityUser extends AppCompatActivity implements
         ActivityManager actMan = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : actMan.getRunningServices(Integer.MAX_VALUE)) {
             if (serviceClass.getName().equals(service.service.getClassName())) {
+                Log.d(TAG, "Timer running ");
                 return true;
             }
         }
+        Log.d(TAG, "Timer NOT running ");
         return false;
     }
 

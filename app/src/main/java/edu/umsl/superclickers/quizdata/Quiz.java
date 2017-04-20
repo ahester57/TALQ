@@ -54,7 +54,7 @@ public class Quiz implements Serializable{
             while (i < qArray.length()) {
                 JSONObject qObj = qArray.getJSONObject(i);
 
-                questions.add(new Question(qObj));
+                questions.add(new Question(qObj, sessionId));
                 i++;
             }
 
@@ -125,4 +125,13 @@ public class Quiz implements Serializable{
     public boolean getTimed() { return timed; }
 
     public int getTimedLength() { return timedLength; }
+
+    @Override
+    public String toString() {
+        return "Quiz{" +
+                "_id='" + _id + '\'' +
+                ", description='" + description + '\'' +
+                ", text='" + text + '\'' +
+                '}';
+    }
 }

@@ -2,16 +2,14 @@ package edu.umsl.superclickers.activity.quiz;
 
 import android.app.Fragment;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.app.Service;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -29,6 +27,7 @@ public class QuizUserFragment extends Fragment implements
         AnswerFragmentUser.AnswerListener,
         QuizGET.QuizGETController {
 
+    private final String TAG = getClass().getSimpleName();
 
     private String userID;
     private String quizID;
@@ -37,6 +36,8 @@ public class QuizUserFragment extends Fragment implements
 
     private Quiz curQuiz;
     private Question curQuestion;
+    private int minutesLeft;
+    private int secondsLeft;
 
     private Button submit;
     private TextView questionView;
@@ -91,6 +92,8 @@ public class QuizUserFragment extends Fragment implements
     @Override
     public void setToken(String token) {
         this.token = token;
+
+        // Get the quiz after got token
         quizGET.getQuiz(userID, courseID, quizID, token);
     }
 
@@ -98,9 +101,9 @@ public class QuizUserFragment extends Fragment implements
     public void setQuiz(Quiz quiz) {
         curQuiz = quiz;
         currQuestion();
-
-
         startTimer();
+        Log.d(TAG, "Set the quiz ");
+
     }
 
     public int getQuizTime() {
@@ -110,13 +113,18 @@ public class QuizUserFragment extends Fragment implements
     public String getQuizID() { return curQuiz.get_id(); }
 
 
-    public void updateGUITimer(int minutesLeft, int secondsLeft) {
+    public void updateGUITimer(int minutes, int seconds) {
+        minutesLeft = minutes;
+        secondsLeft = seconds;
+
         String time = String.format(Locale.getDefault(), "%02d", minutesLeft) +
                 String.format(Locale.getDefault(), ":%02d", secondsLeft);
         if (minutesLeft > curQuiz.getTimedLength() / 2) {
             quizTimeView.setTextColor(Color.GREEN);
         } else if (minutesLeft > curQuiz.getTimedLength() / 2 / 2) {
             quizTimeView.setTextColor(Color.YELLOW);
+        } else if (minutesLeft == 0 && secondsLeft == 1) {
+            quizTimeView.setTextColor(Color.CYAN);
         } else {
             quizTimeView.setTextColor(Color.RED);
         }
@@ -140,7 +148,7 @@ public class QuizUserFragment extends Fragment implements
         }
         curQuestion = curQuiz.getQuestion();
         questionView.setText(curQuestion.getQuestion());
-
+        updateGUITimer(minutesLeft, secondsLeft);
         AnswerFragmentUser answerFragment = new AnswerFragmentUser();
         android.app.FragmentManager fm = getFragmentManager();
         android.app.FragmentTransaction ft = fm.beginTransaction();
