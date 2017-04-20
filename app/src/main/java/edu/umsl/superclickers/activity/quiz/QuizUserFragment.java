@@ -34,7 +34,6 @@ public class QuizUserFragment extends Fragment implements
     private String quizID;
     private String courseID;
     private String token;
-    private boolean onGoingQuiz = false;
 
     private Quiz curQuiz;
     private Question curQuestion;
@@ -64,6 +63,8 @@ public class QuizUserFragment extends Fragment implements
         setRetainInstance(true);
         qController = (QuizController) getActivity();
         quizGET = qController.getQuizGET();
+        quizGET.setController(this);
+        quizGET.getToken(quizID);
     }
 
     @Nullable
@@ -80,11 +81,6 @@ public class QuizUserFragment extends Fragment implements
                 qController.submitQuiz(curQuiz);
             }
         });
-
-
-
-            quizGET.setController(this);
-            quizGET.getToken(quizID);
 
 
 
@@ -110,6 +106,8 @@ public class QuizUserFragment extends Fragment implements
     public int getQuizTime() {
         return curQuiz.getTimedLength();
     }
+
+    public String getQuizID() { return curQuiz.get_id(); }
 
 
     public void updateGUITimer(int minutesLeft, int secondsLeft) {

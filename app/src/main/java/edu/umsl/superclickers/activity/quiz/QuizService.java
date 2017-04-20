@@ -25,15 +25,10 @@ public class QuizService extends Service {
     public static final String COUNTDOWN_BR = "edu.umsl.superclickers.quiz.countdown_br";
     Intent qI = new Intent(COUNTDOWN_BR);
 
-
-    void setQuizTime(int time) {
-        quizTime = time;
-    }
-
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent.getExtras() != null) {
-            quizTime = intent.getIntExtra("QUIZ_TIME", 20);
+            quizTime = intent.getIntExtra("QUIZ_TIME", 10);
         }
 
         return START_STICKY;
@@ -46,16 +41,12 @@ public class QuizService extends Service {
         super.onCreate();
         Log.d(TAG, "Starting quiz timer.");
 
-
-
         quizTimer = new CountDownTimer(quizTime * 60 * 1000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-
                 Log.d(TAG, "Countdown seconds remaining: " + millisUntilFinished / 1000);
                 qI.putExtra("countdown", millisUntilFinished);
                 sendBroadcast(qI);
-
             }
 
             @Override
@@ -63,9 +54,7 @@ public class QuizService extends Service {
                 Log.d(TAG, "Quiz timer finished.");
             }
         };
-
         quizTimer.start();
-
     }
 
     @Override
@@ -77,7 +66,7 @@ public class QuizService extends Service {
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        quizTime = intent.getIntExtra("QUIZ_NAME", 20);
+        quizTime = intent.getIntExtra("QUIZ_NAME", 10);
 
         return null;
     }

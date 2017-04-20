@@ -1,6 +1,7 @@
 package edu.umsl.superclickers.activity.quiz;
 
 
+import android.app.ActivityManager;
 import android.app.FragmentManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -11,6 +12,7 @@ import android.content.ServiceConnection;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.provider.SyncStateContract;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
@@ -32,14 +34,17 @@ public class QuizActivityUser extends AppCompatActivity implements
 
     private final String TAG = getClass().getSimpleName();
 
-
+    private Intent timerService;
     private QuizGET quizGET;
     private QuizUserFragment quizUserFragment;
 
     @Override
     public void submitQuiz(Quiz quiz) {
-        Intent quizIntent = new Intent(QuizActivityUser.this, HomeActivity.class);
+        SQLiteHandlerQuizzes db = SQLiteHandlerQuizzes.sharedInstance(getApplicationContext());
+        db.removeQuiz(getQuizID());
         Toast.makeText(getApplicationContext(), "Quiz Submitted", Toast.LENGTH_LONG).show();
+        stopService(timerService);
+        Intent quizIntent = new Intent(QuizActivityUser.this, HomeActivity.class);
         startActivity(quizIntent);
         finish();
     }
@@ -48,10 +53,11 @@ public class QuizActivityUser extends AppCompatActivity implements
 
     @Override
     public void startQuizTimer() {
-        Intent qI = new Intent(this, QuizService.class);
-        qI.putExtra("QUIZ_TIME", getQuizTime());
+        if (!isTimerRunning(QuizService.class)) {
+            timerService.putExtra("QUIZ_TIME", getQuizTime());
+            startService(timerService);
 
-        startService(qI);
+        }
     }
 
 
@@ -67,6 +73,8 @@ public class QuizActivityUser extends AppCompatActivity implements
         String userID = intent.getStringExtra("USER_ID");
         String courseID = intent.getStringExtra("COURSE_ID");
 
+
+        timerService = new Intent(this, QuizService.class);
 
         FragmentManager fm = getFragmentManager();
         if (fm.findFragmentByTag("QUIZ_GET") != null) {
@@ -87,11 +95,6 @@ public class QuizActivityUser extends AppCompatActivity implements
         }
 
 
-
-
-
-
-
         // Load quiz
         quizUserFragment.setQuizInfo(quizID, userID, courseID);
 
@@ -104,6 +107,8 @@ public class QuizActivityUser extends AppCompatActivity implements
     public int getQuizTime() {
         return quizUserFragment.getQuizTime();
     }
+
+    public String getQuizID() { return quizUserFragment.getQuizID(); }
 
     @Override
     public QuizGET getQuizGET() {
@@ -151,7 +156,6 @@ public class QuizActivityUser extends AppCompatActivity implements
 
     @Override
     protected void onDestroy() {
-        stopService(new Intent(this, QuizService.class));
         Log.d(TAG, "QUiz Activity destoyed");
         super.onDestroy();
     }
@@ -164,6 +168,16 @@ public class QuizActivityUser extends AppCompatActivity implements
             secondsLeft = secondsLeft % 60;
             quizUserFragment.updateGUITimer(minutesLeft, secondsLeft);
         }
+    }
+
+    private boolean isTimerRunning(Class<?> serviceClass) {
+        ActivityManager actMan = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : actMan.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

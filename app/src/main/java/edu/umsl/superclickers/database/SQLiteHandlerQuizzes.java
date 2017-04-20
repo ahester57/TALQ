@@ -65,8 +65,7 @@ public class SQLiteHandlerQuizzes extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         // @TODO resume quiz
-        //db.query();
-        db.execSQL("DROP TABLE IF EXISTS " + TableSchema.TABLE_QUIZ);
+
         db.execSQL(createQuizTable());
 
 
@@ -86,6 +85,14 @@ public class SQLiteHandlerQuizzes extends SQLiteOpenHelper {
         db.close();
 
         Log.d(TAG, "New quiz inserted into sqlite: " + id + quiz.toString());
+    }
+
+    public void removeQuiz(String quizId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        db.execSQL("DELETE FROM " + TableSchema.TABLE_QUIZ +
+                " WHERE " + QuizSchema.KEY_QID + "=\"" + quizId + "\";");
+        db.close();
     }
 
     public void resumeQuiz() {

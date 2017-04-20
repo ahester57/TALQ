@@ -9,15 +9,14 @@ from there:
 git clone http://umsl.vigilantestudio.com/superClickers/superClickers.git
 
 
-@TODO [04/18/17]
+@TODO [04/20/17]
 
 	- make groupViewFragment
 	- make it look nice
-	- visual timer for quizzes
 	- display progress, i.e. 5/10
-	- change login
 	- input token to unlock quiz
-	- get more quiz info and sessionID
 	- Build WaitingRoom --> Then QuizActivityGroup
 	- submit quizzes for grading
 	- set leader to first user finished
+	- resume quiz when gone back and started before timer over
+
