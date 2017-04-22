@@ -2,10 +2,15 @@ package edu.umsl.superclickers.database;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import edu.umsl.superclickers.quizdata.Question;
 import edu.umsl.superclickers.quizdata.Quiz;
 
 /**
@@ -19,6 +24,7 @@ public class SQLiteHandlerQuizzes extends SQLiteOpenHelper {
     private static final String DB_NAME = "tbl-quiz";
     private static final int DB_VERSION = 1;
 
+    private Context context;
     private static SQLiteHandlerQuizzes sPersistence;
 
     public static SQLiteHandlerQuizzes sharedInstance(Context context) {
@@ -30,6 +36,7 @@ public class SQLiteHandlerQuizzes extends SQLiteOpenHelper {
 
     public SQLiteHandlerQuizzes(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
+        this.context = context;
     }
 
     private String createQuizTable() {
@@ -68,8 +75,6 @@ public class SQLiteHandlerQuizzes extends SQLiteOpenHelper {
         db.execSQL(createQuizTable());
 
 
-
-
         ContentValues values = new ContentValues();
         values.put(QuizSchema.KEY_SESSION_ID, quiz.getSessionId());
         values.put(QuizSchema.KEY_QID, quiz.get_id());
@@ -79,11 +84,43 @@ public class SQLiteHandlerQuizzes extends SQLiteOpenHelper {
         values.put(QuizSchema.KEY_EXPIRY_DATE, quiz.getExpiryDate());
         values.put(QuizSchema.KEY_TIMED, quiz.getTimed());
         values.put(QuizSchema.KEY_LENGTH, quiz.getTimedLength());
+
         // inserting row
         long id = db.insert(TableSchema.TABLE_QUIZ ,null, values);
         db.close();
 
         Log.d(TAG, "New quiz inserted into sqlite: " + id + quiz.toString());
+    }
+
+    public Quiz getQuiz(String quizId) {
+        Quiz quiz = null;
+        String selectQuery = "SELECT * FROM " + TableSchema.TABLE_QUIZ +
+                " WHERE _id = \"" + quizId + "\"";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteHandlerQuestions qdb = SQLiteHandlerQuestions.sharedInstance(context);
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        cursor.moveToFirst();
+        if (cursor.getCount() > 0) {
+            String sessionId = cursor.getString(1);
+            String _id = cursor.getString(2);
+            String desc = cursor.getString(3);
+            String text = cursor.getString(4);
+            String avail = cursor.getString(5);
+            String expiry = cursor.getString(6);
+            boolean timed = cursor.getInt(7) > 0;
+            int length = cursor.getInt(8);
+
+            ArrayList<Question> questions = qdb.getQuestions(sessionId);
+            quiz = new Quiz(_id, desc, text, avail, expiry, questions, sessionId, timed, length);
+            // @TODO get add questions
+            Log.d(TAG, "Fectching quiz from Sqlite: " + quiz.toString());
+        }
+        cursor.close();
+        db.close();
+
+        return quiz;
     }
 
     public void removeQuiz(String quizId) {

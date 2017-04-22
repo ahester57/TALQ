@@ -25,16 +25,18 @@ public class Quiz implements Serializable{
     private int qNum;
 
 
-    public Quiz(String id, String description, String text, String availableDate, String expiryDate, ArrayList<Question> questions, int qNum) {
+    public Quiz(String id, String description, String text, String availableDate, String expiryDate,
+                ArrayList<Question> questions, String sessionId, boolean timed, int length) {
         this._id = id;
         this.description = description;
         this.text = text;
         this.availableDate = availableDate;
         this.expiryDate = expiryDate;
         this.questions = questions;
-        this.qNum = qNum;
-        this.timed = false;
-        this.timedLength = 0;
+        this.sessionId = sessionId;
+        this.qNum = 0;
+        this.timed = timed;
+        this.timedLength = length;
     }
 
     public Quiz(JSONObject jObj, String sessionId) throws JSONException{
@@ -98,15 +100,24 @@ public class Quiz implements Serializable{
 
     public String getSessionId() { return sessionId; }
 
+    public ArrayList<Question> getQuestions() {
+        return questions;
+    }
+
     public Question getQuestion() {
         Question q = questions.get(qNum);
         return q;
     }
 
     public Question getNextQuestion() {
-        Question q = questions.get(qNum);
         qNum = (qNum + 1) % questions.size();
+        Question q = questions.get(qNum);
+
         return q;
+    }
+
+    public void setqNum(int n) {
+        qNum = n;
     }
 
     public int getqNum() {

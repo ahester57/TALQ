@@ -27,6 +27,8 @@ public class AnswerFragmentUser extends Fragment implements View.OnClickListener
     private TextView pointsView;
     private Question curQuestion;
 
+
+
     interface AnswerListener {
         Question getQuestion();
         void nextQuestion();
@@ -34,13 +36,20 @@ public class AnswerFragmentUser extends Fragment implements View.OnClickListener
         void prevQuestion();
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        prevProgress = new int[4];
+        aListener = (AnswerListener) getFragmentManager().findFragmentByTag("QUIZ_USER_FRAG");
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_answer_user, container, false);
 
-        prevProgress = new int[4];
-        aListener = (AnswerListener) getFragmentManager().findFragmentByTag("QUIZ_USER_FRAG");
+
 
         pointsView = (TextView) view.findViewById(R.id.question_points);
 

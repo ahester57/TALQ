@@ -80,8 +80,7 @@ public class LoginController extends Fragment {
 
                             if (!error) {
                                 // LOGIN SUCCESSFUL
-                                // create session
-                                session.setLogin(true);
+
 
                                 JSONObject user = jObj.getJSONObject("user");
                                 String ssoId = user.getString("email");
@@ -168,6 +167,9 @@ public class LoginController extends Fragment {
 
 
                                 }
+
+                                // create session
+                                session.setLogin(true);
 
                                 SQLiteHandlerUsers db = SQLiteHandlerUsers.sharedInstance(getActivity());
 

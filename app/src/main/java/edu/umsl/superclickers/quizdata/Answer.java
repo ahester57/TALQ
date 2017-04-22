@@ -16,10 +16,11 @@ public class Answer {
     private String questionId;
     private int sortOrder;
 
-    public Answer(String value, String text, int sortOrder) {
+    public Answer(String value, String text, int sortOrder, String questionId) {
         this.value = value;
         this.text = text;
         this.sortOrder = sortOrder;
+        this.questionId = questionId;
     }
 
     public Answer(JSONObject aObj, String questionId) throws JSONException {

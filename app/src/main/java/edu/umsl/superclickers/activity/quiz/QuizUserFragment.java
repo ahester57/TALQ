@@ -44,12 +44,16 @@ public class QuizUserFragment extends Fragment implements
     private TextView quizTimeView;
     private QuizGET quizGET;
 
+    private boolean resume = false;
+
     private QuizController qController;
 
     interface QuizController {
         void submitQuiz(Quiz quiz);
         QuizGET getQuizGET();
         void startQuizTimer();
+        void setQuizIndex(int qNum);
+        int getQuizIndex();
     }
 
     public void setQuizInfo(String quizID, String userID, String courseID) {
@@ -65,7 +69,9 @@ public class QuizUserFragment extends Fragment implements
         qController = (QuizController) getActivity();
         quizGET = qController.getQuizGET();
         quizGET.setController(this);
-        quizGET.getToken(quizID);
+        if (!resume) {
+            downloadQuiz();
+        }
     }
 
     @Nullable
@@ -89,21 +95,84 @@ public class QuizUserFragment extends Fragment implements
         return view;
     }
 
+    public void setResume(boolean flag) {
+        resume = flag;
+    }
+
+    public void downloadQuiz() {
+        quizGET.getToken(quizID);
+    }
+
     @Override
     public void setToken(String token) {
         this.token = token;
-
         // Get the quiz after got token
         quizGET.getQuiz(userID, courseID, quizID, token);
+    }
+
+    public void attachQuiz(Quiz quiz, int qNum) {
+        curQuiz = quiz;
+        // set quiz index
+        curQuiz.setqNum(qNum);
     }
 
     @Override
     public void setQuiz(Quiz quiz) {
         curQuiz = quiz;
-        currQuestion();
+        if (questionView != null) {
+            currQuestion();
+        }
         startTimer();
         Log.d(TAG, "Set the quiz ");
 
+    }
+
+    @Override
+    public void currQuestion() {
+        if(curQuiz == null) {
+            setBSQuiz();
+        }
+        curQuestion = curQuiz.getQuestion();
+        questionView.setText(curQuestion.getQuestion());
+        qController.setQuizIndex(curQuiz.getqNum());
+        updateGUITimer(minutesLeft, secondsLeft);
+        AnswerFragmentUser answerFragment = new AnswerFragmentUser();
+        android.app.FragmentManager fm = getFragmentManager();
+        android.app.FragmentTransaction ft = fm.beginTransaction();
+        ft.replace(R.id.answer_segment, answerFragment);
+        ft.commit();
+    }
+
+    @Override
+    public void nextQuestion() {
+        if (curQuiz == null) {
+            setBSQuiz();
+        }
+        curQuestion = curQuiz.getNextQuestion();
+        questionView.setText(curQuestion.getQuestion());
+        qController.setQuizIndex(curQuiz.getqNum());
+        // create instance of the answer fragment
+        AnswerFragmentUser answerFrag = new AnswerFragmentUser();
+        // load answer fragment into answerSection of QuizActivityUser
+        android.app.FragmentManager fm = getFragmentManager();
+        android.app.FragmentTransaction ft = fm.beginTransaction();
+        ft.replace(R.id.answer_segment, answerFrag);
+        ft.commit();
+    }
+
+    @Override
+    public void prevQuestion() {
+        if(curQuiz == null) {
+            setBSQuiz();
+        }
+        curQuestion = curQuiz.getPrevQuestion();
+        questionView.setText(curQuestion.getQuestion());
+        qController.setQuizIndex(curQuiz.getqNum());
+        AnswerFragmentUser answerFragment = new AnswerFragmentUser();
+        android.app.FragmentManager fm = getFragmentManager();
+        android.app.FragmentTransaction ft = fm.beginTransaction();
+        ft.replace(R.id.answer_segment, answerFragment);
+        ft.commit();
     }
 
     public int getQuizTime() {
@@ -141,63 +210,17 @@ public class QuizUserFragment extends Fragment implements
         return curQuestion;
     }
 
-    @Override
-    public void currQuestion() {
-        if(curQuiz == null) {
-            setBSQuiz();
-        }
-        curQuestion = curQuiz.getQuestion();
-        questionView.setText(curQuestion.getQuestion());
-        updateGUITimer(minutesLeft, secondsLeft);
-        AnswerFragmentUser answerFragment = new AnswerFragmentUser();
-        android.app.FragmentManager fm = getFragmentManager();
-        android.app.FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(R.id.answer_segment, answerFragment);
-        ft.commit();
-    }
-
-    @Override
-    public void nextQuestion() {
-        if (curQuiz == null) {
-            setBSQuiz();
-        }
-        curQuestion = curQuiz.getNextQuestion();
-        questionView.setText(curQuestion.getQuestion());
-
-        // create instance of the answer fragment
-        AnswerFragmentUser answerFrag = new AnswerFragmentUser();
-        // load answer fragment into answerSection of QuizActivityUser
-        android.app.FragmentManager fm = getFragmentManager();
-        android.app.FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(R.id.answer_segment, answerFrag);
-        ft.commit();
-    }
-
-    @Override
-    public void prevQuestion() {
-        if(curQuiz == null) {
-            setBSQuiz();
-        }
-        curQuestion = curQuiz.getPrevQuestion();
-        questionView.setText(curQuestion.getQuestion());
-
-        AnswerFragmentUser answerFragment = new AnswerFragmentUser();
-        android.app.FragmentManager fm = getFragmentManager();
-        android.app.FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(R.id.answer_segment, answerFragment);
-        ft.commit();
-    }
 
     public void setBSQuiz() {
         ArrayList<Answer> answers = new ArrayList<>();
-        answers.add(new Answer("A", "1", 0));
-        answers.add(new Answer("B", "2", 1));
-        answers.add(new Answer("C", "3", 2));
-        answers.add(new Answer("D", "4", 3));
+        answers.add(new Answer("A", "1", 0, "id"));
+        answers.add(new Answer("B", "2", 1, "id"));
+        answers.add(new Answer("C", "3", 2, "id"));
+        answers.add(new Answer("D", "4", 3, "id"));
         Question question = new Question("id", "title", "What is log_10 1000", 22, answers);
         ArrayList<Question> questions = new ArrayList<>();
         questions.add(question);
         setQuiz(new Quiz("ddd", "description", "what is log_10 1000?", "now", "never",
-                questions, 0));
+                questions, "sessionId", false, 0));
     }
 }

@@ -7,6 +7,8 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import edu.umsl.superclickers.app.SessionManager;
+
 /**
  * Created by Austin on 4/19/2017.
  */
@@ -14,6 +16,8 @@ import android.util.Log;
 public class QuizService extends Service {
 
     final String TAG = getClass().getSimpleName();
+    private SessionManager session;
+
 
     private int quizTime = 20;
     CountDownTimer quizTimer = null;
@@ -36,6 +40,8 @@ public class QuizService extends Service {
     public void onCreate() {
         super.onCreate();
         Log.d(TAG, "Starting quiz timer.");
+        session = new SessionManager(getApplicationContext());
+
 
         quizTimer = new CountDownTimer(quizTime * 60 * 1000, 1000) {
             @Override
@@ -48,7 +54,7 @@ public class QuizService extends Service {
             @Override
             public void onFinish() {
                 Log.d(TAG, "Quiz timer finished.");
-
+                session.removeQuizIndex();
             }
         };
         quizTimer.start();

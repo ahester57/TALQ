@@ -70,12 +70,15 @@ public class Question {
 
     public String getQuestion() { return text; }
 
+    public ArrayList<Answer> getAnswers() {
+        return availableAnswers;
+    }
 
     public Answer getA() {
         try {
             return availableAnswers.get(0);
         } catch (IndexOutOfBoundsException e) {
-            return new Answer("A", "", 0);
+            return new Answer("A", "", 0, _id);
         }
     }
 
@@ -83,7 +86,7 @@ public class Question {
         try {
             return availableAnswers.get(1);
         } catch (IndexOutOfBoundsException e) {
-            return new Answer("B", "", 1);
+            return new Answer("B", "", 1, _id);
         }
     }
 
@@ -91,7 +94,7 @@ public class Question {
         try {
             return availableAnswers.get(2);
         } catch (IndexOutOfBoundsException e) {
-            return new Answer("C", "", 2);
+            return new Answer("C", "", 2, _id);
         }
     }
 
@@ -99,7 +102,7 @@ public class Question {
         try {
             return availableAnswers.get(3);
         } catch (IndexOutOfBoundsException e) {
-            return new Answer("D", "", 3);
+            return new Answer("D", "", 3, _id);
         }
     }
 

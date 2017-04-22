@@ -14,10 +14,16 @@ import com.android.volley.toolbox.StringRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 import edu.umsl.superclickers.app.AppController;
 import edu.umsl.superclickers.app.QuizConfig;
 import edu.umsl.superclickers.database.QuizSchema;
+import edu.umsl.superclickers.database.SQLiteHandlerAnswers;
+import edu.umsl.superclickers.database.SQLiteHandlerQuestions;
 import edu.umsl.superclickers.database.SQLiteHandlerQuizzes;
+import edu.umsl.superclickers.quizdata.Answer;
+import edu.umsl.superclickers.quizdata.Question;
 import edu.umsl.superclickers.quizdata.Quiz;
 
 /**
@@ -77,8 +83,20 @@ public class QuizGET extends Fragment {
 
                                 Quiz quiz = new Quiz(quizObj, sessionId);
 
+                                SQLiteHandlerQuestions qdb = SQLiteHandlerQuestions.sharedInstance(getActivity());
                                 SQLiteHandlerQuizzes db = SQLiteHandlerQuizzes.sharedInstance(getActivity());
+                                SQLiteHandlerAnswers adb = SQLiteHandlerAnswers.sharedInstance(getActivity());
                                 db.addQuiz(quiz);
+
+                                ArrayList<Answer> answers;
+                                ArrayList<Question> questions = quiz.getQuestions();
+                                for (Question q : questions) {
+                                    qdb.addQuestion(q);
+                                    for (Answer a: q.getAnswers()) {
+                                        adb.addAnswer(a);
+                                    }
+                                }
+
                                 qController.setQuiz(quiz);
 
 

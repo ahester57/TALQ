@@ -2,11 +2,15 @@ package edu.umsl.superclickers.database;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.util.ArrayList;
+
 import edu.umsl.superclickers.quizdata.Answer;
+import edu.umsl.superclickers.quizdata.Question;
 
 /**
  * Created by Austin on 4/20/2017.
@@ -72,6 +76,31 @@ public class SQLiteHandlerAnswers extends SQLiteOpenHelper {
         db.close();
 
         Log.d(TAG, "New answer inserted into sqlite: " + id + answer.toString());
+    }
+
+    public ArrayList<Answer> getAnswers(String questionId) {
+        ArrayList<Answer> answers = new ArrayList<>();
+        String selectQuery = "SELECT * FROM " + TableSchema.TABLE_ANSWER +
+                " WHERE " + AnswerSchema.KEY_QUESTION_ID + " = \"" + questionId + "\"";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        cursor.moveToFirst();
+        if (cursor.getCount() > 0) {
+            do {
+                String _id = cursor.getString(1);
+                String value = cursor.getString(2);
+                String text = cursor.getString(3);
+                int sort = cursor.getInt(4);
+                answers.add(new Answer(value, text, sort, _id));
+                // @TODO get add answers
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        Log.d(TAG, "Fectching question from Sqlite: " + answers.toString());
+        return answers;
     }
 
     public void removeAnswersFromQuestion(String questionId) {

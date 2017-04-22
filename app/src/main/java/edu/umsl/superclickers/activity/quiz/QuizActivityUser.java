@@ -14,6 +14,8 @@ import android.widget.Toast;
 
 import edu.umsl.superclickers.R;
 import edu.umsl.superclickers.activity.home.HomeActivity;
+import edu.umsl.superclickers.app.SessionManager;
+import edu.umsl.superclickers.database.SQLiteHandlerQuestions;
 import edu.umsl.superclickers.database.SQLiteHandlerQuizzes;
 import edu.umsl.superclickers.quizdata.Quiz;
 
@@ -26,28 +28,7 @@ public class QuizActivityUser extends AppCompatActivity implements
     private Intent timerService;
     private QuizGET quizGET;
     private QuizUserFragment quizUserFragment;
-
-    @Override
-    public void submitQuiz(Quiz quiz) {
-        SQLiteHandlerQuizzes db = SQLiteHandlerQuizzes.sharedInstance(getApplicationContext());
-        db.removeQuiz(getQuizID());
-        Toast.makeText(getApplicationContext(), "Quiz Submitted", Toast.LENGTH_LONG).show();
-        stopService(timerService);
-        Intent quizIntent = new Intent(QuizActivityUser.this, HomeActivity.class);
-        startActivity(quizIntent);
-        finish();
-    }
-
-
-
-    @Override
-    public void startQuizTimer() {
-        if (!isTimerRunning(QuizService.class)) {
-            timerService.putExtra("QUIZ_TIME", getQuizTime());
-            startService(timerService);
-
-        }
-    }
+    private SessionManager session;
 
 
 
@@ -62,6 +43,8 @@ public class QuizActivityUser extends AppCompatActivity implements
         String userID = intent.getStringExtra("USER_ID");
         String courseID = intent.getStringExtra("COURSE_ID");
 
+        // Session manager
+        session = new SessionManager(getApplicationContext());
 
         timerService = new Intent(this, QuizService.class);
 
@@ -81,17 +64,58 @@ public class QuizActivityUser extends AppCompatActivity implements
             fm.beginTransaction()
                     .add(R.id.quiz_container, quizUserFragment, "QUIZ_USER_FRAG")
                     .commit();
+
+            if (!session.isQuizRunning()) {
+                // Load quiz from internet
+                quizUserFragment.setQuizInfo(quizID, userID, courseID);
+                quizUserFragment.setResume(false);
+            } else {
+                // get quiz from SQLite
+                quizUserFragment.setQuizInfo(quizID, userID, courseID);
+                SQLiteHandlerQuizzes db = SQLiteHandlerQuizzes.sharedInstance(getApplicationContext());
+                quizUserFragment.setResume(true);
+                quizUserFragment.attachQuiz(db.getQuiz(quizID), getQuizIndex());
+            }
         }
 
-
-        // Load quiz
-        quizUserFragment.setQuizInfo(quizID, userID, courseID);
 
 
 
         // @TODO save quiz to SQLite
     }
 
+    @Override
+    public void submitQuiz(Quiz quiz) {
+        SQLiteHandlerQuizzes db = SQLiteHandlerQuizzes.sharedInstance(getApplicationContext());
+        SQLiteHandlerQuestions qdb = SQLiteHandlerQuestions.sharedInstance(getApplicationContext());
+
+        db.removeQuiz(getQuizID());
+        qdb.removeAllQuestions();
+        session.removeQuizIndex();
+        Toast.makeText(getApplicationContext(), "Quiz Submitted", Toast.LENGTH_LONG).show();
+        stopService(timerService);
+        Intent quizIntent = new Intent(QuizActivityUser.this, HomeActivity.class);
+        startActivity(quizIntent);
+        finish();
+    }
+
+    @Override
+    public void startQuizTimer() {
+        if (!isTimerRunning(QuizService.class)) {
+            timerService.putExtra("QUIZ_TIME", getQuizTime());
+            startService(timerService);
+        }
+    }
+
+    @Override
+    public void setQuizIndex(int qNum) {
+        session.setQuizIndex(qNum);
+    }
+
+    @Override
+    public int getQuizIndex() {
+        return session.getQuizIndex();
+    }
 
     public int getQuizTime() {
         return quizUserFragment.getQuizTime();
@@ -108,7 +132,6 @@ public class QuizActivityUser extends AppCompatActivity implements
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         //outState.putInt("TIME_LEFT", )
-        // @TODO fix timer restarting
     }
 
     private BroadcastReceiver br = new BroadcastReceiver() {
