@@ -181,6 +181,7 @@ public class QuizUserFragment extends Fragment implements
 
     public String getQuizID() { return curQuiz.get_id(); }
 
+    public Quiz getCurQuiz() { return curQuiz; }
 
     public void updateGUITimer(int minutes, int seconds) {
         minutesLeft = minutes;

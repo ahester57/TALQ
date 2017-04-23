@@ -11,7 +11,6 @@ import java.util.ArrayList;
 
 import edu.umsl.superclickers.quizdata.Answer;
 import edu.umsl.superclickers.quizdata.Question;
-import edu.umsl.superclickers.quizdata.Quiz;
 
 /**
  * Created by Austin on 4/20/2017.

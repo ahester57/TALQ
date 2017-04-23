@@ -60,7 +60,6 @@ public class Quiz implements Serializable{
                 i++;
             }
 
-
             this._id = id;
             this.description = desc;
             this.text = text;
@@ -112,7 +111,6 @@ public class Quiz implements Serializable{
     public Question getNextQuestion() {
         qNum = (qNum + 1) % questions.size();
         Question q = questions.get(qNum);
-
         return q;
     }
 
@@ -127,7 +125,7 @@ public class Quiz implements Serializable{
     public Question getPrevQuestion() {
         qNum = (qNum - 1) % questions.size();
         if(qNum < 0) {
-            qNum += questions.size();
+            qNum += questions.size(); // bc mod
         }
         Question q = questions.get(qNum);
         return q;

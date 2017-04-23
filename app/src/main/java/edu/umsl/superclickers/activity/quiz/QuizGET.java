@@ -14,16 +14,10 @@ import com.android.volley.toolbox.StringRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-
 import edu.umsl.superclickers.app.AppController;
 import edu.umsl.superclickers.app.QuizConfig;
+import edu.umsl.superclickers.app.SessionManager;
 import edu.umsl.superclickers.database.QuizSchema;
-import edu.umsl.superclickers.database.SQLiteHandlerAnswers;
-import edu.umsl.superclickers.database.SQLiteHandlerQuestions;
-import edu.umsl.superclickers.database.SQLiteHandlerQuizzes;
-import edu.umsl.superclickers.quizdata.Answer;
-import edu.umsl.superclickers.quizdata.Question;
 import edu.umsl.superclickers.quizdata.Quiz;
 
 /**
@@ -34,6 +28,7 @@ public class QuizGET extends Fragment {
 
     private final String TAG = this.getClass().getSimpleName();
 
+    private SessionManager session;
     private QuizGETController qController;
 
     interface QuizGETController {
@@ -44,6 +39,8 @@ public class QuizGET extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Session manager
+        session = new SessionManager(getActivity());
     }
 
     public void setController(QuizGETController qControl) {
@@ -77,29 +74,11 @@ public class QuizGET extends Fragment {
                             if (error.equals("false")) {
                                 // Quiz was found
                                 String sessionId = jObj.getString(QuizSchema.KEY_SESSION_ID);
-
                                 JSONObject quizObj = jObj.getJSONObject("quiz");
 
-
                                 Quiz quiz = new Quiz(quizObj, sessionId);
-
-                                SQLiteHandlerQuestions qdb = SQLiteHandlerQuestions.sharedInstance(getActivity());
-                                SQLiteHandlerQuizzes db = SQLiteHandlerQuizzes.sharedInstance(getActivity());
-                                SQLiteHandlerAnswers adb = SQLiteHandlerAnswers.sharedInstance(getActivity());
-                                db.addQuiz(quiz);
-
-                                ArrayList<Answer> answers;
-                                ArrayList<Question> questions = quiz.getQuestions();
-                                for (Question q : questions) {
-                                    qdb.addQuestion(q);
-                                    for (Answer a: q.getAnswers()) {
-                                        adb.addAnswer(a);
-                                    }
-                                }
-
+                                session.addQuizToDB(quiz);
                                 qController.setQuiz(quiz);
-
-
 
                             } else {
                                 // Error
@@ -125,7 +104,6 @@ public class QuizGET extends Fragment {
         // end string request.. phew!
         AppController.getInstance().addToRequestQueue(strReq, tag_str_req);
     }
-
 
     void getToken(final String id) {
         String tag_str_req = "req_quiz";
@@ -150,12 +128,8 @@ public class QuizGET extends Fragment {
                             // if no errors
                             if (error.equals("false")) {
                                 // get token
-
                                 JSONObject token = jObj.getJSONObject("token");
-
                                 qController.setToken(token.getString("accessToken"));
-
-
 
                             } else {
                                 // Error
@@ -181,6 +155,5 @@ public class QuizGET extends Fragment {
         // end string request.. phew!
         AppController.getInstance().addToRequestQueue(strReq, tag_str_req);
     }
-
 
 }

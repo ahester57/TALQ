@@ -32,13 +32,12 @@ public class RegisterActivity extends AppCompatActivity implements
 
     private RegisterController rController;
 
-
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        // @TODO switch to a fragment with retainInstance = true
         inSSO = (EditText) findViewById(R.id.reg_sso_text_edit);
         inPassword = (EditText) findViewById(R.id.reg_pwd_edit);
         inConfirm = (EditText) findViewById(R.id.reg_pwd_confirm);
@@ -80,10 +79,9 @@ public class RegisterActivity extends AppCompatActivity implements
 
                 if (!ssoId.isEmpty() && !password.isEmpty()) {
                     if (password.equals(confirm)) {
-
+                        // checks userId tblearn-api
                         rController.getUserDetails(ssoId, password);
-
-
+                        // if finds existing user, registers with given credentials
                     } else {
                         Toast.makeText(getApplicationContext(),
                                 "Ya done goofed. Passwords don't match.", Toast.LENGTH_LONG).show();

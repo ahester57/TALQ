@@ -36,6 +36,7 @@ public class LoginActivity extends AppCompatActivity implements
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        // @TODO switch to a fragment with retainInstance = true
 
         Button login = (Button) findViewById(R.id.login_button);
         Button register = (Button) findViewById(R.id.new_user_button);
@@ -53,7 +54,6 @@ public class LoginActivity extends AppCompatActivity implements
             startActivity(intent);
             finish();
         }
-
 
         lController = new LoginController();
 

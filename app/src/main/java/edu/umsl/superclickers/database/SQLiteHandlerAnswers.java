@@ -10,7 +10,6 @@ import android.util.Log;
 import java.util.ArrayList;
 
 import edu.umsl.superclickers.quizdata.Answer;
-import edu.umsl.superclickers.quizdata.Question;
 
 /**
  * Created by Austin on 4/20/2017.
@@ -108,6 +107,13 @@ public class SQLiteHandlerAnswers extends SQLiteOpenHelper {
 
         db.execSQL("DELETE FROM " + TableSchema.TABLE_ANSWER +
                 " WHERE " + AnswerSchema.KEY_QUESTION_ID + "=\"" + questionId + "\";");
+        db.close();
+    }
+
+    public void removeAllAnswers() {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        db.execSQL("DELETE FROM " + TableSchema.TABLE_ANSWER + ";");
         db.close();
     }
 }

@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import edu.umsl.superclickers.quizdata.Question;
 import edu.umsl.superclickers.quizdata.Quiz;
@@ -70,7 +69,7 @@ public class SQLiteHandlerQuizzes extends SQLiteOpenHelper {
     public void addQuiz(Quiz quiz) {
         SQLiteDatabase db = this.getWritableDatabase();
 
-        // @TODO resume quiz
+        // @TODO if quiz with same Id exists don't crash but ignore
 
         db.execSQL(createQuizTable());
 
@@ -96,27 +95,14 @@ public class SQLiteHandlerQuizzes extends SQLiteOpenHelper {
         Quiz quiz = null;
         String selectQuery = "SELECT * FROM " + TableSchema.TABLE_QUIZ +
                 " WHERE _id = \"" + quizId + "\"";
-
         SQLiteDatabase db = this.getReadableDatabase();
-        SQLiteHandlerQuestions qdb = SQLiteHandlerQuestions.sharedInstance(context);
+
         Cursor cursor = db.rawQuery(selectQuery, null);
+        QuizCursorWrapper qCursor = new QuizCursorWrapper(cursor, context);
 
-        cursor.moveToFirst();
-        if (cursor.getCount() > 0) {
-            String sessionId = cursor.getString(1);
-            String _id = cursor.getString(2);
-            String desc = cursor.getString(3);
-            String text = cursor.getString(4);
-            String avail = cursor.getString(5);
-            String expiry = cursor.getString(6);
-            boolean timed = cursor.getInt(7) > 0;
-            int length = cursor.getInt(8);
+        quiz = qCursor.getQuiz();
 
-            ArrayList<Question> questions = qdb.getQuestions(sessionId);
-            quiz = new Quiz(_id, desc, text, avail, expiry, questions, sessionId, timed, length);
-            // @TODO get add questions
-            Log.d(TAG, "Fectching quiz from Sqlite: " + quiz.toString());
-        }
+        Log.d(TAG, "Fectching quiz from Sqlite: " + quiz.toString());
         cursor.close();
         db.close();
 
@@ -129,6 +115,15 @@ public class SQLiteHandlerQuizzes extends SQLiteOpenHelper {
         db.execSQL("DELETE FROM " + TableSchema.TABLE_QUIZ +
                 " WHERE " + QuizSchema.KEY_QID + "=\"" + quizId + "\";");
         db.close();
+        Log.d(TAG, "Removed quiz from Sqlite: " + quizId);
+    }
+
+    public void removeAllQuizzes() {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        db.execSQL("DELETE FROM " + TableSchema.TABLE_QUIZ + ";");
+        db.close();
+        Log.d(TAG, "Removed all quizzes from Sqlite.");
     }
 
     public void resumeQuiz() {

@@ -15,8 +15,6 @@ import android.widget.Toast;
 import edu.umsl.superclickers.R;
 import edu.umsl.superclickers.activity.home.HomeActivity;
 import edu.umsl.superclickers.app.SessionManager;
-import edu.umsl.superclickers.database.SQLiteHandlerQuestions;
-import edu.umsl.superclickers.database.SQLiteHandlerQuizzes;
 import edu.umsl.superclickers.quizdata.Quiz;
 
 
@@ -30,13 +28,18 @@ public class QuizActivityUser extends AppCompatActivity implements
     private QuizUserFragment quizUserFragment;
     private SessionManager session;
 
-
+    // BroadcastReceiver for QuizService
+    private BroadcastReceiver br = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateGUITimer(intent);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
-
 
         Intent intent = getIntent();
         String quizID = intent.getStringExtra("QUIZ_ID");
@@ -45,10 +48,10 @@ public class QuizActivityUser extends AppCompatActivity implements
 
         // Session manager
         session = new SessionManager(getApplicationContext());
-
         timerService = new Intent(this, QuizService.class);
 
         FragmentManager fm = getFragmentManager();
+        // Check if quizGET exists
         if (fm.findFragmentByTag("QUIZ_GET") != null) {
             quizGET = (QuizGET) fm.findFragmentByTag("QUIZ_GET");
         } else {
@@ -57,52 +60,53 @@ public class QuizActivityUser extends AppCompatActivity implements
                     .add(quizGET, "QUIZ_GET")
                     .commit();
         }
+        // Check if fragment exists
         if (fm.findFragmentByTag("QUIZ_GET") != null) {
             quizUserFragment = (QuizUserFragment) fm.findFragmentByTag("QUIZ_USER_FRAG");
         } else {
+            // Add new quizFragment and reload quiz
             quizUserFragment = new QuizUserFragment();
             fm.beginTransaction()
                     .add(R.id.quiz_container, quizUserFragment, "QUIZ_USER_FRAG")
                     .commit();
-
-            if (!session.isQuizRunning()) {
-                // Load quiz from internet
-                quizUserFragment.setQuizInfo(quizID, userID, courseID);
-                quizUserFragment.setResume(false);
-            } else {
-                // get quiz from SQLite
-                quizUserFragment.setQuizInfo(quizID, userID, courseID);
-                SQLiteHandlerQuizzes db = SQLiteHandlerQuizzes.sharedInstance(getApplicationContext());
-                quizUserFragment.setResume(true);
-                quizUserFragment.attachQuiz(db.getQuiz(quizID), getQuizIndex());
-            }
+            // Only try to reload quiz when fragment is not loaded
+            reloadQuiz(quizID, userID, courseID);
         }
 
-
-
-
-        // @TODO save quiz to SQLite
     }
 
     @Override
     public void submitQuiz(Quiz quiz) {
-        SQLiteHandlerQuizzes db = SQLiteHandlerQuizzes.sharedInstance(getApplicationContext());
-        SQLiteHandlerQuestions qdb = SQLiteHandlerQuestions.sharedInstance(getApplicationContext());
+        // @TODO POST quiz for grading
 
-        db.removeQuiz(getQuizID());
-        qdb.removeAllQuestions();
-        session.removeQuizIndex();
         Toast.makeText(getApplicationContext(), "Quiz Submitted", Toast.LENGTH_LONG).show();
         stopService(timerService);
+        session.clearDatabase();
         Intent quizIntent = new Intent(QuizActivityUser.this, HomeActivity.class);
         startActivity(quizIntent);
         finish();
+    }
+
+    void reloadQuiz(String quizID, String userID, String courseID) {
+        if (!session.isQuizRunning()) {
+            // Load quiz from internet
+            //@TODO fix when quiz is over and started again
+            quizUserFragment.setQuizInfo(quizID, userID, courseID);
+            quizUserFragment.setResume(false);
+            session.setActiveQuiz(quizID);
+        } else {
+            // get quiz from SQLite
+            quizUserFragment.setQuizInfo(quizID, userID, courseID);
+            quizUserFragment.setResume(true);
+            quizUserFragment.attachQuiz(getActiveQuiz(), getQuizIndex());
+        }
     }
 
     @Override
     public void startQuizTimer() {
         if (!isTimerRunning(QuizService.class)) {
             timerService.putExtra("QUIZ_TIME", getQuizTime());
+            timerService.putExtra("QUIZ_ID", getQuizID());
             startService(timerService);
         }
     }
@@ -117,6 +121,14 @@ public class QuizActivityUser extends AppCompatActivity implements
         return session.getQuizIndex();
     }
 
+    Quiz getQuiz(String quizId) {
+        return session.getQuiz(quizId);
+    }
+
+    Quiz getActiveQuiz() {
+        return session.getActiveQuiz();
+    }
+
     public int getQuizTime() {
         return quizUserFragment.getQuizTime();
     }
@@ -128,18 +140,30 @@ public class QuizActivityUser extends AppCompatActivity implements
         return quizGET;
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        //outState.putInt("TIME_LEFT", )
+    void updateGUITimer(Intent intent) {
+        if (intent.getExtras() != null) {
+            long millisUntilFinished = intent.getLongExtra("countdown", 4);
+            int secondsLeft = (int) millisUntilFinished / 1000 - 1;
+            int minutesLeft = secondsLeft / 60;
+            secondsLeft = secondsLeft % 60;
+            quizUserFragment.updateGUITimer(minutesLeft, secondsLeft);
+            if (millisUntilFinished < 2000) {
+                submitQuiz(quizUserFragment.getCurQuiz());
+            }
+        }
     }
 
-    private BroadcastReceiver br = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            updateGUITimer(intent);
+    private boolean isTimerRunning(Class<?> serviceClass) {
+        ActivityManager actMan = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : actMan.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                Log.d(TAG, "Timer running ");
+                return true;
+            }
         }
-    };
+        Log.d(TAG, "Timer NOT running ");
+        return false;
+    }
 
     @Override
     protected void onResume() {
@@ -173,27 +197,10 @@ public class QuizActivityUser extends AppCompatActivity implements
         super.onDestroy();
     }
 
-    void updateGUITimer(Intent intent) {
-        if (intent.getExtras() != null) {
-            long millisUntilFinished = intent.getLongExtra("countdown", 4);
-            int secondsLeft = (int) millisUntilFinished / 1000;
-            int minutesLeft = secondsLeft / 60;
-            secondsLeft = secondsLeft % 60;
-            quizUserFragment.updateGUITimer(minutesLeft, secondsLeft);
-
-        }
-    }
-
-    private boolean isTimerRunning(Class<?> serviceClass) {
-        ActivityManager actMan = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : actMan.getRunningServices(Integer.MAX_VALUE)) {
-            if (serviceClass.getName().equals(service.service.getClassName())) {
-                Log.d(TAG, "Timer running ");
-                return true;
-            }
-        }
-        Log.d(TAG, "Timer NOT running ");
-        return false;
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        //outState.putInt("TIME_LEFT", )
     }
 
 }

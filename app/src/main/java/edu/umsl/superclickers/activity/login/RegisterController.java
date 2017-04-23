@@ -43,13 +43,11 @@ public class RegisterController extends Fragment {
         super.onCreate(savedInstanceState);
         pDialog = new ProgressDialog(getActivity());
         pDialog.setCancelable(false);
-
-
         rDelegate = (RegisterListener) getActivity();
     }
 
     // Store new user, uploads to register URL
-    void registerUser(final String name, final String ssoId, final String password) {
+    void registerUser(final String name, final String userId, final String password) {
         String tag_str_req = "req_register";
 
         pDialog.setMessage("Registerin...");
@@ -68,20 +66,10 @@ public class RegisterController extends Fragment {
 
                             if (!error) {
                                 // REGISTER SUCCESSFUL
-                                // store user in db
+                                // store user in remote db
 
-                                //store user
-                                String uid = jObj.getString("uid");
-
-                                JSONObject user = jObj.getJSONObject("user");
-                                String name = user.getString("name");
-                                String ssoId = user.getString("email");
-                                String created_at = user.getString("created_at");
-
-
+                                Log.d(TAG, "User " + userId + " stored in remote database.");
                                 Toast.makeText(getActivity(), "User registered", Toast.LENGTH_LONG).show();
-
-
                                 rDelegate.goToLogin();
 
                             } else {
@@ -111,22 +99,23 @@ public class RegisterController extends Fragment {
                 // put params to login url via POST
                 Map<String, String> params = new HashMap<>();
                 params.put("name", name);
-                params.put("email", ssoId);
+                params.put("email", userId);
                 params.put("password", password);
 
                 return params;
             }
         };
         // end string request.. phew!
-
         Log.d(TAG, "we made it");
 
         AppController.getInstance().addToRequestQueue(strReq, tag_str_req);
     }
 
-    void getUserDetails(final String ssoID, final String pwd) {
+    // checks if userId in class list
+    // if found, registers user with given credentials
+    void getUserDetails(final String userId, final String pwd) {
         String tag_str_req = "req_name";
-        String uri = String.format(LoginConfig.URL_USER_BY_SSO, ssoID);
+        String uri = String.format(LoginConfig.URL_USER_BY_SSO, userId);
         // new string request
         StringRequest strReq = new StringRequest(Request.Method.GET, uri,
 
@@ -136,22 +125,17 @@ public class RegisterController extends Fragment {
                         Log.d(TAG, " Response: " + response);
                         try {
                             JSONObject jObj = new JSONObject(response);
-
                             String error;
                             try {
                                 error = jObj.getString("error");
                             } catch (JSONException e) {
                                 error = "false";
                             }
-
                             // if no errors
                             if (error.equals("false")) {
                                 // user was found
-
                                 String name = jObj.getString("first") + " " + jObj.getString("last");
-                                rDelegate.registerUser(name, ssoID, pwd);
-
-
+                                rDelegate.registerUser(name, userId, pwd);
 
                             } else {
                                 // Error

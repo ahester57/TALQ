@@ -24,7 +24,6 @@ import java.util.Map;
 import edu.umsl.superclickers.app.AppController;
 import edu.umsl.superclickers.app.LoginConfig;
 import edu.umsl.superclickers.app.SessionManager;
-import edu.umsl.superclickers.database.SQLiteHandlerUsers;
 import edu.umsl.superclickers.userdata.User;
 
 /**
@@ -38,32 +37,28 @@ public class LoginController extends Fragment {
     private ProgressDialog pDialog; //////
     private SessionManager session;
 
-    private LoginListener lDelegate;
+    private LoginListener lListener;
 
     interface LoginListener {
         void goToHome();
     }
 
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        lDelegate = (LoginListener) getActivity();
-
+        // Login activity listener
+        lListener = (LoginListener) getActivity();
         // progress dialog
         pDialog = new ProgressDialog(getActivity());
         pDialog.setCancelable(false);
-
-
         // Session manager
         session = new SessionManager(getActivity());
     }
 
-    // verify login credentials
+    // check login credentials
     void checkLogin(final String ssoId, final String password) {
         String tag_str_req = "req_login";
-
-        pDialog.setMessage("Loggin in...");
+        pDialog.setMessage("Logging in...");
         showDialog();
 
         // new string request
@@ -80,13 +75,9 @@ public class LoginController extends Fragment {
 
                             if (!error) {
                                 // LOGIN SUCCESSFUL
-
-
                                 JSONObject user = jObj.getJSONObject("user");
                                 String ssoId = user.getString("email");
-
                                 verifyUser(ssoId);
-
 
                             } else {
                                 // Error loggin in
@@ -121,15 +112,12 @@ public class LoginController extends Fragment {
             }
         };
         // end string request.. phew!
-
-
-
         AppController.getInstance().addToRequestQueue(strReq, tag_str_req);
     }
 
-    // checks if valid user and inserts into database
+    // verifies if valid user and inserts into database
     void verifyUser(final String user_id) {
-        String tag_str_req = "req_user_details";
+        String tag_str_req = "req_verify_user";
         String uri = String.format(LoginConfig.URL_USER_BY_SSO, user_id);
         // new string request
         StringRequest strReq = new StringRequest(Request.Method.GET, uri,
@@ -140,18 +128,15 @@ public class LoginController extends Fragment {
                         Log.d(TAG, " Response: " + response);
                         try {
                             JSONObject jObj = new JSONObject(response);
-
                             String error;
                             try {
                                 error = jObj.getString("error");
                             } catch (JSONException e) {
                                 error = "false";
                             }
-
                             // if no errors
                             if (error.equals("false")) {
                                 // user was found
-
                                 // Extract user details
                                 String _id = jObj.getString("_id");
                                 String userID = jObj.getString("userID");
@@ -159,25 +144,17 @@ public class LoginController extends Fragment {
                                 String first = jObj.getString("first");
                                 String last = jObj.getString("last");
 
-
                                 JSONArray courseArr = jObj.getJSONArray("enrolledCourses");
                                 // Handle enrolled courses
                                 for (int i = 0; i < courseArr.length(); i++) {
                                     JSONObject courseObj = courseArr.getJSONObject(i);
-
+                                    // @TODO add courses to database
 
                                 }
-
                                 // create session
+                                session.addUserToDB(new User(first, last, userID, email, _id));
                                 session.setLogin(true);
-
-                                SQLiteHandlerUsers db = SQLiteHandlerUsers.sharedInstance(getActivity());
-
-                                db.addUser(new User(first, last, userID, email, _id));
-                                //rDelegate.registerUser(name, user_id);
-                                // add user to sql database
-                                lDelegate.goToHome();
-
+                                lListener.goToHome();
 
                             } else {
                                 // Error
