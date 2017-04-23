@@ -25,10 +25,10 @@ import edu.umsl.superclickers.R;
 import edu.umsl.superclickers.activity.login.LoginActivity;
 import edu.umsl.superclickers.activity.quiz.QuizActivityUser;
 import edu.umsl.superclickers.activity.quiz.QuizService;
+import edu.umsl.superclickers.app.FragmentConfig;
 import edu.umsl.superclickers.app.SessionManager;
 import edu.umsl.superclickers.database.SQLiteHandlerUsers;
 import edu.umsl.superclickers.database.UserSchema;
-import edu.umsl.superclickers.quizdata.Quiz;
 import edu.umsl.superclickers.userdata.User;
 
 /**
@@ -37,7 +37,7 @@ import edu.umsl.superclickers.userdata.User;
  */
 
 public class HomeActivity extends AppCompatActivity implements
-        View.OnClickListener, HomeFragment.HomeController {
+        View.OnClickListener, HomeController.HomeListener {
 
     private final String TAG = HomeActivity.class.getSimpleName();
 
@@ -48,7 +48,7 @@ public class HomeActivity extends AppCompatActivity implements
     private Spinner quiz_select_spinner;
     private SQLiteHandlerUsers db;
     private SessionManager session;
-    private HomeFragment hFragment;
+    private HomeController hFragment;
 
     private ArrayList<String> quizzes;
     private HashMap<String, String> quizMap;
@@ -85,17 +85,17 @@ public class HomeActivity extends AppCompatActivity implements
             btnCreateGroup.setEnabled(false);
         } else {
             // Fetch user info from sqlite
-            HashMap<String, String> userDetails = db.getUserDetails();
+            User user = session.getCurrentUser();
 
-            textName.setText(userDetails.get(UserSchema.KEY_LAST) +
-                    ", " + userDetails.get(UserSchema.KEY_FIRST));
-            textEmail.setText(userDetails.get(UserSchema.KEY_USER_ID));
+            textName.setText(user.getLast() +
+                    ", " + user.getFirst());
+            textEmail.setText(user.getUserId());
         }
 
-        hFragment = new HomeFragment();
+        hFragment = new HomeController();
         FragmentManager fm = getFragmentManager();
         fm.beginTransaction()
-                .add(hFragment, "HOME_GET")
+                .add(hFragment, FragmentConfig.KEY_HOME_CONTROLLER)
                 .commit();
 
         hFragment.getQuizzesFor(userId);
@@ -170,10 +170,10 @@ public class HomeActivity extends AppCompatActivity implements
         courseId = courseIds.get(pos);
     }
 
-    public void submitQuiz() {
+    public void stopQuiz() {
         // @TODO POST quiz for grading
         Toast.makeText(getApplicationContext(), "Quiz Submitted", Toast.LENGTH_LONG).show();
-        stopService(new Intent(getApplicationContext(), QuizService.class));
+        stopService(new Intent(getBaseContext(), QuizService.class));
         session.clearDatabase();
     }
 
@@ -182,7 +182,7 @@ public class HomeActivity extends AppCompatActivity implements
             long millisUntilFinished = intent.getLongExtra("countdown", 4);
 
             if (millisUntilFinished < 2000) {
-                submitQuiz();
+                stopQuiz();
             }
         }
     }
@@ -227,7 +227,8 @@ public class HomeActivity extends AppCompatActivity implements
 
     @Override
     protected void onDestroy() {
-        Log.d(TAG, "QUiz Activity destoyed");
+        Log.d(TAG, "Home Activity destoyed");
+        //stopQuiz();
         super.onDestroy();
     }
 }

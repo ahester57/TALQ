@@ -18,5 +18,4 @@ git clone http://umsl.vigilantestudio.com/superClickers/superClickers.git
 	- Build WaitingRoom --> Then QuizActivityGroup
 	- submit quizzes for grading
 	- set leader to first user finished
-	- resume quiz when gone back and started before timer over
-
+	- fix timer on app force close --> allows for infinite time

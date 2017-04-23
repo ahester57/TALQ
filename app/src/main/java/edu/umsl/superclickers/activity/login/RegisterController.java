@@ -31,7 +31,7 @@ public class RegisterController extends Fragment {
     private final String TAG = getClass().getSimpleName();
 
     private ProgressDialog pDialog;
-    private RegisterListener rDelegate;
+    private RegisterListener rListener;
 
     interface RegisterListener {
         void goToLogin();
@@ -43,7 +43,7 @@ public class RegisterController extends Fragment {
         super.onCreate(savedInstanceState);
         pDialog = new ProgressDialog(getActivity());
         pDialog.setCancelable(false);
-        rDelegate = (RegisterListener) getActivity();
+        rListener = (RegisterListener) getActivity();
     }
 
     // Store new user, uploads to register URL
@@ -70,7 +70,7 @@ public class RegisterController extends Fragment {
 
                                 Log.d(TAG, "User " + userId + " stored in remote database.");
                                 Toast.makeText(getActivity(), "User registered", Toast.LENGTH_LONG).show();
-                                rDelegate.goToLogin();
+                                rListener.goToLogin();
 
                             } else {
                                 // Error loggin in
@@ -135,7 +135,7 @@ public class RegisterController extends Fragment {
                             if (error.equals("false")) {
                                 // user was found
                                 String name = jObj.getString("first") + " " + jObj.getString("last");
-                                rDelegate.registerUser(name, userId, pwd);
+                                rListener.registerUser(name, userId, pwd);
 
                             } else {
                                 // Error

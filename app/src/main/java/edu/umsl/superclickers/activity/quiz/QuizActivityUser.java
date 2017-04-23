@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import edu.umsl.superclickers.R;
 import edu.umsl.superclickers.activity.home.HomeActivity;
+import edu.umsl.superclickers.app.FragmentConfig;
 import edu.umsl.superclickers.app.SessionManager;
 import edu.umsl.superclickers.quizdata.Quiz;
 
@@ -48,26 +49,26 @@ public class QuizActivityUser extends AppCompatActivity implements
 
         // Session manager
         session = new SessionManager(getApplicationContext());
-        timerService = new Intent(this, QuizService.class);
+        timerService = new Intent(getBaseContext(), QuizService.class);
 
         FragmentManager fm = getFragmentManager();
         // Check if quizGET exists
-        if (fm.findFragmentByTag("QUIZ_GET") != null) {
-            quizGET = (QuizGET) fm.findFragmentByTag("QUIZ_GET");
+        if (fm.findFragmentByTag(FragmentConfig.KEY_QUIZ_GET) != null) {
+            quizGET = (QuizGET) fm.findFragmentByTag(FragmentConfig.KEY_QUIZ_GET);
         } else {
             quizGET = new QuizGET();
             fm.beginTransaction()
-                    .add(quizGET, "QUIZ_GET")
+                    .add(quizGET, FragmentConfig.KEY_QUIZ_GET)
                     .commit();
         }
         // Check if fragment exists
-        if (fm.findFragmentByTag("QUIZ_GET") != null) {
-            quizUserFragment = (QuizUserFragment) fm.findFragmentByTag("QUIZ_USER_FRAG");
+        if (fm.findFragmentByTag(FragmentConfig.KEY_QUIZ_USER_FRAG) != null) {
+            quizUserFragment = (QuizUserFragment) fm.findFragmentByTag(FragmentConfig.KEY_QUIZ_USER_FRAG);
         } else {
             // Add new quizFragment and reload quiz
             quizUserFragment = new QuizUserFragment();
             fm.beginTransaction()
-                    .add(R.id.quiz_container, quizUserFragment, "QUIZ_USER_FRAG")
+                    .add(R.id.quiz_container, quizUserFragment, FragmentConfig.KEY_QUIZ_USER_FRAG)
                     .commit();
             // Only try to reload quiz when fragment is not loaded
             reloadQuiz(quizID, userID, courseID);

@@ -125,7 +125,7 @@ public class Quiz implements Serializable{
     public Question getPrevQuestion() {
         qNum = (qNum - 1) % questions.size();
         if(qNum < 0) {
-            qNum += questions.size(); // bc mod
+            qNum += questions.size(); // BUT -1 MOD 10 = 9!!!! stupid % not following rules of math
         }
         Question q = questions.get(qNum);
         return q;

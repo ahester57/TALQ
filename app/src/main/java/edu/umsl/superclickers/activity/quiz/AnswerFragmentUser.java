@@ -11,6 +11,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import edu.umsl.superclickers.R;
+import edu.umsl.superclickers.app.FragmentConfig;
 import edu.umsl.superclickers.quizdata.Question;
 
 /**
@@ -41,7 +42,8 @@ public class AnswerFragmentUser extends Fragment implements View.OnClickListener
         super.onCreate(savedInstanceState);
 
         prevProgress = new int[4];
-        aListener = (AnswerListener) getFragmentManager().findFragmentByTag("QUIZ_USER_FRAG");
+        aListener = (AnswerListener) getFragmentManager()
+                .findFragmentByTag(FragmentConfig.KEY_QUIZ_USER_FRAG);
     }
 
     @Nullable

@@ -148,20 +148,22 @@ public class SQLiteHandlerUsers extends SQLiteOpenHelper {
     }
 
     /// get user data
-    public HashMap<String, String> getUserDetails() { // change to return user object
-        HashMap<String, String> user = new HashMap<>();
+    public User getCurrentUser() { // change to return user object
+        User user = null;
         String selectQuery = "SELECT * FROM " + TableSchema.TABLE_USER;
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
 
+
         cursor.moveToFirst();
         if (cursor.getCount() > 0) {
-            user.put(UserSchema.KEY_FIRST, cursor.getString(1));
-            user.put(UserSchema.KEY_LAST, cursor.getString(2));
-            user.put(UserSchema.KEY_USER_ID, cursor.getString(3));
-            user.put(UserSchema.KEY_EMAIL, cursor.getString(4));
-            user.put(UserSchema.KEY_UID, cursor.getString(5));
+            String first = cursor.getString(1);
+            String last = cursor.getString(2);
+            String userId = cursor.getString(3);
+            String email = cursor.getString(4);
+            String _id = cursor.getString(5);
+            user = new User(first, last, userId, email, _id);
         }
         cursor.close();
         db.close();

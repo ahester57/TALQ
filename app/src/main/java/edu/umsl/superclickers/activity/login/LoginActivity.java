@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import edu.umsl.superclickers.R;
 import edu.umsl.superclickers.activity.home.HomeActivity;
+import edu.umsl.superclickers.app.FragmentConfig;
 import edu.umsl.superclickers.app.SessionManager;
 
 
@@ -59,7 +60,7 @@ public class LoginActivity extends AppCompatActivity implements
 
         FragmentManager fm = getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        ft.add(lController, "LOGIN_CONTROLLER")
+        ft.add(lController, FragmentConfig.KEY_LOGIN_CONTROLLER)
             .commit();
 
         userPass.setOnClickListener(this);

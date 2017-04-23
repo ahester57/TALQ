@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import edu.umsl.superclickers.R;
 import edu.umsl.superclickers.activity.quiz.QuizActivityUser;
+import edu.umsl.superclickers.app.FragmentConfig;
 import edu.umsl.superclickers.app.SessionManager;
 
 /**
@@ -55,7 +56,7 @@ public class RegisterActivity extends AppCompatActivity implements
 
         FragmentManager fm = getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        ft.add(rController, "REG_CONTROLLER")
+        ft.add(rController, FragmentConfig.KEY_REGISTER_CONTROLLER)
                 .commit();
 
         btnBack.setOnClickListener(this);

@@ -2,6 +2,7 @@ package edu.umsl.superclickers.app;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteException;
 import android.util.Log;
 
 import edu.umsl.superclickers.database.SQLiteHandlerAnswers;
@@ -49,7 +50,12 @@ public class SessionManager {
         db.addUser(user);
     }
 
-
+    public User getCurrentUser() {
+        User user = null;
+        SQLiteHandlerUsers db = SQLiteHandlerUsers.sharedInstance(_context);
+        user = db.getCurrentUser();
+        return user;
+    }
 
     public void addQuizToDB(Quiz quiz) {
         SQLiteHandlerQuestions qdb = SQLiteHandlerQuestions.sharedInstance(_context);
@@ -115,9 +121,13 @@ public class SessionManager {
         SQLiteHandlerQuizzes db = SQLiteHandlerQuizzes.sharedInstance(_context);
         SQLiteHandlerQuestions qdb = SQLiteHandlerQuestions.sharedInstance(_context);
         SQLiteHandlerAnswers adb = SQLiteHandlerAnswers.sharedInstance(_context);
-        db.removeAllQuizzes();
-        qdb.removeAllQuestions();
-        adb.removeAllAnswers();
+        try {
+            db.removeAllQuizzes();
+            qdb.removeAllQuestions();
+            adb.removeAllAnswers();
+        } catch (SQLiteException e) {
+            e.printStackTrace();
+        }
         removeQuizIndex();
     }
 

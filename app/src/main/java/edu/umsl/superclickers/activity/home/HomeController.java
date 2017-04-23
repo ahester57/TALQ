@@ -26,16 +26,16 @@ import edu.umsl.superclickers.database.QuizSchema;
  * Created by stin on 3/23/17.
  */
 
-public class HomeFragment extends Fragment {
+public class HomeController extends Fragment {
 
     private final String TAG = getClass().getSimpleName();
 
-    private HomeController hController;
+    private HomeListener hController;
     private ArrayList<String> quizzes;
     private ArrayList<String> quizIds;
     private ArrayList<String> courseIds;
 
-    interface HomeController {
+    interface HomeListener {
         void setQuizzes(ArrayList<String> quizzes, ArrayList<String> quizIds, ArrayList<String> courseId);
     }
 
@@ -44,7 +44,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        hController = (HomeController) getActivity();
+        hController = (HomeListener) getActivity();
         quizzes = new ArrayList<>();
         quizIds = new ArrayList<>();
         courseIds = new ArrayList<>();
