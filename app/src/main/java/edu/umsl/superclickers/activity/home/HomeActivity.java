@@ -152,6 +152,7 @@ public class HomeActivity extends AppCompatActivity implements
     void setActiveQuiz(int pos) {
         quizID = quizzes.get(pos).get_id();
         courseId = courseIds.get(pos);
+        Log.d(TAG, "Selected quiz: " + quizzes.get(pos).getDescription());
     }
 
     public void stopQuiz() {
