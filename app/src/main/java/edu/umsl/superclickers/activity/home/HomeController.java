@@ -19,7 +19,8 @@ import java.util.ArrayList;
 
 import edu.umsl.superclickers.app.AppController;
 import edu.umsl.superclickers.app.QuizConfig;
-import edu.umsl.superclickers.database.schema.QuizSchema;
+import edu.umsl.superclickers.quizdata.Quiz;
+import edu.umsl.superclickers.quizdata.QuizListItem;
 
 
 /**
@@ -30,13 +31,12 @@ public class HomeController extends Fragment {
 
     private final String TAG = getClass().getSimpleName();
 
-    private HomeListener hController;
-    private ArrayList<String> quizzes;
-    private ArrayList<String> quizIds;
+    private HomeListener hListener;
+    private ArrayList<QuizListItem> quizzes;
     private ArrayList<String> courseIds;
 
     interface HomeListener {
-        void setQuizzes(ArrayList<String> quizzes, ArrayList<String> quizIds, ArrayList<String> courseId);
+        void setQuizzes(ArrayList<QuizListItem> quizzes, ArrayList<String> courseId);
     }
 
 
@@ -44,9 +44,8 @@ public class HomeController extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        hController = (HomeListener) getActivity();
+        hListener = (HomeListener) getActivity();
         quizzes = new ArrayList<>();
-        quizIds = new ArrayList<>();
         courseIds = new ArrayList<>();
     }
 
@@ -78,15 +77,13 @@ public class HomeController extends Fragment {
                                     String courseId = jObj.getString("courseId");
 
                                     JSONObject quiz = jObj.getJSONObject("quiz");
-                                    String _id = quiz.getString("_id");
-                                    String desc = quiz.getString(QuizSchema.KEY_DESC);
 
-                                    quizzes.add(desc);
-                                    quizIds.add(_id);
+                                    // @TODO return quiz object
+                                    quizzes.add(new QuizListItem(quiz));
                                     courseIds.add(courseId);
                                 }
 
-                                hController.setQuizzes(quizzes, quizIds, courseIds);
+                                hListener.setQuizzes(quizzes, courseIds);
 
                             } else {
                                 // Error

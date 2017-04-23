@@ -18,4 +18,5 @@ public class FragmentConfig {
     public static String KEY_REGISTER_CONTROLLER = "REGISTER_CONTROLLER";
     public static String KEY_HOME_CONTROLLER = "HOME_CONTROLLER";
     public static String KEY_GROUP_CONTROLLER = "GROUP_CONTROLLER";
+
 }

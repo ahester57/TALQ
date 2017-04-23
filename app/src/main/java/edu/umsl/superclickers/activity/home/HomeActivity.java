@@ -8,8 +8,12 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -28,6 +32,8 @@ import edu.umsl.superclickers.activity.quiz.QuizService;
 import edu.umsl.superclickers.app.FragmentConfig;
 import edu.umsl.superclickers.app.SessionManager;
 import edu.umsl.superclickers.database.SQLiteHandlerUsers;
+import edu.umsl.superclickers.quizdata.Quiz;
+import edu.umsl.superclickers.quizdata.QuizListItem;
 import edu.umsl.superclickers.userdata.User;
 
 /**
@@ -44,15 +50,13 @@ public class HomeActivity extends AppCompatActivity implements
     private String quizID;
     private String courseId;
 
-    private Spinner quiz_select_spinner;
+    private ArrayList<QuizListItem> quizzes;
+    private ArrayList<String> courseIds;
+
     private SQLiteHandlerUsers db;
     private SessionManager session;
-    private HomeController hFragment;
-
-    private ArrayList<String> quizzes;
-    private HashMap<String, String> quizMap;
-
-    private ArrayList<String> courseIds;
+    private HomeController hController;
+    private RecyclerView qRecyclerView;
 
     // BroadcastReceiver for QuizService
     private BroadcastReceiver br = new BroadcastReceiver() {
@@ -72,7 +76,9 @@ public class HomeActivity extends AppCompatActivity implements
         Button btnLogout = (Button) findViewById(R.id.logout_button);
         Button btnPlay = (Button) findViewById(R.id.play_button);
         Button btnCreateGroup = (Button) findViewById(R.id.groups_button);
-        quiz_select_spinner = (Spinner) findViewById(R.id.quiz_select_spinner);
+        qRecyclerView = (RecyclerView) findViewById(R.id.quiz_list_recycler);
+        qRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+
 
         // database
         db = new SQLiteHandlerUsers(getApplicationContext());
@@ -91,13 +97,13 @@ public class HomeActivity extends AppCompatActivity implements
             textEmail.setText(user.getUserId());
         }
 
-        hFragment = new HomeController();
+        hController = new HomeController();
         FragmentManager fm = getFragmentManager();
         fm.beginTransaction()
-                .add(hFragment, FragmentConfig.KEY_HOME_CONTROLLER)
+                .add(hController, FragmentConfig.KEY_HOME_CONTROLLER)
                 .commit();
 
-        hFragment.getQuizzesFor(userId);
+        hController.getQuizzesFor(userId);
 
         // @TODO download group info and put it SQLite
 
@@ -129,43 +135,22 @@ public class HomeActivity extends AppCompatActivity implements
         }
     }
 
+
+
     @Override
-    public void setQuizzes(ArrayList<String> quizzes, ArrayList<String> quizIds, ArrayList<String> courseIds) {
-        quizMap = new HashMap<>();
+    public void setQuizzes(ArrayList<QuizListItem> quizzes, ArrayList<String> courseIds) {
         this.quizzes = quizzes;
         this.courseIds = courseIds;
 
-        for (int i = 0; i < quizzes.size(); i++) {
-            quizMap.put(quizzes.get(i), quizIds.get(i));
-        }
-        setQuizSpinner();
+        setActiveQuiz(0);
+        qRecyclerView.setAdapter(new QuizAdapter(quizzes));
         // @TODO display running quizzes
     }
 
-    void setQuizSpinner() {
-        final List<String> spinQuizzes = this.quizzes;
-        // @TODO switch spinner to recyclerView
-        ArrayAdapter<String> quizAdapter = new ArrayAdapter<>(this,
-                R.layout.support_simple_spinner_dropdown_item, spinQuizzes);
-        quizAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-        quiz_select_spinner.setAdapter(quizAdapter);
-        quiz_select_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String col = parent.getItemAtPosition(position).toString();
-                setActiveQuiz(col, position);
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                setActiveQuiz(spinQuizzes.get(0), 0);
-            }
-        });
-    }
 
-    void setActiveQuiz(String quiz, int pos) {
-
-        quizID = quizMap.get(quiz);
+    void setActiveQuiz(int pos) {
+        quizID = quizzes.get(pos).get_id();
         courseId = courseIds.get(pos);
     }
 
@@ -229,5 +214,48 @@ public class HomeActivity extends AppCompatActivity implements
         Log.d(TAG, "Home Activity destoyed");
         //stopQuiz();
         super.onDestroy();
+    }
+
+
+    class QuizAdapter extends RecyclerView.Adapter<QuizHolder> implements
+            QuizHolder.QuizHolderListener {
+
+        private List<QuizListItem> mQuizzes;
+
+        public QuizAdapter(List<QuizListItem> quizzes) {
+            mQuizzes = quizzes;
+        }
+
+        @Override
+        public QuizHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
+            View view = inflater.inflate(R.layout.quiz_recycler_item, parent, false);
+            QuizHolder qHolder = new QuizHolder(view, this);
+            return qHolder;
+        }
+
+        @Override
+        public void setQuiz(int pos) {
+            setActiveQuiz(pos);
+        }
+
+        @Override
+        public void onBindViewHolder(QuizHolder holder, int position) {
+            if (mQuizzes != null) {
+                try {
+                    holder.bindQuiz(mQuizzes.get(position));
+                } catch (IndexOutOfBoundsException e) {
+                    Log.e("WHOOPS", "idk");
+                }
+            }
+        }
+
+        @Override
+        public int getItemCount() {
+            if (mQuizzes != null) {
+                return mQuizzes.size();
+            }
+            return 0;
+        }
     }
 }
