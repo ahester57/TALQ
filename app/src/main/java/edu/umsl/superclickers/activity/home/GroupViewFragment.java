@@ -14,7 +14,7 @@ import edu.umsl.superclickers.R;
  *
  */
 
-public class GroupFragment extends Fragment {
+public class GroupViewFragment extends Fragment {
 
     @Nullable
     @Override

@@ -9,6 +9,8 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
+import edu.umsl.superclickers.database.schema.AnswerSchema;
+import edu.umsl.superclickers.database.schema.TableSchema;
 import edu.umsl.superclickers.quizdata.Answer;
 
 /**

@@ -23,8 +23,8 @@ import edu.umsl.superclickers.quizdata.Quiz;
  * Created by Austin on 4/19/2017.
  */
 
-public class QuizUserFragment extends Fragment implements
-        AnswerFragmentUser.AnswerListener,
+public class QuizViewUser extends Fragment implements
+        AnswerViewUser.AnswerListener,
         QuizGET.QuizGETController {
 
     private final String TAG = getClass().getSimpleName();
@@ -136,7 +136,7 @@ public class QuizUserFragment extends Fragment implements
         questionView.setText(curQuestion.getQuestion());
         qController.setQuizIndex(curQuiz.getqNum());
         updateGUITimer(minutesLeft, secondsLeft);
-        AnswerFragmentUser answerFragment = new AnswerFragmentUser();
+        AnswerViewUser answerFragment = new AnswerViewUser();
         android.app.FragmentManager fm = getFragmentManager();
         android.app.FragmentTransaction ft = fm.beginTransaction();
         ft.replace(R.id.answer_segment, answerFragment);
@@ -152,7 +152,7 @@ public class QuizUserFragment extends Fragment implements
         questionView.setText(curQuestion.getQuestion());
         qController.setQuizIndex(curQuiz.getqNum());
         // create instance of the answer fragment
-        AnswerFragmentUser answerFrag = new AnswerFragmentUser();
+        AnswerViewUser answerFrag = new AnswerViewUser();
         // load answer fragment into answerSection of QuizActivityUser
         android.app.FragmentManager fm = getFragmentManager();
         android.app.FragmentTransaction ft = fm.beginTransaction();
@@ -168,7 +168,7 @@ public class QuizUserFragment extends Fragment implements
         curQuestion = curQuiz.getPrevQuestion();
         questionView.setText(curQuestion.getQuestion());
         qController.setQuizIndex(curQuiz.getqNum());
-        AnswerFragmentUser answerFragment = new AnswerFragmentUser();
+        AnswerViewUser answerFragment = new AnswerViewUser();
         android.app.FragmentManager fm = getFragmentManager();
         android.app.FragmentTransaction ft = fm.beginTransaction();
         ft.replace(R.id.answer_segment, answerFragment);

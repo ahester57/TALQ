@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import edu.umsl.superclickers.database.schema.QuizSchema;
+import edu.umsl.superclickers.database.schema.TableSchema;
 import edu.umsl.superclickers.quizdata.Quiz;
 
 /**

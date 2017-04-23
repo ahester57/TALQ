@@ -19,7 +19,7 @@ import edu.umsl.superclickers.quizdata.Question;
  *
  */
 
-public class AnswerFragmentUser extends Fragment implements View.OnClickListener{
+public class AnswerViewUser extends Fragment implements View.OnClickListener{
 
     private AnswerListener aListener;
     private Button A, B, C, D, buttonPrevious, buttonNext;
@@ -43,7 +43,7 @@ public class AnswerFragmentUser extends Fragment implements View.OnClickListener
 
         prevProgress = new int[4];
         aListener = (AnswerListener) getFragmentManager()
-                .findFragmentByTag(FragmentConfig.KEY_QUIZ_USER_FRAG);
+                .findFragmentByTag(FragmentConfig.KEY_QUIZ_VIEW_USER);
     }
 
     @Nullable

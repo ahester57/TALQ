@@ -22,7 +22,7 @@ public class QuizService extends Service {
     private String quizId;
     CountDownTimer quizTimer = null;
 
-    public static final String COUNTDOWN_BR = "edu.umsl.superclickers.quiz.countdown_br";
+    public static final String COUNTDOWN_BR = "edu.umsl.superclickers.app.countdown_br";
     Intent qI = new Intent(COUNTDOWN_BR);
 
     @Override
@@ -61,7 +61,7 @@ public class QuizService extends Service {
 
     @Override
     public void onDestroy() {
-        //quizTimer.cancel();
+        quizTimer.cancel();
         super.onDestroy();
     }
 

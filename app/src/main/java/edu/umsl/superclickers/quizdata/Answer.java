@@ -3,7 +3,7 @@ package edu.umsl.superclickers.quizdata;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import edu.umsl.superclickers.database.AnswerSchema;
+import edu.umsl.superclickers.database.schema.AnswerSchema;
 
 /**
  * Created by Austin on 3/22/2017.

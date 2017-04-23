@@ -1,9 +1,9 @@
 package edu.umsl.superclickers.activity.quiz;
 
-import android.app.Activity;
 import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 
 import edu.umsl.superclickers.R;
 import edu.umsl.superclickers.app.FragmentConfig;
@@ -13,12 +13,12 @@ import edu.umsl.superclickers.app.SessionManager;
  * Created by Austin on 4/22/2017.
  */
 
-public class WaitingRoomActivity extends Activity {
+public class WaitingRoomActivity extends AppCompatActivity {
 
     private String userID;
     private String quizID;
 
-    private WaitingRoomFragment wFragment;
+    private WaitingRoomView wFragment;
     private SessionManager session;
 
 
@@ -30,9 +30,9 @@ public class WaitingRoomActivity extends Activity {
         FragmentManager fm = getFragmentManager();
         // Check if quizGET exists
         if (fm.findFragmentByTag(FragmentConfig.KEY_WAITING_ROOM) != null) {
-            wFragment = (WaitingRoomFragment) fm.findFragmentByTag(FragmentConfig.KEY_WAITING_ROOM);
+            wFragment = (WaitingRoomView) fm.findFragmentByTag(FragmentConfig.KEY_WAITING_ROOM);
         } else {
-            wFragment = new WaitingRoomFragment();
+            wFragment = new WaitingRoomView();
             fm.beginTransaction()
                     .add(wFragment, FragmentConfig.KEY_WAITING_ROOM)
                     .commit();

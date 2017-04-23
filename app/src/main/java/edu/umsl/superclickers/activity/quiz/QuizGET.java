@@ -17,7 +17,7 @@ import org.json.JSONObject;
 import edu.umsl.superclickers.app.AppController;
 import edu.umsl.superclickers.app.QuizConfig;
 import edu.umsl.superclickers.app.SessionManager;
-import edu.umsl.superclickers.database.QuizSchema;
+import edu.umsl.superclickers.database.schema.QuizSchema;
 import edu.umsl.superclickers.quizdata.Quiz;
 
 /**

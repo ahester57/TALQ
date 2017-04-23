@@ -9,6 +9,9 @@ import android.util.Log;
 
 import java.util.Arrays;
 
+import edu.umsl.superclickers.database.schema.GroupSchema;
+import edu.umsl.superclickers.database.schema.TableSchema;
+import edu.umsl.superclickers.database.schema.UserSchema;
 import edu.umsl.superclickers.userdata.User;
 
 /**

@@ -4,7 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.CursorWrapper;
 
-import edu.umsl.superclickers.quizdata.Quiz;
+import edu.umsl.superclickers.database.schema.UserSchema;
 import edu.umsl.superclickers.userdata.User;
 
 /**

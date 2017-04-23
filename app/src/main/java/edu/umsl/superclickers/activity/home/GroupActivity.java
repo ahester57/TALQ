@@ -47,7 +47,7 @@ public class GroupActivity extends AppCompatActivity implements View.OnClickList
 
         gController = new GroupController();
         // load fragment ... switch to recycler view
-        GroupFragment gFragment = new GroupFragment();
+        GroupViewFragment gFragment = new GroupViewFragment();
 
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.replace(R.id.group_frame, gFragment);

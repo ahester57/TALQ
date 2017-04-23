@@ -13,7 +13,7 @@ import edu.umsl.superclickers.R;
  * Created by Austin on 4/22/2017.
  */
 
-public class WaitingRoomFragment extends Fragment {
+public class WaitingRoomView extends Fragment {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -24,7 +24,7 @@ public class WaitingRoomFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_quiz, container, false);
+        View view = inflater.inflate(R.layout.fragment_waiting_room, container, false);
 
         return view;
     }

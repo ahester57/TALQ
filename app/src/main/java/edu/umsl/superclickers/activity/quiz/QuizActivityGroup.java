@@ -1,6 +1,5 @@
 package edu.umsl.superclickers.activity.quiz;
 
-
 import android.app.ActivityManager;
 import android.app.FragmentManager;
 import android.content.BroadcastReceiver;
@@ -18,15 +17,18 @@ import edu.umsl.superclickers.app.FragmentConfig;
 import edu.umsl.superclickers.app.SessionManager;
 import edu.umsl.superclickers.quizdata.Quiz;
 
+/**
+ * Created by Austin on 4/22/2017.
+ */
 
-public class QuizActivityUser extends AppCompatActivity implements
-        QuizViewUser.QuizController {
+public class QuizActivityGroup extends AppCompatActivity implements
+        QuizViewGroup.QuizController {
 
     private final String TAG = getClass().getSimpleName();
 
     private Intent timerService;
     private QuizGET quizGET;
-    private QuizViewUser quizViewUser;
+    private QuizViewGroup quizViewGroup;
     private SessionManager session;
 
     // BroadcastReceiver for QuizService
@@ -62,13 +64,13 @@ public class QuizActivityUser extends AppCompatActivity implements
                     .commit();
         }
         // Check if fragment exists
-        if (fm.findFragmentByTag(FragmentConfig.KEY_QUIZ_VIEW_USER) != null) {
-            quizViewUser = (QuizViewUser) fm.findFragmentByTag(FragmentConfig.KEY_QUIZ_VIEW_USER);
+        if (fm.findFragmentByTag(FragmentConfig.KEY_QUIZ_VIEW_GROUP) != null) {
+            quizViewGroup = (QuizViewGroup) fm.findFragmentByTag(FragmentConfig.KEY_QUIZ_VIEW_GROUP);
         } else {
             // Add new quizFragment and reload quiz
-            quizViewUser = new QuizViewUser();
+            quizViewGroup = new QuizViewGroup();
             fm.beginTransaction()
-                    .add(R.id.quiz_container, quizViewUser, FragmentConfig.KEY_QUIZ_VIEW_USER)
+                    .add(R.id.quiz_container, quizViewGroup, FragmentConfig.KEY_QUIZ_VIEW_GROUP)
                     .commit();
             // Only try to reload quiz when fragment is not loaded
             reloadQuiz(quizID, userID, courseID);
@@ -83,7 +85,7 @@ public class QuizActivityUser extends AppCompatActivity implements
         Toast.makeText(getApplicationContext(), "Quiz Submitted", Toast.LENGTH_LONG).show();
         stopService(timerService);
         session.clearDatabase();
-        Intent quizIntent = new Intent(QuizActivityUser.this, HomeActivity.class);
+        Intent quizIntent = new Intent(QuizActivityGroup.this, HomeActivity.class);
         startActivity(quizIntent);
         finish();
     }
@@ -92,14 +94,14 @@ public class QuizActivityUser extends AppCompatActivity implements
         if (!session.isQuizRunning()) {
             // Load quiz from internet
             //@TODO fix when quiz is over and started again
-            quizViewUser.setQuizInfo(quizID, userID, courseID);
-            quizViewUser.setResume(false);
+            quizViewGroup.setQuizInfo(quizID, userID, courseID);
+            quizViewGroup.setResume(false);
             session.setActiveQuiz(quizID);
         } else {
             // get quiz from SQLite
-            quizViewUser.setQuizInfo(quizID, userID, courseID);
-            quizViewUser.setResume(true);
-            quizViewUser.attachQuiz(getActiveQuiz(), getQuizIndex());
+            quizViewGroup.setQuizInfo(quizID, userID, courseID);
+            quizViewGroup.setResume(true);
+            quizViewGroup.attachQuiz(getActiveQuiz(), getQuizIndex());
         }
     }
 
@@ -131,10 +133,10 @@ public class QuizActivityUser extends AppCompatActivity implements
     }
 
     public int getQuizTime() {
-        return quizViewUser.getQuizTime();
+        return quizViewGroup.getQuizTime();
     }
 
-    public String getQuizID() { return quizViewUser.getQuizID(); }
+    public String getQuizID() { return quizViewGroup.getQuizID(); }
 
     @Override
     public QuizGET getQuizGET() {
@@ -147,9 +149,9 @@ public class QuizActivityUser extends AppCompatActivity implements
             int secondsLeft = (int) millisUntilFinished / 1000 - 1;
             int minutesLeft = secondsLeft / 60;
             secondsLeft = secondsLeft % 60;
-            quizViewUser.updateGUITimer(minutesLeft, secondsLeft);
+            quizViewGroup.updateGUITimer(minutesLeft, secondsLeft);
             if (millisUntilFinished < 2000) {
-                submitQuiz(quizViewUser.getCurQuiz());
+                submitQuiz(quizViewGroup.getCurQuiz());
             }
         }
     }

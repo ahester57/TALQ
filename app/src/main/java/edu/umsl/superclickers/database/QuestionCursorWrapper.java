@@ -7,6 +7,7 @@ import android.database.CursorWrapper;
 
 import java.util.ArrayList;
 
+import edu.umsl.superclickers.database.schema.QuestionSchema;
 import edu.umsl.superclickers.quizdata.Answer;
 import edu.umsl.superclickers.quizdata.Question;
 

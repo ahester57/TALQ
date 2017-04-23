@@ -7,7 +7,7 @@ import org.json.JSONObject;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import edu.umsl.superclickers.database.QuizSchema;
+import edu.umsl.superclickers.database.schema.QuizSchema;
 
 
 public class Quiz implements Serializable{

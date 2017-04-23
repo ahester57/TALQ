@@ -1,4 +1,4 @@
-package edu.umsl.superclickers.database;
+package edu.umsl.superclickers.database.schema;
 
 /**
  * Created by Austin on 3/22/2017.
