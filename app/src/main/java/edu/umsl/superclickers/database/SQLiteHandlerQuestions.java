@@ -69,12 +69,7 @@ public class SQLiteHandlerQuestions extends SQLiteOpenHelper {
 
         db.execSQL(createQuestionTable());
 
-        ContentValues values = new ContentValues();
-        values.put(QuestionSchema.KEY_SESSION_ID, question.getSessionId());
-        values.put(QuestionSchema.KEY_QUID, question.get_id());
-        values.put(QuestionSchema.KEY_TITLE, question.getTitle());
-        values.put(QuestionSchema.KEY_TEXT, question.getText());
-        values.put(QuestionSchema.KEY_POINTS_POSS, question.getPointsPossible());
+        ContentValues values = QuestionCursorWrapper.createQuestionValues(question);
 
         // inserting row
         long id = db.insert(TableSchema.TABLE_QUESTION ,null, values);
@@ -84,26 +79,15 @@ public class SQLiteHandlerQuestions extends SQLiteOpenHelper {
     }
 
     public ArrayList<Question> getQuestions(String sessionId) {
-        ArrayList<Question> questions = new ArrayList<>();
         String selectQuery = "SELECT * FROM " + TableSchema.TABLE_QUESTION +
                 " WHERE " + QuestionSchema.KEY_SESSION_ID + " = \"" + sessionId + "\"";
 
         SQLiteDatabase db = this.getReadableDatabase();
-        SQLiteHandlerAnswers adb = SQLiteHandlerAnswers.sharedInstance(context);
         Cursor cursor = db.rawQuery(selectQuery, null);
+        QuestionCursorWrapper qCursor = new QuestionCursorWrapper(cursor, context);
 
-        cursor.moveToFirst();
-        if (cursor.getCount() > 0) {
-            do {
-                String _id = cursor.getString(2);
-                String title = cursor.getString(3);
-                String text = cursor.getString(4);
-                int points = cursor.getInt(5);
-                ArrayList<Answer> answers = adb.getAnswers(_id);
-                questions.add(new Question(_id, title, text, points, answers));
-                // @TODO get add answers
-            } while (cursor.moveToNext());
-        }
+        ArrayList<Question> questions = qCursor.getQuestions();
+
         cursor.close();
         db.close();
         Log.d(TAG, "Fectching question from Sqlite: " + questions.toString());

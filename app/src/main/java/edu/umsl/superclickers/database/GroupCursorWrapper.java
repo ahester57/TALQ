@@ -7,15 +7,16 @@ import edu.umsl.superclickers.userdata.Group;
 
 /**
  * Created by Austin on 3/22/2017.
+ *
  */
 
-public class GroupCursorWrapper extends CursorWrapper {
+class GroupCursorWrapper extends CursorWrapper {
 
-    public GroupCursorWrapper(Cursor cursor) {
+    GroupCursorWrapper(Cursor cursor) {
         super(cursor);
     }
 
-    public Group getUser() {
+    Group getUser() {
         String guid = getString(getColumnIndex(GroupSchema.KEY_GID));
         String name = getString(getColumnIndex(UserSchema.KEY_NAME));
         Group group = new Group(name, guid);

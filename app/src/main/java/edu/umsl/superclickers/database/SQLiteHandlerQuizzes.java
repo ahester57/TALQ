@@ -7,9 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import java.util.ArrayList;
-
-import edu.umsl.superclickers.quizdata.Question;
 import edu.umsl.superclickers.quizdata.Quiz;
 
 /**
@@ -68,22 +65,11 @@ public class SQLiteHandlerQuizzes extends SQLiteOpenHelper {
     // add new quiz to database
     public void addQuiz(Quiz quiz) {
         SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL(createQuizTable());
 
         // @TODO if quiz with same Id exists don't crash but ignore
 
-        db.execSQL(createQuizTable());
-
-
-        ContentValues values = new ContentValues();
-        values.put(QuizSchema.KEY_SESSION_ID, quiz.getSessionId());
-        values.put(QuizSchema.KEY_QID, quiz.get_id());
-        values.put(QuizSchema.KEY_DESC, quiz.getDescription());
-        values.put(QuizSchema.KEY_TEXT, quiz.getText());
-        values.put(QuizSchema.KEY_AVAIL_DATE, quiz.getAvailableDate());
-        values.put(QuizSchema.KEY_EXPIRY_DATE, quiz.getExpiryDate());
-        values.put(QuizSchema.KEY_TIMED, quiz.getTimed());
-        values.put(QuizSchema.KEY_LENGTH, quiz.getTimedLength());
-
+        ContentValues values = QuizCursorWrapper.createQuizValues(quiz);
         // inserting row
         long id = db.insert(TableSchema.TABLE_QUIZ ,null, values);
         db.close();
@@ -96,10 +82,9 @@ public class SQLiteHandlerQuizzes extends SQLiteOpenHelper {
         String selectQuery = "SELECT * FROM " + TableSchema.TABLE_QUIZ +
                 " WHERE _id = \"" + quizId + "\"";
         SQLiteDatabase db = this.getReadableDatabase();
-
         Cursor cursor = db.rawQuery(selectQuery, null);
-        QuizCursorWrapper qCursor = new QuizCursorWrapper(cursor, context);
 
+        QuizCursorWrapper qCursor = new QuizCursorWrapper(cursor, context);
         quiz = qCursor.getQuiz();
 
         Log.d(TAG, "Fectching quiz from Sqlite: " + quiz.toString());
@@ -126,7 +111,4 @@ public class SQLiteHandlerQuizzes extends SQLiteOpenHelper {
         Log.d(TAG, "Removed all quizzes from Sqlite.");
     }
 
-    public void resumeQuiz() {
-
-    }
 }

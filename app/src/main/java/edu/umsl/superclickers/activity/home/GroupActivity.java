@@ -1,35 +1,17 @@
 package edu.umsl.superclickers.activity.home;
 
 import android.app.FragmentTransaction;
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
-
 import edu.umsl.superclickers.R;
-import edu.umsl.superclickers.app.AppController;
 import edu.umsl.superclickers.app.FragmentConfig;
-import edu.umsl.superclickers.app.LoginConfig;
 import edu.umsl.superclickers.app.SessionManager;
-import edu.umsl.superclickers.database.SQLiteHandlerUsers;
-import edu.umsl.superclickers.database.UserSchema;
 import edu.umsl.superclickers.userdata.User;
 
 /**

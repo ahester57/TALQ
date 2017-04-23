@@ -1,9 +1,9 @@
 package edu.umsl.superclickers.database;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.CursorWrapper;
-import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -12,20 +12,19 @@ import edu.umsl.superclickers.quizdata.Quiz;
 
 /**
  * Created by Austin on 3/21/2017.
+ *
  */
 
-public class QuizCursorWrapper extends CursorWrapper {
+class QuizCursorWrapper extends CursorWrapper {
 
-    private Context context;
     private SQLiteHandlerQuestions qdb;
 
-    public QuizCursorWrapper(Cursor cursor, Context context) {
+    QuizCursorWrapper(Cursor cursor, Context context) {
         super(cursor);
-        this.context = context;
         this.qdb = SQLiteHandlerQuestions.sharedInstance(context);
     }
 
-    public Quiz getQuiz() {
+    Quiz getQuiz() {
         Quiz quiz = null;
 
         moveToFirst();
@@ -41,10 +40,22 @@ public class QuizCursorWrapper extends CursorWrapper {
 
             ArrayList<Question> questions = qdb.getQuestions(sessionId);
             quiz = new Quiz(_id, desc, text, avail, expiry, questions, sessionId, timed, length);
-            // @TODO get add questions
         }
         return quiz;
     }
 
+    static ContentValues createQuizValues(Quiz quiz) {
+        ContentValues values = new ContentValues();
+        values.put(QuizSchema.KEY_SESSION_ID, quiz.getSessionId());
+        values.put(QuizSchema.KEY_QID, quiz.get_id());
+        values.put(QuizSchema.KEY_DESC, quiz.getDescription());
+        values.put(QuizSchema.KEY_TEXT, quiz.getText());
+        values.put(QuizSchema.KEY_AVAIL_DATE, quiz.getAvailableDate());
+        values.put(QuizSchema.KEY_EXPIRY_DATE, quiz.getExpiryDate());
+        values.put(QuizSchema.KEY_TIMED, quiz.getTimed());
+        values.put(QuizSchema.KEY_LENGTH, quiz.getTimedLength());
+
+        return values;
+    }
 
 }

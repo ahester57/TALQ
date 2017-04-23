@@ -64,11 +64,7 @@ public class SQLiteHandlerAnswers extends SQLiteOpenHelper {
 
         db.execSQL(createAnswerTable());
 
-        ContentValues values = new ContentValues();
-        values.put(AnswerSchema.KEY_QUESTION_ID, answer.getQuestionId());
-        values.put(AnswerSchema.KEY_VALUE, answer.getValue());
-        values.put(AnswerSchema.KEY_TEXT, answer.getText());
-        values.put(AnswerSchema.KEY_SORT_ORDER, answer.getSortOrder());
+        ContentValues values = AnswerCursorWrapper.createQuestionValues(answer);
 
         // inserting row
         long id = db.insert(TableSchema.TABLE_ANSWER ,null, values);
@@ -78,24 +74,15 @@ public class SQLiteHandlerAnswers extends SQLiteOpenHelper {
     }
 
     public ArrayList<Answer> getAnswers(String questionId) {
-        ArrayList<Answer> answers = new ArrayList<>();
         String selectQuery = "SELECT * FROM " + TableSchema.TABLE_ANSWER +
                 " WHERE " + AnswerSchema.KEY_QUESTION_ID + " = \"" + questionId + "\"";
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
+        AnswerCursorWrapper aCursor = new AnswerCursorWrapper(cursor);
 
-        cursor.moveToFirst();
-        if (cursor.getCount() > 0) {
-            do {
-                String _id = cursor.getString(1);
-                String value = cursor.getString(2);
-                String text = cursor.getString(3);
-                int sort = cursor.getInt(4);
-                answers.add(new Answer(value, text, sort, _id));
-                // @TODO get add answers
-            } while (cursor.moveToNext());
-        }
+        ArrayList<Answer> answers = aCursor.getAnswers();
+
         cursor.close();
         db.close();
         Log.d(TAG, "Fectching question from Sqlite: " + answers.toString());

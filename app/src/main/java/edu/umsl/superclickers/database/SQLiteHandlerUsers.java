@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.util.Arrays;
-import java.util.HashMap;
 
 import edu.umsl.superclickers.userdata.User;
 
@@ -67,8 +66,6 @@ public class SQLiteHandlerUsers extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-
-
         db.execSQL(createLoginTable());
         db.execSQL(createGroupTable());
         db.execSQL(createRelationTable());
@@ -95,12 +92,7 @@ public class SQLiteHandlerUsers extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TableSchema.TABLE_USER);
         db.execSQL(createLoginTable());
 
-        ContentValues values = new ContentValues();
-        values.put(UserSchema.KEY_FIRST, user.getFirst());
-        values.put(UserSchema.KEY_LAST, user.getLast());
-        values.put(UserSchema.KEY_USER_ID, user.getUserId());
-        values.put(UserSchema.KEY_EMAIL, user.getEmail());
-        values.put(UserSchema.KEY_UID, user.get_id());
+        ContentValues values = UserCursorWrapper.createUserValues(user);
 
         // inserting row
         long id = db.insert(TableSchema.TABLE_USER ,null, values);
@@ -149,22 +141,14 @@ public class SQLiteHandlerUsers extends SQLiteOpenHelper {
 
     /// get user data
     public User getCurrentUser() { // change to return user object
-        User user = null;
         String selectQuery = "SELECT * FROM " + TableSchema.TABLE_USER;
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
+        UserCursorWrapper uCursor = new UserCursorWrapper(cursor);
 
+        User user = uCursor.getUser();
 
-        cursor.moveToFirst();
-        if (cursor.getCount() > 0) {
-            String first = cursor.getString(1);
-            String last = cursor.getString(2);
-            String userId = cursor.getString(3);
-            String email = cursor.getString(4);
-            String _id = cursor.getString(5);
-            user = new User(first, last, userId, email, _id);
-        }
         cursor.close();
         db.close();
 
@@ -189,15 +173,6 @@ public class SQLiteHandlerUsers extends SQLiteOpenHelper {
         db.close();
 
         Log.d(TAG, "Deleted " + Arrays.toString(emails) + "from database" + TableSchema.TABLE_USER);
-    }
-
-    public boolean isUserInAGroup() {
-        return false; // implemented in api
-    }
-
-    public String[] getAllGroups() {
-        // @TODO
-        return new String[] {"abra", "kadabra", "alakazam"};
     }
 
 }

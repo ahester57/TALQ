@@ -28,7 +28,6 @@ import edu.umsl.superclickers.activity.quiz.QuizService;
 import edu.umsl.superclickers.app.FragmentConfig;
 import edu.umsl.superclickers.app.SessionManager;
 import edu.umsl.superclickers.database.SQLiteHandlerUsers;
-import edu.umsl.superclickers.database.UserSchema;
 import edu.umsl.superclickers.userdata.User;
 
 /**
