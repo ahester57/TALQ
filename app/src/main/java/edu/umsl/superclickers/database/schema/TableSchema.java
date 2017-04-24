@@ -12,4 +12,5 @@ public class TableSchema {
     public static final String TABLE_QUIZ = "quiz";
     public static final String TABLE_QUESTION = "questions";
     public static final String TABLE_ANSWER = "answers";
+    public static final String TABLE_COURSE = "courses";
 }

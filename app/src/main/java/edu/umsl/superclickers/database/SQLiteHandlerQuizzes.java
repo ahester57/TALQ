@@ -76,7 +76,7 @@ public class SQLiteHandlerQuizzes extends SQLiteOpenHelper {
         long id = db.insert(TableSchema.TABLE_QUIZ ,null, values);
         db.close();
 
-        Log.d(TAG, "New quiz inserted into sqlite: " + id + quiz.toString());
+        Log.d(TAG, "New quiz inserted into sqlite: " + values.getAsString(QuizSchema.KEY_DESC));
     }
 
     public Quiz getQuiz(String quizId) {

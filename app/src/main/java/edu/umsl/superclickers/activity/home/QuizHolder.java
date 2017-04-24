@@ -8,11 +8,10 @@ import android.widget.TextView;
 import java.lang.ref.WeakReference;
 
 import edu.umsl.superclickers.R;
-import edu.umsl.superclickers.quizdata.Quiz;
 import edu.umsl.superclickers.quizdata.QuizListItem;
 
 /**
- * Created by Austin on 4/22/2017.
+ * Created by Austin on 4/22/2017
  */
 
 public class QuizHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -22,8 +21,6 @@ public class QuizHolder extends RecyclerView.ViewHolder implements View.OnClickL
     private TextView tQuizText;
     private TextView tCourseName;
     private TextView tQuizTime;
-
-    private QuizListItem curQuiz;
     private WeakReference<QuizHolderListener> mListener;
 
     interface QuizHolderListener {
@@ -34,7 +31,6 @@ public class QuizHolder extends RecyclerView.ViewHolder implements View.OnClickL
     public QuizHolder(View itemView, QuizHolderListener listener) {
         super(itemView);
         this.mListener = new WeakReference<>(listener);
-        curQuiz = null;
         tQuizName = (TextView) itemView.findViewById(R.id.text_quiz_name);
         tQuizText = (TextView) itemView.findViewById(R.id.text_quiz_text);
         tCourseName = (TextView) itemView.findViewById(R.id.text_course_name);
@@ -43,7 +39,6 @@ public class QuizHolder extends RecyclerView.ViewHolder implements View.OnClickL
     }
 
     public void bindQuiz(QuizListItem quiz) {
-        curQuiz = quiz;
         tQuizName.setText(quiz.getDescription());
         tQuizText.setText(quiz.getText());
         tCourseName.setText(quiz.getAvailableDate()); ////////

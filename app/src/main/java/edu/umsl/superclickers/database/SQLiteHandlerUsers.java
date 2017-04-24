@@ -101,7 +101,7 @@ public class SQLiteHandlerUsers extends SQLiteOpenHelper {
         long id = db.insert(TableSchema.TABLE_USER ,null, values);
         db.close();
 
-        Log.d(TAG, "New user inserted into sqlite: " + id);
+        Log.d(TAG, "New user inserted into sqlite: " + values.getAsString(UserSchema.KEY_USER_ID));
     }
 
     // ad new group to database

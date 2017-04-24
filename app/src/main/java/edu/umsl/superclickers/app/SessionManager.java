@@ -6,12 +6,14 @@ import android.database.sqlite.SQLiteException;
 import android.util.Log;
 
 import edu.umsl.superclickers.database.SQLiteHandlerAnswers;
+import edu.umsl.superclickers.database.SQLiteHandlerCourses;
 import edu.umsl.superclickers.database.SQLiteHandlerQuestions;
 import edu.umsl.superclickers.database.SQLiteHandlerQuizzes;
 import edu.umsl.superclickers.database.SQLiteHandlerUsers;
 import edu.umsl.superclickers.quizdata.Answer;
 import edu.umsl.superclickers.quizdata.Question;
 import edu.umsl.superclickers.quizdata.Quiz;
+import edu.umsl.superclickers.userdata.Course;
 import edu.umsl.superclickers.userdata.User;
 
 
@@ -55,6 +57,11 @@ public class SessionManager {
         SQLiteHandlerUsers db = SQLiteHandlerUsers.sharedInstance(_context);
         user = db.getCurrentUser();
         return user;
+    }
+
+    public void addCourseToDB(Course course) {
+        SQLiteHandlerCourses db = SQLiteHandlerCourses.sharedInstance(_context);
+        db.addCourse(course);
     }
 
     public void addQuizToDB(Quiz quiz) {
@@ -121,10 +128,12 @@ public class SessionManager {
         SQLiteHandlerQuizzes db = SQLiteHandlerQuizzes.sharedInstance(_context);
         SQLiteHandlerQuestions qdb = SQLiteHandlerQuestions.sharedInstance(_context);
         SQLiteHandlerAnswers adb = SQLiteHandlerAnswers.sharedInstance(_context);
+        SQLiteHandlerCourses cdb = SQLiteHandlerCourses.sharedInstance(_context);
         try {
             db.removeAllQuizzes();
             qdb.removeAllQuestions();
             adb.removeAllAnswers();
+            cdb.deleteAllCourses();
         } catch (SQLiteException e) {
             e.printStackTrace();
         }

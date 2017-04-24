@@ -14,15 +14,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import edu.umsl.superclickers.R;
@@ -32,7 +28,6 @@ import edu.umsl.superclickers.activity.quiz.QuizService;
 import edu.umsl.superclickers.app.FragmentConfig;
 import edu.umsl.superclickers.app.SessionManager;
 import edu.umsl.superclickers.database.SQLiteHandlerUsers;
-import edu.umsl.superclickers.quizdata.Quiz;
 import edu.umsl.superclickers.quizdata.QuizListItem;
 import edu.umsl.superclickers.userdata.User;
 

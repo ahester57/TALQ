@@ -107,7 +107,7 @@ public class QuizGET extends Fragment {
     }
 
     void getToken(final String id) {
-        String tag_str_req = "req_quiz";
+        String tag_str_req = "req_token";
         String uri = String.format(QuizConfig.URL_QUIZ_TOKEN, id);
         // new string request
         StringRequest strReq = new StringRequest(Request.Method.GET, uri,

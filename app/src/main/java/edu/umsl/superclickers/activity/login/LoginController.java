@@ -24,6 +24,7 @@ import java.util.Map;
 import edu.umsl.superclickers.app.AppController;
 import edu.umsl.superclickers.app.LoginConfig;
 import edu.umsl.superclickers.app.SessionManager;
+import edu.umsl.superclickers.userdata.Course;
 import edu.umsl.superclickers.userdata.User;
 
 /**
@@ -148,9 +149,9 @@ public class LoginController extends Fragment {
                                 // Handle enrolled courses
                                 for (int i = 0; i < courseArr.length(); i++) {
                                     JSONObject courseObj = courseArr.getJSONObject(i);
-                                    // @TODO add courses to database
-
+                                    session.addCourseToDB(new Course(courseObj));
                                 }
+
                                 // create session
                                 session.addUserToDB(new User(first, last, userID, email, _id));
                                 session.setLogin(true);

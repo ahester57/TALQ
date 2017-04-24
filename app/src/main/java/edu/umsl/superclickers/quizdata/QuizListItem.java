@@ -1,9 +1,7 @@
 package edu.umsl.superclickers.quizdata;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 
 import edu.umsl.superclickers.database.schema.QuizSchema;
 
