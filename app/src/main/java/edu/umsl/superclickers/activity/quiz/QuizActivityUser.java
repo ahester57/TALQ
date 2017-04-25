@@ -82,7 +82,7 @@ public class QuizActivityUser extends AppCompatActivity implements
 
         Toast.makeText(getApplicationContext(), "Quiz Submitted", Toast.LENGTH_LONG).show();
         stopService(timerService);
-        session.clearDatabase();
+        session.clearActiveQuiz();
         Intent quizIntent = new Intent(QuizActivityUser.this, HomeActivity.class);
         startActivity(quizIntent);
         finish();

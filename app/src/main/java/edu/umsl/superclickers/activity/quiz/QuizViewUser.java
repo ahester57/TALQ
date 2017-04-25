@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import edu.umsl.superclickers.R;
+import edu.umsl.superclickers.app.FragmentConfig;
 import edu.umsl.superclickers.quizdata.Answer;
 import edu.umsl.superclickers.quizdata.Question;
 import edu.umsl.superclickers.quizdata.Quiz;
@@ -133,45 +134,31 @@ public class QuizViewUser extends Fragment implements
             setBSQuiz();
         }
         curQuestion = curQuiz.getQuestion();
-        questionView.setText(curQuestion.getQuestion());
-        qController.setQuizIndex(curQuiz.getqNum());
-        updateGUITimer(minutesLeft, secondsLeft);
-        AnswerViewUser answerFragment = new AnswerViewUser();
-        android.app.FragmentManager fm = getFragmentManager();
-        android.app.FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(R.id.answer_segment, answerFragment);
-        ft.commit();
+        loadAnswerFragment();
     }
 
     @Override
     public void nextQuestion() {
-        if (curQuiz == null) {
-            setBSQuiz();
-        }
         curQuestion = curQuiz.getNextQuestion();
-        questionView.setText(curQuestion.getQuestion());
-        qController.setQuizIndex(curQuiz.getqNum());
-        // create instance of the answer fragment
-        AnswerViewUser answerFrag = new AnswerViewUser();
-        // load answer fragment into answerSection of QuizActivityUser
-        android.app.FragmentManager fm = getFragmentManager();
-        android.app.FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(R.id.answer_segment, answerFrag);
-        ft.commit();
+        loadAnswerFragment();
     }
 
     @Override
     public void prevQuestion() {
-        if(curQuiz == null) {
-            setBSQuiz();
-        }
         curQuestion = curQuiz.getPrevQuestion();
+        loadAnswerFragment();
+    }
+
+    private void loadAnswerFragment() {
         questionView.setText(curQuestion.getQuestion());
         qController.setQuizIndex(curQuiz.getqNum());
-        AnswerViewUser answerFragment = new AnswerViewUser();
+        // create instance of the answer fragment
+        updateGUITimer(minutesLeft, secondsLeft);
+        AnswerViewUser answerFrag = new AnswerViewUser();
+        // load answer fragment into answerSection of QuizActivityUser
         android.app.FragmentManager fm = getFragmentManager();
         android.app.FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(R.id.answer_segment, answerFragment);
+        ft.replace(R.id.answer_segment, answerFrag, FragmentConfig.KEY_ANSWER_VIEW_USER);
         ft.commit();
     }
 

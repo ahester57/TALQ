@@ -48,7 +48,6 @@ public class HomeActivity extends AppCompatActivity implements
     private ArrayList<QuizListItem> quizzes;
     private ArrayList<String> courseIds;
 
-    private SQLiteHandlerUsers db;
     private SessionManager session;
     private HomeController hController;
     private RecyclerView qRecyclerView;
@@ -74,9 +73,6 @@ public class HomeActivity extends AppCompatActivity implements
         qRecyclerView = (RecyclerView) findViewById(R.id.quiz_list_recycler);
         qRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 
-
-        // database
-        db = new SQLiteHandlerUsers(getApplicationContext());
         // session manager
         session = new SessionManager(getApplicationContext());
 
@@ -130,8 +126,6 @@ public class HomeActivity extends AppCompatActivity implements
         }
     }
 
-
-
     @Override
     public void setQuizzes(ArrayList<QuizListItem> quizzes, ArrayList<String> courseIds) {
         this.quizzes = quizzes;
@@ -141,8 +135,6 @@ public class HomeActivity extends AppCompatActivity implements
         qRecyclerView.setAdapter(new QuizAdapter(quizzes));
         // @TODO display running quizzes
     }
-
-
 
     void setActiveQuiz(int pos) {
         quizID = quizzes.get(pos).get_id();
@@ -154,7 +146,7 @@ public class HomeActivity extends AppCompatActivity implements
         // @TODO POST quiz for grading
         Toast.makeText(getApplicationContext(), "Quiz Submitted", Toast.LENGTH_LONG).show();
         stopService(new Intent(getBaseContext(), QuizService.class));
-        session.clearDatabase();
+        session.clearActiveQuiz();
     }
 
     void handleQuizTimer(Intent intent) {
@@ -171,45 +163,10 @@ public class HomeActivity extends AppCompatActivity implements
     private void logoutUser() {
         session.setLogin(false);
         session.clearDatabase();
-
-        db.deleteAllUsers();
         // Go to login activity
         Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
         startActivity(intent);
         finish();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        registerReceiver(br, new IntentFilter(QuizService.COUNTDOWN_BR));
-        Log.d(TAG, "Registered broadcast reciever");
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        unregisterReceiver(br);
-        Log.d(TAG, "Unregistered broadcast reciever");
-
-    }
-
-    @Override
-    protected void onStop() {
-        try {
-            unregisterReceiver(br);
-            Log.d(TAG, "Unregistered broadcast reciever");
-        } catch (Exception e) {
-            // Receiver stopped onPause
-        }
-        super.onStop();
-    }
-
-    @Override
-    protected void onDestroy() {
-        Log.d(TAG, "Home Activity destoyed");
-        //stopQuiz();
-        super.onDestroy();
     }
 
 
@@ -253,5 +210,38 @@ public class HomeActivity extends AppCompatActivity implements
             }
             return 0;
         }
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver(br, new IntentFilter(QuizService.COUNTDOWN_BR));
+        Log.d(TAG, "Registered broadcast reciever");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(br);
+        Log.d(TAG, "Unregistered broadcast reciever");
+
+    }
+
+    @Override
+    protected void onStop() {
+        try {
+            unregisterReceiver(br);
+            Log.d(TAG, "Unregistered broadcast reciever");
+        } catch (Exception e) {
+            // Receiver stopped onPause
+        }
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        Log.d(TAG, "Home Activity destoyed");
+        super.onDestroy();
     }
 }

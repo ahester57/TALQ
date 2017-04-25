@@ -10,4 +10,5 @@ public class AnswerSchema {
     public static final String KEY_VALUE = "value";
     public static final String KEY_TEXT = "text";
     public static final String KEY_SORT_ORDER = "sortOrder";
+    public static final String KEY_ALLOCATED_POINTS = "allocatedPoints";
 }

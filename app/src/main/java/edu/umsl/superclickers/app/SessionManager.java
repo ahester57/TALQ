@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteException;
 import android.util.Log;
 
+import java.util.ArrayList;
+
 import edu.umsl.superclickers.database.SQLiteHandlerAnswers;
 import edu.umsl.superclickers.database.SQLiteHandlerCourses;
 import edu.umsl.superclickers.database.SQLiteHandlerQuestions;
@@ -13,6 +15,7 @@ import edu.umsl.superclickers.database.SQLiteHandlerUsers;
 import edu.umsl.superclickers.quizdata.Answer;
 import edu.umsl.superclickers.quizdata.Question;
 import edu.umsl.superclickers.quizdata.Quiz;
+import edu.umsl.superclickers.quizdata.SelectedAnswer;
 import edu.umsl.superclickers.userdata.Course;
 import edu.umsl.superclickers.userdata.User;
 
@@ -83,6 +86,19 @@ public class SessionManager {
         return db.getQuiz(quizId);
     }
 
+    public ArrayList<SelectedAnswer> getSelectedAnswersFor(String questionId) {
+        SQLiteHandlerAnswers db = SQLiteHandlerAnswers.sharedInstance(_context);
+        return db.getSelectedAnswers(questionId);
+    }
+
+    public void setSelectedAnswersFor(ArrayList<SelectedAnswer> answers) {
+        SQLiteHandlerAnswers db = SQLiteHandlerAnswers.sharedInstance(_context);
+        db.removeSelectedFromQuestion(answers.get(0).getQuestionId());
+        for (SelectedAnswer a : answers) {
+            db.addSelectedAnswer(a);
+        }
+    }
+
     public Quiz getActiveQuiz() {
         SQLiteHandlerQuizzes db = SQLiteHandlerQuizzes.sharedInstance(_context);
         return db.getQuiz(pref.getString(KEY_QUIZ_ID, null));
@@ -129,11 +145,28 @@ public class SessionManager {
         SQLiteHandlerQuestions qdb = SQLiteHandlerQuestions.sharedInstance(_context);
         SQLiteHandlerAnswers adb = SQLiteHandlerAnswers.sharedInstance(_context);
         SQLiteHandlerCourses cdb = SQLiteHandlerCourses.sharedInstance(_context);
+        SQLiteHandlerUsers udb = SQLiteHandlerUsers.sharedInstance(_context);
+        try {
+            udb.deleteAllUsers();
+            db.removeAllQuizzes();
+            cdb.deleteAllCourses();
+            qdb.removeAllQuestions();
+            adb.removeAllAnswers();
+        } catch (SQLiteException e) {
+            e.printStackTrace();
+        }
+        removeQuizIndex();
+    }
+
+    public void clearActiveQuiz() {
+        SQLiteHandlerQuizzes db = SQLiteHandlerQuizzes.sharedInstance(_context);
+        SQLiteHandlerQuestions qdb = SQLiteHandlerQuestions.sharedInstance(_context);
+        SQLiteHandlerAnswers adb = SQLiteHandlerAnswers.sharedInstance(_context);
+
         try {
             db.removeAllQuizzes();
             qdb.removeAllQuestions();
             adb.removeAllAnswers();
-            cdb.deleteAllCourses();
         } catch (SQLiteException e) {
             e.printStackTrace();
         }
