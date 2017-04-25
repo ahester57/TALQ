@@ -56,15 +56,18 @@ public class SessionManager {
     }
 
     public User getCurrentUser() {
-        User user = null;
         SQLiteHandlerUsers db = SQLiteHandlerUsers.sharedInstance(_context);
-        user = db.getCurrentUser();
-        return user;
+        return db.getCurrentUser();
     }
 
     public void addCourseToDB(Course course) {
         SQLiteHandlerCourses db = SQLiteHandlerCourses.sharedInstance(_context);
         db.addCourse(course);
+    }
+
+    public ArrayList<Course> getEnrolledCourses() {
+        SQLiteHandlerCourses db = SQLiteHandlerCourses.sharedInstance(_context);
+        return db.getCurrentCourses();
     }
 
     public void addQuizToDB(Quiz quiz) {
@@ -131,13 +134,6 @@ public class SessionManager {
         Log.d(TAG, "Quiz index removed ");
     }
 
-    public boolean isQuizRunning() {
-        return pref.getInt(KEY_QUIZ_INDEX, -1) != -1;
-    }
-
-    public boolean isLoggedIn() {
-        return pref.getBoolean(KEY_IS_LOGGEDIN, false);
-    }
 
     // @TODO clear database stuff all in one here
     public void clearDatabase() {
@@ -171,6 +167,14 @@ public class SessionManager {
             e.printStackTrace();
         }
         removeQuizIndex();
+    }
+
+    public boolean isQuizRunning() {
+        return pref.getInt(KEY_QUIZ_INDEX, -1) != -1;
+    }
+
+    public boolean isLoggedIn() {
+        return pref.getBoolean(KEY_IS_LOGGEDIN, false);
     }
 
 }

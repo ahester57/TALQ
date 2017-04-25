@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.util.ArrayList;
+
 import edu.umsl.superclickers.database.schema.CourseSchema;
 import edu.umsl.superclickers.database.schema.TableSchema;
 import edu.umsl.superclickers.userdata.Course;
@@ -80,21 +82,21 @@ public class SQLiteHandlerCourses extends SQLiteOpenHelper {
 
 
     /// get course data
-    public Course getCurrentCourse() { // change to return user object
+    public ArrayList<Course> getCurrentCourses() { // change to return user object
         String selectQuery = "SELECT * FROM " + TableSchema.TABLE_COURSE;
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
         CourseCursorWrapper uCursor = new CourseCursorWrapper(cursor);
 
-        Course course = uCursor.getCourse();
+        ArrayList<Course> courses = uCursor.getCourses();
 
         cursor.close();
         db.close();
 
-        Log.d(TAG, "Fectching course from Sqlite: " + course.toString());
+        Log.d(TAG, "Fectching course from Sqlite: " + courses.toString());
 
-        return course;
+        return courses;
     }
 
     public void deleteAllCourses() {

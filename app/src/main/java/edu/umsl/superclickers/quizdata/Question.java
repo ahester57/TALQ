@@ -60,8 +60,8 @@ public class Question {
         return true; //answer.equalsIgnoreCase(guess);
     }
 
-    public String getPointsPossible() {
-        return String.valueOf(pointsPossible);
+    public int getPointsPossible() {
+        return pointsPossible;
     }
 
     public void setPointsPossible(int newPoints) {

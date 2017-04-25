@@ -27,8 +27,8 @@ import edu.umsl.superclickers.activity.quiz.QuizActivityUser;
 import edu.umsl.superclickers.activity.quiz.QuizService;
 import edu.umsl.superclickers.app.FragmentConfig;
 import edu.umsl.superclickers.app.SessionManager;
-import edu.umsl.superclickers.database.SQLiteHandlerUsers;
 import edu.umsl.superclickers.quizdata.QuizListItem;
+import edu.umsl.superclickers.userdata.Course;
 import edu.umsl.superclickers.userdata.User;
 
 /**
@@ -46,6 +46,7 @@ public class HomeActivity extends AppCompatActivity implements
     private String courseId;
 
     private ArrayList<QuizListItem> quizzes;
+    private ArrayList<Course> courses;
     private ArrayList<String> courseIds;
 
     private SessionManager session;
@@ -95,6 +96,8 @@ public class HomeActivity extends AppCompatActivity implements
                 .commit();
 
         hController.getQuizzesFor(userId);
+
+        courses = session.getEnrolledCourses();
 
         // @TODO download group info and put it SQLite
 
@@ -174,6 +177,7 @@ public class HomeActivity extends AppCompatActivity implements
             QuizHolder.QuizHolderListener {
 
         private List<QuizListItem> mQuizzes;
+        private List<Course> mCourses;
 
         public QuizAdapter(List<QuizListItem> quizzes) {
             mQuizzes = quizzes;

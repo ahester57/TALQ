@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import edu.umsl.superclickers.R;
 import edu.umsl.superclickers.app.FragmentConfig;
 import edu.umsl.superclickers.app.SessionManager;
-import edu.umsl.superclickers.quizdata.Answer;
 import edu.umsl.superclickers.quizdata.Question;
 import edu.umsl.superclickers.quizdata.SelectedAnswer;
 
@@ -36,7 +35,6 @@ public class AnswerViewUser extends Fragment implements View.OnClickListener {
     private TextView pointsView;
 
     private Question curQuestion;
-    private ArrayList<Answer> answers;
     private ArrayList<SelectedAnswer> selectedAnswers;
 
     private SessionManager session;
@@ -58,24 +56,19 @@ public class AnswerViewUser extends Fragment implements View.OnClickListener {
         aListener = (AnswerListener) getFragmentManager()
                 .findFragmentByTag(FragmentConfig.KEY_QUIZ_VIEW_USER);
         curQuestion = aListener.getQuestion();
-
-        answers = new ArrayList<>();
-        selectedAnswers = new ArrayList<>();
-
-        answers.add(curQuestion.getA());
-        answers.add(curQuestion.getB());
-        answers.add(curQuestion.getC());
-        answers.add(curQuestion.getD());
         String questionId = curQuestion.get_id();
+
         // selected answers now store "prevProgress" as allocatedPoints
+        selectedAnswers = new ArrayList<>();
         selectedAnswers = session.getSelectedAnswersFor(questionId);
         if (selectedAnswers.size() != 4) {
             Log.d(TAG, "New selected answers created.");
-            selectedAnswers.add(new SelectedAnswer(answers.get(0).getValue(), 0, questionId));
-            selectedAnswers.add(new SelectedAnswer(answers.get(1).getValue(), 0, questionId));
-            selectedAnswers.add(new SelectedAnswer(answers.get(2).getValue(), 0, questionId));
-            selectedAnswers.add(new SelectedAnswer(answers.get(3).getValue(), 0, questionId));
+            selectedAnswers.add(new SelectedAnswer(curQuestion.getA().getValue(), 0, questionId));
+            selectedAnswers.add(new SelectedAnswer(curQuestion.getB().getValue(), 0, questionId));
+            selectedAnswers.add(new SelectedAnswer(curQuestion.getC().getValue(), 0, questionId));
+            selectedAnswers.add(new SelectedAnswer(curQuestion.getD().getValue(), 0, questionId));
         }
+
         Log.d(TAG, "Answer view created.");
     }
 
@@ -98,14 +91,11 @@ public class AnswerViewUser extends Fragment implements View.OnClickListener {
         buttonPrevious.setOnClickListener(this);
         buttonNext.setOnClickListener(this);
 
-
         pointsView = (TextView) view.findViewById(R.id.question_points);
-        pointsView.setText(curQuestion.getPointsPossible());
-
+        pointsView.setText(String.valueOf(curQuestion.getPointsPossible()));
 
         setSeekBarListeners();
         setAnswerText();
-
 
         return view;
     }
@@ -128,10 +118,10 @@ public class AnswerViewUser extends Fragment implements View.OnClickListener {
     }
 
     private void setAnswerText() {
-        A.setText(answers.get(0).toString());
-        B.setText(answers.get(1).toString());
-        C.setText(answers.get(2).toString());
-        D.setText(answers.get(3).toString());
+        A.setText(curQuestion.getA().toString());
+        B.setText(curQuestion.getB().toString());
+        C.setText(curQuestion.getC().toString());
+        D.setText(curQuestion.getD().toString());
     }
 
     private void setSeekBarListeners() {
@@ -167,15 +157,17 @@ public class AnswerViewUser extends Fragment implements View.OnClickListener {
                     index = 3;
                     break;
             }
-
-            int p = Integer.valueOf(curQuestion.getPointsPossible());
+            if (index == -1) {
+                return;
+            }
+            int p = curQuestion.getPointsPossible();
             int pr = selectedAnswers.get(index).getAllocatedPoints() - progress;
             if (p + pr < 0) {
                 seekBar.setProgress(selectedAnswers.get(index).getAllocatedPoints());
             } else {
                 selectedAnswers.get(index).setAllocatedPoints(progress);
                 curQuestion.setPointsPossible(p + pr);
-                pointsView.setText(curQuestion.getPointsPossible());
+                pointsView.setText(String.valueOf(curQuestion.getPointsPossible()));
             }
 
         }

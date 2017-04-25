@@ -4,6 +4,8 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.CursorWrapper;
 
+import java.util.ArrayList;
+
 import edu.umsl.superclickers.database.schema.CourseSchema;
 import edu.umsl.superclickers.userdata.Course;
 
@@ -17,8 +19,8 @@ class CourseCursorWrapper extends CursorWrapper {
         super(cursor);
     }
 
-    Course getCourse() {
-        Course course = null;
+    ArrayList<Course> getCourses() {
+        ArrayList<Course> courses = new ArrayList<>();
 
         moveToFirst();
         if (getCount() > 0) {
@@ -28,9 +30,9 @@ class CourseCursorWrapper extends CursorWrapper {
             String name = getString(getColumnIndex(CourseSchema.KEY_NAME));
             String semester = getString(getColumnIndex(CourseSchema.KEY_SEMESTER));
             String instructor = getString(getColumnIndex(CourseSchema.KEY_INSTRUCTOR));
-            course = new Course(_id, courseId, extID, name, semester, instructor);
+            courses.add(new Course(_id, courseId, extID, name, semester, instructor));
         }
-        return course;
+        return courses;
     }
 
     static ContentValues createCourseValues(Course course) {

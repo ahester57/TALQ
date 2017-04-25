@@ -40,7 +40,7 @@ public class QuizService extends Service {
         Log.d(TAG, "Starting quiz timer.");
         session = new SessionManager(getApplicationContext());
 
-        quizTimer = new CountDownTimer((1 * 60 * 1000) + 2000, 1000) {
+        quizTimer = new CountDownTimer((quizTime * 60 * 1000) + 2000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 Log.d(TAG, "Countdown seconds remaining: " + millisUntilFinished / 1000);

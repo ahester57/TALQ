@@ -30,4 +30,13 @@ public class SelectedAnswer {
     public String getQuestionId() {
         return questionId;
     }
+
+    @Override
+    public String toString() {
+        return "SelectedAnswer{" +
+                "value='" + value + '\'' +
+                ", allocatedPoints=" + allocatedPoints +
+                ", questionId='" + questionId + '\'' +
+                '}';
+    }
 }
