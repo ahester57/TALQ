@@ -1,4 +1,4 @@
-package edu.umsl.superclickers.activity.quiz;
+package edu.umsl.superclickers.activity.helper;
 
 /**
  * Created by Austin on 3/21/2017.

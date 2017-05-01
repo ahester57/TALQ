@@ -22,7 +22,7 @@ import edu.umsl.superclickers.quizdata.Quiz;
 public class QuizActivityUser extends AppCompatActivity implements
         QuizViewUser.QuizController {
 
-    private final String TAG = getClass().getSimpleName();
+    private final String TAG = QuizActivityUser.class.getSimpleName();
 
     private Intent timerService;
     private QuizGET quizGET;

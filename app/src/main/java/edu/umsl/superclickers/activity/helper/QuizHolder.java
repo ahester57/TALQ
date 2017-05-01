@@ -1,4 +1,4 @@
-package edu.umsl.superclickers.activity.home;
+package edu.umsl.superclickers.activity.helper;
 
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -15,15 +15,15 @@ import edu.umsl.superclickers.quizdata.QuizListItem;
  */
 
 public class QuizHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-    private final String TAG = getClass().getSimpleName();
 
+    private final String TAG = QuizHolder.class.getSimpleName();
     private TextView tQuizName;
     private TextView tQuizText;
     private TextView tCourseName;
     private TextView tQuizTime;
     private WeakReference<QuizHolderListener> mListener;
 
-    interface QuizHolderListener {
+    public interface QuizHolderListener {
         void setQuiz(int pos);
     }
 

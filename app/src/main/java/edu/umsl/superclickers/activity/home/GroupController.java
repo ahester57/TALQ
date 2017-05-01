@@ -29,7 +29,7 @@ import edu.umsl.superclickers.database.SQLiteHandlerUsers;
 
 public class GroupController extends Fragment {
 
-    private final String TAG = getClass().getSimpleName();
+    private final String TAG = GroupController.class.getSimpleName();
 
     private ProgressDialog pDialog;
     private SQLiteHandlerUsers db;

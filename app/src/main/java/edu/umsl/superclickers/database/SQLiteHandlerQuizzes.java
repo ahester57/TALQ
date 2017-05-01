@@ -89,7 +89,11 @@ public class SQLiteHandlerQuizzes extends SQLiteOpenHelper {
         QuizCursorWrapper qCursor = new QuizCursorWrapper(cursor, context);
         quiz = qCursor.getQuiz();
 
-        Log.d(TAG, "Fectching quiz from Sqlite: " + quiz.toString());
+        if (quiz != null) {
+            Log.d(TAG, "Fectching quiz from Sqlite: " + quiz.toString());
+        } else {
+            Log.e(TAG, "Error fetching quiz from SQlite.");
+        }
         cursor.close();
         db.close();
 

@@ -1,4 +1,4 @@
-package edu.umsl.superclickers.activity.home;
+package edu.umsl.superclickers.activity.helper;
 
 import android.content.Context;
 

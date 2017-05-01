@@ -28,7 +28,7 @@ import edu.umsl.superclickers.quizdata.QuizListItem;
 
 public class HomeController extends Fragment {
 
-    private final String TAG = getClass().getSimpleName();
+    private final String TAG = HomeController.class.getSimpleName();
 
     private HomeListener hListener;
     private ArrayList<QuizListItem> quizzes;

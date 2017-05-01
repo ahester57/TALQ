@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import edu.umsl.superclickers.R;
+import edu.umsl.superclickers.activity.helper.HorDottedProgress;
 import edu.umsl.superclickers.app.FragmentConfig;
 import edu.umsl.superclickers.quizdata.Answer;
 import edu.umsl.superclickers.quizdata.Question;
@@ -44,6 +45,7 @@ public class QuizViewUser extends Fragment implements
     private TextView questionView;
     private TextView quizTimeView;
     private QuizGET quizGET;
+    private HorDottedProgress horDottedProgress;
 
     private boolean resume = false;
 
@@ -70,7 +72,7 @@ public class QuizViewUser extends Fragment implements
         qController = (QuizController) getActivity();
         quizGET = qController.getQuizGET();
         quizGET.setController(this);
-        if (!resume) {
+        if (!resume || curQuiz == null) {
             downloadQuiz();
         }
     }
@@ -89,7 +91,7 @@ public class QuizViewUser extends Fragment implements
                 qController.submitQuiz(curQuiz);
             }
         });
-
+        horDottedProgress = (HorDottedProgress) view.findViewById(R.id.progress_quiz_dots);
 
 
         currQuestion();
@@ -112,9 +114,13 @@ public class QuizViewUser extends Fragment implements
     }
 
     public void attachQuiz(Quiz quiz, int qNum) {
-        curQuiz = quiz;
-        // set quiz index
-        curQuiz.setqNum(qNum);
+        if (quiz != null) {
+            curQuiz = quiz;
+            // set quiz index
+            curQuiz.setqNum(qNum);
+        } else {
+            curQuiz = null;
+        }
     }
 
     @Override
@@ -123,7 +129,9 @@ public class QuizViewUser extends Fragment implements
         if (questionView != null) {
             currQuestion();
         }
-        startTimer();
+        if (horDottedProgress != null) {
+            horDottedProgress.setDotAmount(curQuiz.getQuestions().size());
+        }        startTimer();
         Log.d(TAG, "Set the quiz ");
 
     }
@@ -133,6 +141,9 @@ public class QuizViewUser extends Fragment implements
         if(curQuiz == null) {
             setBSQuiz();
         }
+        if (horDottedProgress != null) {
+            horDottedProgress.setDotAmount(curQuiz.getQuestions().size());
+        }
         curQuestion = curQuiz.getQuestion();
         loadAnswerFragment();
     }
@@ -140,12 +151,14 @@ public class QuizViewUser extends Fragment implements
     @Override
     public void nextQuestion() {
         curQuestion = curQuiz.getNextQuestion();
+        horDottedProgress.nextDot();
         loadAnswerFragment();
     }
 
     @Override
     public void prevQuestion() {
         curQuestion = curQuiz.getPrevQuestion();
+        horDottedProgress.previousDot();
         loadAnswerFragment();
     }
 

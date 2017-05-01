@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.umsl.superclickers.R;
+import edu.umsl.superclickers.activity.helper.QuizHolder;
 import edu.umsl.superclickers.activity.login.LoginActivity;
 import edu.umsl.superclickers.activity.quiz.QuizActivityUser;
 import edu.umsl.superclickers.activity.quiz.QuizService;
