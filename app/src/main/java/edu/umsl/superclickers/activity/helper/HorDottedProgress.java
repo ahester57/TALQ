@@ -41,6 +41,10 @@ public class HorDottedProgress extends View {
         Log.d(TAG, "Set dot amount == " + dotAmount);
     }
 
+    public void setProgress(int progress) {
+        this.dotPosition = progress;
+    }
+
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);

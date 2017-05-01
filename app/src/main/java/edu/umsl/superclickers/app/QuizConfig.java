@@ -15,6 +15,7 @@ public class QuizConfig {
     public static String // ssoID, readable courseId, Quiz UUID, token
         URL_GET_QUIZ = URL_BASE + "/v1/quiz/?user_id=%1$s&course_id=%2$s&quiz_id=%3$s&token=%4$s";
 
-    public static String URL_GROUPS_FOR_COURSE = URL_BASE + "/v1/groups?course_id=%1$s";
-    public static String URL_GROUP_BY_ID = URL_BASE + "/v1/groups/%1$s";
+    public static String URL_POST_USER_QUIZ = URL_BASE + // need to post json answer questions
+            "/v1/quiz/?course_id=%1$s&user_id=%2$s&session_id=%3$s";
+
 }

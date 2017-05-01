@@ -17,7 +17,6 @@ package edu.umsl.superclickers.app;
  */
 
 public class LoginConfig {
-
     private static String URL_BASE = "http://tblearn-api.vigilantestudio.com";
 
     public static String URL_LOGIN = "http://stin.tech/android_login_api/login.php";

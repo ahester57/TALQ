@@ -137,6 +137,12 @@ public class AnswerViewUser extends Fragment implements View.OnClickListener {
         bP.setProgress(selectedAnswers.get(1).getAllocatedPoints());
         cP.setProgress(selectedAnswers.get(2).getAllocatedPoints());
         dP.setProgress(selectedAnswers.get(3).getAllocatedPoints());
+        int count = 0;
+        for (SelectedAnswer a : selectedAnswers) {
+            count += a.getAllocatedPoints();
+        }
+        curQuestion.setPointsPossible(4 - count);
+        pointsView.setText(String.valueOf(curQuestion.getPointsPossible()));
     }
 
     private SeekBar.OnSeekBarChangeListener seekListener = new SeekBar.OnSeekBarChangeListener() {

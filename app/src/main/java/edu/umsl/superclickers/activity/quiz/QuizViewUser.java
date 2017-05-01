@@ -131,7 +131,8 @@ public class QuizViewUser extends Fragment implements
         }
         if (horDottedProgress != null) {
             horDottedProgress.setDotAmount(curQuiz.getQuestions().size());
-        }        startTimer();
+        }
+        startTimer();
         Log.d(TAG, "Set the quiz ");
 
     }
@@ -143,6 +144,7 @@ public class QuizViewUser extends Fragment implements
         }
         if (horDottedProgress != null) {
             horDottedProgress.setDotAmount(curQuiz.getQuestions().size());
+            horDottedProgress.setProgress(curQuiz.getqNum());
         }
         curQuestion = curQuiz.getQuestion();
         loadAnswerFragment();
