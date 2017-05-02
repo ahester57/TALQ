@@ -33,6 +33,9 @@
         <activity android:name=".activity.home.GroupActivity">
         </activity>
 
+        <activity android:name=".activity.quiz.WaitingRoomActivity">
+        </activity>
+
         <service
             android:name=".activity.quiz.QuizService"
             android:label="@string/quiz_service">

@@ -33,7 +33,7 @@ import edu.umsl.superclickers.userdata.User;
 
 public class LoginController extends Fragment {
 
-    private final String TAG = getClass().getSimpleName();
+    private final String TAG = LoginController.class.getSimpleName();
 
     private ProgressDialog pDialog; //////
     private SessionManager session;
