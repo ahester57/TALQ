@@ -24,6 +24,10 @@ public class QuizActivityUser extends AppCompatActivity implements
 
     private final String TAG = QuizActivityUser.class.getSimpleName();
 
+    private String quizID;
+    private String userID;
+    private String courseID;
+
     private Intent timerService;
     private QuizGET quizGET;
     private QuizViewUser quizViewUser;
@@ -43,9 +47,9 @@ public class QuizActivityUser extends AppCompatActivity implements
         setContentView(R.layout.activity_quiz);
 
         Intent intent = getIntent();
-        String quizID = intent.getStringExtra("QUIZ_ID");
-        String userID = intent.getStringExtra("USER_ID");
-        String courseID = intent.getStringExtra("COURSE_ID");
+        quizID = intent.getStringExtra("QUIZ_ID");
+        userID = intent.getStringExtra("USER_ID");
+        courseID = intent.getStringExtra("COURSE_ID");
 
         // Session manager
         session = new SessionManager(getApplicationContext());
@@ -85,6 +89,8 @@ public class QuizActivityUser extends AppCompatActivity implements
 
         Intent quizIntent = new Intent(QuizActivityUser.this, WaitingRoomActivity.class);
         quizIntent.putExtra("QUIZ_ID", getQuizID());
+        quizIntent.putExtra("COURSE_ID", courseID);
+        quizIntent.putExtra("USER_ID", userID);
         startActivity(quizIntent);
         finish();
     }

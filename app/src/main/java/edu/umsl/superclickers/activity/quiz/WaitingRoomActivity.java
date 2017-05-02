@@ -30,7 +30,7 @@ public class WaitingRoomActivity extends AppCompatActivity
     private final static String TAG = WaitingRoomActivity.class.getSimpleName();
 
     private String userID;
-    private String quizID;
+    private String courseID;
     private Quiz curQuiz;
 
     private ArrayList<SelectedAnswer> selectedAnswers = new ArrayList<>();
@@ -45,6 +45,13 @@ public class WaitingRoomActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
 
+        Intent i = getIntent();
+        courseID = i.getStringExtra("COURSE_ID");
+        userID = i.getStringExtra("USER_ID");
+
+        session = new SessionManager(getApplicationContext());
+        curQuiz = session.getActiveQuiz();
+
         FragmentManager fm = getFragmentManager();
         // Check if quizGET exists
         if (fm.findFragmentByTag(FragmentConfig.KEY_WAITING_ROOM) != null) {
@@ -52,7 +59,7 @@ public class WaitingRoomActivity extends AppCompatActivity
         } else {
             wFragment = new WaitingRoomView();
             fm.beginTransaction()
-                    .add(wFragment, FragmentConfig.KEY_WAITING_ROOM)
+                    .add(R.id.quiz_container, wFragment, FragmentConfig.KEY_WAITING_ROOM)
                     .commit();
         }
         if (fm.findFragmentByTag(FragmentConfig.KEY_WAITING_CONTROLLER) != null) {
@@ -62,30 +69,26 @@ public class WaitingRoomActivity extends AppCompatActivity
             fm.beginTransaction()
                     .add(wController, FragmentConfig.KEY_WAITING_CONTROLLER)
                     .commit();
+
+            // if WaitingRoomController DNE, post quiz for grading
+            JSONObject quizPOSTObj = buildAnswersForPOST();
+            wController.POSTQuiz(courseID, userID,
+                    curQuiz.getSessionId(),
+                    quizPOSTObj);
         }
 
 
-        session = new SessionManager(getApplicationContext());
-        curQuiz = session.getActiveQuiz();
-
-        JSONObject quizPOSTObj = buildAnswersForPOST();
-
-        wController.POSTQuiz("cmpsci4020", "arh5w6",
-                "dfc3013974f5a5dcee8381e42f246e60d764d67d8e422d15e703fdbc4acba630",
-                quizPOSTObj);
-        session.clearActiveQuiz();
+        Log.d(TAG, "Waiting room created.");
     }
 
     @Override
-    public void postInfo() {
-
+    public void postInfo(String response) {
+        wFragment.setTextQuizInfo(response);
     }
 
     private JSONObject buildAnswersForPOST() {
         JSONObject postObj = new JSONObject();
         try {
-
-
             // Build question array
             JSONArray questionArr = new JSONArray();
             for (Question q : curQuiz.getQuestions()) {
@@ -113,5 +116,12 @@ public class WaitingRoomActivity extends AppCompatActivity
         }
         Log.i(TAG, postObj.toString());
         return postObj;
+    }
+
+    @Override
+    public void onBackPressed() {
+        session.clearActiveQuiz();
+
+        super.onBackPressed();
     }
 }

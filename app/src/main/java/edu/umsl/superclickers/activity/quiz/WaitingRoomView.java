@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import edu.umsl.superclickers.R;
 
@@ -14,6 +15,10 @@ import edu.umsl.superclickers.R;
  */
 
 public class WaitingRoomView extends Fragment {
+
+    private TextView textQuizInfo;
+
+    private String quizInfo = "none";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -26,6 +31,15 @@ public class WaitingRoomView extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_waiting_room, container, false);
 
+        textQuizInfo = (TextView) view.findViewById(R.id.text_quiz_info);
+        textQuizInfo.setText(quizInfo);
+
+
         return view;
+    }
+
+    public void setTextQuizInfo(String quizInfo) {
+        this.quizInfo = quizInfo;
+        textQuizInfo.setText(quizInfo);
     }
 }

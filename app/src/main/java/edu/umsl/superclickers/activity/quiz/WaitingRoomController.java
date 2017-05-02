@@ -35,13 +35,13 @@ public class WaitingRoomController extends Fragment {
 
     private final String TAG = WaitingRoomController.class.getSimpleName();
 
-    private ProgressDialog pDialog; //////
+
     private SessionManager session;
 
     private WaitListener wListener;
 
     interface WaitListener {
-        void postInfo();
+        void postInfo(String response);
     }
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,8 +49,7 @@ public class WaitingRoomController extends Fragment {
         // Login activity listener
         wListener = (WaitListener) getActivity();
         // progress dialog
-        pDialog = new ProgressDialog(getActivity());
-        pDialog.setCancelable(false);
+
         // Session manager
         session = new SessionManager(getActivity());
     }
@@ -84,9 +83,8 @@ public class WaitingRoomController extends Fragment {
 
                             if (!error) {
                                 // Quiz POST SUCCESSFUL
-                                JSONObject user = jObj.getJSONObject("user");
-                                String ssoId = user.getString("email");
-
+                                //JSONObject user = jObj.getJSONObject("user");
+                                  wListener.postInfo(response);
 
                             } else {
                                 // Error uploading quiz

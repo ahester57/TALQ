@@ -9,16 +9,7 @@
     tools:layout_editor_absoluteY="81dp">
 
     <TextView
-        android:id="@+id/quiz_timer_text"
-        android:layout_width="95dp"
-        android:layout_height="43dp"
-        android:text=""
-        android:textSize="24sp"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp" />
-
-    <TextView
-        android:id="@+id/textView"
+        android:id="@+id/text_quiz_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="waiting"
