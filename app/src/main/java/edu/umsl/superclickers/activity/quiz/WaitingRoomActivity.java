@@ -32,6 +32,7 @@ public class WaitingRoomActivity extends AppCompatActivity
 
     private String userID;
     private String courseID;
+    private String groupID;
     private Quiz curQuiz;
 
     private ArrayList<SelectedAnswer> selectedAnswers = new ArrayList<>();
@@ -46,11 +47,13 @@ public class WaitingRoomActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
 
+        session = new SessionManager(getApplicationContext());
+
         Intent i = getIntent();
         courseID = i.getStringExtra("COURSE_ID");
         userID = i.getStringExtra("USER_ID");
+        groupID = session.getGroupId();
 
-        session = new SessionManager(getApplicationContext());
         curQuiz = session.getActiveQuiz();
 
         FragmentManager fm = getFragmentManager();
@@ -76,6 +79,8 @@ public class WaitingRoomActivity extends AppCompatActivity
             wController.POSTQuiz(courseID, userID,
                     curQuiz.getSessionId(),
                     quizPOSTObj);
+            wController.getGroupStatus(groupID, courseID,
+                    curQuiz.get_id(), curQuiz.getSessionId());
         }
 
 
@@ -93,6 +98,23 @@ public class WaitingRoomActivity extends AppCompatActivity
         if (quizResultUser != null) {
             wFragment.setTextQuizInfo("You got " + quizResultUser.calculateTotalPoints());
         }
+    }
+
+    @Override
+    public void setGroupStatus(String response) {
+        JSONObject gObj;
+        try {
+            gObj = new JSONObject(response);
+
+            JSONArray statusArr = gObj.getJSONArray("status");
+
+            JSONObject leaderObj =gObj.getJSONObject("leader");
+
+        } catch (JSONException e) {
+            Log.e("JSONError", e.getMessage());
+        }
+
+
     }
 
     private JSONObject buildAnswersForPOST() {

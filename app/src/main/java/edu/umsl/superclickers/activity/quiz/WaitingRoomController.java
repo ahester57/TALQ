@@ -23,9 +23,11 @@ import java.util.Map;
 
 import edu.umsl.superclickers.activity.login.LoginController;
 import edu.umsl.superclickers.app.AppController;
+import edu.umsl.superclickers.app.GroupConfig;
 import edu.umsl.superclickers.app.LoginConfig;
 import edu.umsl.superclickers.app.QuizConfig;
 import edu.umsl.superclickers.app.SessionManager;
+import edu.umsl.superclickers.userdata.Group;
 
 /**
  * Created by Austin on 5/1/2017.
@@ -42,7 +44,10 @@ public class WaitingRoomController extends Fragment {
 
     interface WaitListener {
         void postInfo(String response);
+        void setGroupStatus(String response);
     }
+
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -126,5 +131,57 @@ public class WaitingRoomController extends Fragment {
         AppController.getInstance().addToRequestQueue(strReq, tag_str_req);
     }
 
+    void getGroupStatus(final String group_id, final String courseId,
+                        final String quiz_id, final String session_id) {
+        String tag_str_req = "req_group";
+        String uri = String.format(GroupConfig.URL_GROUP_STATUS, group_id, courseId,
+                                                               quiz_id, session_id);
+        // new string request
+        StringRequest strReq = new StringRequest(Request.Method.GET, uri,
+
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d(TAG, " Response: " + response);
+                        try {
+                            JSONObject jObj = new JSONObject(response);
+
+                            String error;
+                            try {
+                                error = jObj.getString("error");
+                            } catch (JSONException e) {
+                                error = "false";
+                            }
+
+                            // if no errors
+                            if (error.equals("false")) {
+                                // Group was found
+
+
+                                wListener.setGroupStatus(response);
+
+                            } else {
+                                // Error
+                                String errMessage = "error";
+                                Toast.makeText(getActivity(), errMessage,
+                                        Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getActivity(), "JSON error: "
+                                    + e.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "Group error: " + error.getMessage());
+                Toast.makeText(getActivity(), error.getMessage(),
+                        Toast.LENGTH_LONG).show();
+
+            }
+        });
+        AppController.getInstance().addToRequestQueue(strReq, tag_str_req);
+    }
 
 }

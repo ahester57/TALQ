@@ -34,6 +34,7 @@ public class SessionManager {
     private static final String KEY_IS_LOGGEDIN = "isLoggedIn";
     private static final String KEY_QUIZ_INDEX = "quizIndex";
     private static final String KEY_QUIZ_ID = "quizId";
+    private static final String KEY_GROUP_ID = "groupId";
 
     public SessionManager(Context context) {
         this._context = context;
@@ -58,6 +59,20 @@ public class SessionManager {
     public User getCurrentUser() {
         SQLiteHandlerUsers db = SQLiteHandlerUsers.sharedInstance(_context);
         return db.getCurrentUser();
+    }
+
+    public String getGroupId() {
+        String groupId = pref.getString(KEY_GROUP_ID, null);
+        Log.d(TAG, "Group Id got = " + groupId);
+        return  groupId;
+    }
+
+    public void setGroupId(String groupId) {
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString(KEY_GROUP_ID, groupId);
+        editor.apply();
+
+        Log.d(TAG, "Group Id set = " + groupId);
     }
 
     public void addCourseToDB(Course course) {

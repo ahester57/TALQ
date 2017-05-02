@@ -30,6 +30,7 @@ import edu.umsl.superclickers.app.FragmentConfig;
 import edu.umsl.superclickers.app.SessionManager;
 import edu.umsl.superclickers.quizdata.QuizListItem;
 import edu.umsl.superclickers.userdata.Course;
+import edu.umsl.superclickers.userdata.Group;
 import edu.umsl.superclickers.userdata.User;
 
 /**
@@ -45,6 +46,7 @@ public class HomeActivity extends AppCompatActivity implements
     private String userId = "arh5w6";
     private String quizID;
     private String courseId;
+    private Group group;
 
     private ArrayList<QuizListItem> quizzes;
     private ArrayList<Course> courses;
@@ -78,17 +80,20 @@ public class HomeActivity extends AppCompatActivity implements
         // session manager
         session = new SessionManager(getApplicationContext());
 
+        User user = null;
         if (!session.isLoggedIn()) {
             //logoutUser();
             btnCreateGroup.setEnabled(false);
         } else {
             // Fetch user info from sqlite
-            User user = session.getCurrentUser();
+            user = session.getCurrentUser();
 
             textName.setText(user.getLast() +
                     ", " + user.getFirst());
             textEmail.setText(user.getUserId());
         }
+
+        courses = session.getEnrolledCourses();
 
         hController = new HomeController();
         FragmentManager fm = getFragmentManager();
@@ -96,9 +101,15 @@ public class HomeActivity extends AppCompatActivity implements
                 .add(hController, FragmentConfig.KEY_HOME_CONTROLLER)
                 .commit();
 
-        hController.getQuizzesFor(userId);
+        if(user != null) {
+            hController.getQuizzesFor(user.getUserId());
+            hController.getGroupFor(user.getUserId(), courses.get(0).getCourseId());
+        } else {
+            hController.getQuizzesFor("arh5w6");
+            hController.getGroupFor("arh5w6", courses.get(0).getCourseId());
+        }
 
-        courses = session.getEnrolledCourses();
+
 
         // @TODO download group info and put it SQLite
 
@@ -128,6 +139,12 @@ public class HomeActivity extends AppCompatActivity implements
                 startActivity(in);
                 break;
         }
+    }
+
+    @Override
+    public void setGroup(Group group) {
+        this.group = group;
+        session.setGroupId(group.getGroupId());
     }
 
     @Override

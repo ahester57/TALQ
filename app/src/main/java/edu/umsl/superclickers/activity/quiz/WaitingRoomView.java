@@ -12,9 +12,12 @@ import edu.umsl.superclickers.R;
 
 /**
  * Created by Austin on 4/22/2017.
+ *
  */
 
 public class WaitingRoomView extends Fragment {
+
+    private final static String TAG = WaitingRoomView.class.getSimpleName();
 
     private TextView textQuizInfo;
 

@@ -1,45 +1,60 @@
 package edu.umsl.superclickers.userdata;
 
+import android.util.Log;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class Group{
+public class Group {
 
     private String groupName;
     private String groupId;
-    private ArrayList<User> users;
+    private ArrayList<String> courseIds = new ArrayList<>();
+    private ArrayList<SimpleUser> users = new ArrayList<>();
 
 
     public Group(String groupName, String groupId) {
         this.groupName = groupName;
         this.groupId = groupId;
 
-        users = new ArrayList<>();
-        users.ensureCapacity(4);
     }
 
-    public void setUsers(List<User> users) {
-        this.users = (ArrayList<User>) users;
-    }
-
-    // add a User to the group
-    // returns success / failure
-    public boolean add(User user) {
-        if (users.size() <= 5) {
-            users.add(user);
-            return true;
-        } else {
-            return false;
+    public Group(JSONObject gObj) {
+        try {
+            this.groupId = gObj.getString("_id");
+            this.groupName = gObj.getString("name");
+            JSONArray cArr = gObj.getJSONArray("courseIds");
+            for (int i = 0; i < cArr.length(); i++) {
+                courseIds.add(cArr.getString(i));
+            }
+            JSONArray uArr = gObj.getJSONArray("users");
+            for (int i = 0; i < uArr.length(); i++) {
+                JSONObject uObj = uArr.getJSONObject(i);
+                users.add(new SimpleUser(uObj));
+            }
+        } catch (JSONException e) {
+            Log.e("JsONError", e.getMessage());
         }
     }
 
-    @Override
-    public String toString() {
-        return "Group{" +
-                "id='" + groupId + '\'' +
-                ", name='" + groupName +  '\'' +
-                ", users=" + '[' + users + ']' +
-                '}';
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public String getGroupId() {
+        return groupId;
+    }
+
+    public ArrayList<String> getCourseIds() {
+        return courseIds;
+    }
+
+    public ArrayList<SimpleUser> getUsers() {
+        return users;
     }
 }

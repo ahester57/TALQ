@@ -29,7 +29,7 @@ public class QuizViewUser extends Fragment implements
         AnswerViewUser.AnswerListener,
         QuizGET.QuizGETController {
 
-    private final String TAG = getClass().getSimpleName();
+    private final String TAG = QuizViewUser.class.getSimpleName();
 
     private String userID;
     private String quizID;
