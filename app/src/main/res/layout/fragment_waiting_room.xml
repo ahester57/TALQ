@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="waiting"
-        tools:layout_editor_absoluteX="149dp"
-        tools:layout_editor_absoluteY="232dp" />
+        tools:layout_editor_absoluteX="-1dp"
+        tools:layout_editor_absoluteY="-1dp" />
 
 </android.support.constraint.ConstraintLayout>

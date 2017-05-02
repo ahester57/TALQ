@@ -39,7 +39,12 @@ public class WaitingRoomView extends Fragment {
     }
 
     public void setTextQuizInfo(String quizInfo) {
-        this.quizInfo = quizInfo;
         textQuizInfo.setText(quizInfo);
+    }
+
+    void parseQuizResponse(String quizResponse) {
+
+
+        this.quizInfo = quizResponse;
     }
 }

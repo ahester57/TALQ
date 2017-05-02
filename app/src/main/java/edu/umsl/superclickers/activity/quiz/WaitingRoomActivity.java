@@ -18,6 +18,7 @@ import edu.umsl.superclickers.app.FragmentConfig;
 import edu.umsl.superclickers.app.SessionManager;
 import edu.umsl.superclickers.quizdata.Question;
 import edu.umsl.superclickers.quizdata.Quiz;
+import edu.umsl.superclickers.quizdata.QuizResultUser;
 import edu.umsl.superclickers.quizdata.SelectedAnswer;
 
 /**
@@ -83,7 +84,15 @@ public class WaitingRoomActivity extends AppCompatActivity
 
     @Override
     public void postInfo(String response) {
-        wFragment.setTextQuizInfo(response);
+        QuizResultUser quizResultUser = null;
+        try {
+            quizResultUser = new QuizResultUser(new JSONObject(response));
+        } catch (JSONException e) {
+            Log.e("JSONError", e.getMessage());
+        }
+        if (quizResultUser != null) {
+            wFragment.setTextQuizInfo("You got " + quizResultUser.calculateTotalPoints());
+        }
     }
 
     private JSONObject buildAnswersForPOST() {
