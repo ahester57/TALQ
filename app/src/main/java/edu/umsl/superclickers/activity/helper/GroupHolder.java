@@ -12,17 +12,6 @@ import android.widget.TextView;
 import java.lang.ref.WeakReference;
 
 import edu.umsl.superclickers.R;
-import edu.umsl.superclickers.quizdata.QuizListItem;
-
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
-
-import java.lang.ref.WeakReference;
-
-import edu.umsl.superclickers.R;
-import edu.umsl.superclickers.quizdata.QuizListItem;
 import edu.umsl.superclickers.userdata.Group;
 
 /**

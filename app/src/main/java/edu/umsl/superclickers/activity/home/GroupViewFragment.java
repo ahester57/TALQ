@@ -1,6 +1,7 @@
 package edu.umsl.superclickers.activity.home;
 
 import android.app.Fragment;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -47,7 +48,12 @@ public class GroupViewFragment extends Fragment implements GroupController.Group
 
     @Override
     public void setGroup(Group group) {
-        // @TODO list all groups
+        // checks if your group is trying again
+        for (Group g : gGroups) {
+            if (group.getGroupId().equals(g.getGroupId())) {
+                return;
+            }
+        }
         gGroups.add(group);
         gRecycler.setAdapter(new GroupAdapter(gGroups));
     }
@@ -56,7 +62,7 @@ public class GroupViewFragment extends Fragment implements GroupController.Group
             GroupHolder.GroupHolderListener {
 
         private List<Group> mGroups;
-
+        private int selectedPos = 0;
 
         public GroupAdapter(List<Group> groups) {
             mGroups = groups;
@@ -76,10 +82,23 @@ public class GroupViewFragment extends Fragment implements GroupController.Group
         }
 
         @Override
-        public void onBindViewHolder(GroupHolder holder, int position) {
+        public void onBindViewHolder(GroupHolder holder, final int position) {
             if (mGroups != null) {
                 try {
+                    if (selectedPos == position) {
+                        holder.itemView.setBackgroundColor(Color.GREEN);
+                    } else {
+                        holder.itemView.setBackgroundColor(Color.TRANSPARENT);
+                    }
                     holder.bindGroup(mGroups.get(position));
+//                    holder.itemView.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            notifyItemChanged(selectedPos);
+//                            selectedPos = position;
+//                            notifyItemChanged(selectedPos);
+//                        }
+//                    });
                 } catch (IndexOutOfBoundsException e) {
                     Log.e("WHOOPS", "idk");
                 }

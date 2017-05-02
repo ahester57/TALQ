@@ -38,7 +38,6 @@ public class HomeController extends Fragment {
 
     interface HomeListener {
         void setQuizzes(ArrayList<QuizListItem> quizzes, ArrayList<String> courseId);
-        void setGroup(Group group);
     }
 
 
@@ -111,55 +110,5 @@ public class HomeController extends Fragment {
         AppController.getInstance().addToRequestQueue(strReq, tag_str_req);
     }
 
-    void getGroupFor(final String user_id, final String courseId) {
-        String tag_str_req = "req_group";
-        String uri = String.format(GroupConfig.URL_GROUP_FOR_USER, user_id, courseId);
-        // new string request
-        StringRequest strReq = new StringRequest(Request.Method.GET, uri,
-
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.d(TAG, " Response: " + response);
-                        try {
-                            JSONObject jObj = new JSONObject(response);
-
-                            String error;
-                            try {
-                                error = jObj.getString("error");
-                            } catch (JSONException e) {
-                                error = "false";
-                            }
-
-                            // if no errors
-                            if (error.equals("false")) {
-                                // Group was found
-                                Group group = new Group(jObj);
-
-                                hListener.setGroup(group);
-
-                            } else {
-                                // Error
-                                String errMessage = "error";
-                                Toast.makeText(getActivity(), errMessage,
-                                        Toast.LENGTH_LONG).show();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Toast.makeText(getActivity(), "JSON error: "
-                                    + e.getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "Group error: " + error.getMessage());
-                Toast.makeText(getActivity(), error.getMessage(),
-                        Toast.LENGTH_LONG).show();
-
-            }
-        });
-        AppController.getInstance().addToRequestQueue(strReq, tag_str_req);
-    }
 
 }

@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -39,7 +40,9 @@ import edu.umsl.superclickers.userdata.User;
  */
 
 public class HomeActivity extends AppCompatActivity implements
-        View.OnClickListener, HomeController.HomeListener {
+        HomeController.HomeListener,
+        GroupController.GroupListener,
+        HomeViewFragment.HomeViewListener {
 
     private final String TAG = HomeActivity.class.getSimpleName();
 
@@ -54,7 +57,8 @@ public class HomeActivity extends AppCompatActivity implements
 
     private SessionManager session;
     private HomeController hController;
-    private RecyclerView qRecyclerView;
+    private GroupController gController;
+    private HomeViewFragment hViewFragment;
 
     // BroadcastReceiver for QuizService
     private BroadcastReceiver br = new BroadcastReceiver() {
@@ -69,78 +73,62 @@ public class HomeActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        TextView textName = (TextView) findViewById(R.id.name_text_view);
-        TextView textEmail = (TextView) findViewById(R.id.email_text_view);
-        Button btnLogout = (Button) findViewById(R.id.logout_button);
-        Button btnPlay = (Button) findViewById(R.id.play_button);
-        Button btnCreateGroup = (Button) findViewById(R.id.groups_button);
-        qRecyclerView = (RecyclerView) findViewById(R.id.quiz_list_recycler);
-        qRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+
 
         // session manager
         session = new SessionManager(getApplicationContext());
 
         User user = null;
-        if (!session.isLoggedIn()) {
-            //logoutUser();
-            btnCreateGroup.setEnabled(false);
-        } else {
-            // Fetch user info from sqlite
-            user = session.getCurrentUser();
 
-            textName.setText(user.getLast() +
-                    ", " + user.getFirst());
-            textEmail.setText(user.getUserId());
-        }
-
+        user = session.getCurrentUser();
         courses = session.getEnrolledCourses();
 
-        hController = new HomeController();
+
         FragmentManager fm = getFragmentManager();
-        fm.beginTransaction()
-                .add(hController, FragmentConfig.KEY_HOME_CONTROLLER)
-                .commit();
 
-        if(user != null) {
-            hController.getQuizzesFor(user.getUserId());
-            hController.getGroupFor(user.getUserId(), courses.get(0).getCourseId());
 
+        if (fm.findFragmentByTag(FragmentConfig.KEY_HOME_VIEW) != null) {
+            hViewFragment = (HomeViewFragment) fm.findFragmentByTag(FragmentConfig.KEY_HOME_VIEW);
         } else {
-            hController.getQuizzesFor("arh5w6");
+            hViewFragment = new HomeViewFragment();
+            fm.beginTransaction()
+                    .replace(R.id.home_frame, hViewFragment, FragmentConfig.KEY_HOME_VIEW)
+                    .commit();
         }
 
 
 
-        // @TODO download group info and put it SQLite
-
-        btnLogout.setOnClickListener(this);
-        btnPlay.setOnClickListener(this);
-        btnCreateGroup.setOnClickListener(this);
-
-    }
-
-    @Override
-    public void onClick(View view) {
-
-        switch (view.getId()) {
-            case R.id.logout_button:
-                logoutUser();
-                break;
-            case R.id.play_button:
-                Intent i = new Intent(HomeActivity.this, QuizActivityUser.class);
-                i.putExtra("QUIZ_ID", quizID);
-                i.putExtra("USER_ID", userId);
-                i.putExtra("COURSE_ID", courseId);
-                i.putExtra("GROUP_ID", group.getGroupId());
-                startActivity(i);
-                //finish();
-                break;
-            case R.id.groups_button:
-                Intent in = new Intent(HomeActivity.this, GroupActivity.class);
-                startActivity(in);
-                break;
+        if (fm.findFragmentByTag(FragmentConfig.KEY_HOME_CONTROLLER) != null) {
+            hController = (HomeController) fm.findFragmentByTag(FragmentConfig.KEY_HOME_CONTROLLER);
+        } else {
+            hController = new HomeController();
+            fm.beginTransaction()
+                    .add(hController, FragmentConfig.KEY_HOME_CONTROLLER)
+                    .commit();
+            // only request groups if hController DNE
+            if(user != null) {
+                hController.getQuizzesFor(user.getUserId());
+            } else {
+                hController.getQuizzesFor("arh5w6");
+            }
         }
+
+        if (fm.findFragmentByTag(FragmentConfig.KEY_GROUP_CONTROLLER) != null) {
+            gController = (GroupController) fm.findFragmentByTag(FragmentConfig.KEY_GROUP_CONTROLLER);
+        } else {
+            gController = new GroupController();
+            fm.beginTransaction()
+                    .add(gController, FragmentConfig.KEY_GROUP_CONTROLLER)
+                    .commit();
+            // only request groups if gController DNE
+            if(user != null) {
+                gController.getGroupForUser(user.getUserId(), courses.get(0).getCourseId());
+            }
+        }
+
+
     }
+
 
     @Override
     public void setGroup(Group group) {
@@ -153,11 +141,12 @@ public class HomeActivity extends AppCompatActivity implements
         this.courseIds = courseIds;
 
         setActiveQuiz(0);
-        qRecyclerView.setAdapter(new QuizAdapter(quizzes));
+        hViewFragment.setQuizAdapter(quizzes);
         // @TODO display running quizzes
     }
 
-    void setActiveQuiz(int pos) {
+    @Override
+    public void setActiveQuiz(int pos) {
         quizID = quizzes.get(pos).get_id();
         courseId = courseIds.get(pos);
         Log.d(TAG, "Selected quiz: " + quizzes.get(pos).getDescription());
@@ -180,8 +169,26 @@ public class HomeActivity extends AppCompatActivity implements
         }
     }
 
+
+
+    @Override
+    public void startQuiz() {
+        Intent i = new Intent(HomeActivity.this, QuizActivityUser.class);
+        i.putExtra("QUIZ_ID", quizID);
+        i.putExtra("USER_ID", userId);
+        i.putExtra("COURSE_ID", courseId);
+        i.putExtra("GROUP_ID", group.getGroupId());
+        startActivity(i);
+    }
+
+    @Override
+    public void goToGroups() {
+        Intent in = new Intent(HomeActivity.this, GroupActivity.class);
+        startActivity(in);
+    }
     // logout user,
-    private void logoutUser() {
+    @Override
+    public void logoutUser() {
         session.setLogin(false);
         session.clearDatabase();
         // Go to login activity
@@ -190,49 +197,6 @@ public class HomeActivity extends AppCompatActivity implements
         finish();
     }
 
-
-    class QuizAdapter extends RecyclerView.Adapter<QuizHolder> implements
-            QuizHolder.QuizHolderListener {
-
-        private List<QuizListItem> mQuizzes;
-        private List<Course> mCourses;
-
-        public QuizAdapter(List<QuizListItem> quizzes) {
-            mQuizzes = quizzes;
-        }
-
-        @Override
-        public QuizHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
-            View view = inflater.inflate(R.layout.quiz_recycler_item, parent, false);
-            QuizHolder qHolder = new QuizHolder(view, this);
-            return qHolder;
-        }
-
-        @Override
-        public void setQuiz(int pos) {
-            setActiveQuiz(pos);
-        }
-
-        @Override
-        public void onBindViewHolder(QuizHolder holder, int position) {
-            if (mQuizzes != null) {
-                try {
-                    holder.bindQuiz(mQuizzes.get(position));
-                } catch (IndexOutOfBoundsException e) {
-                    Log.e("WHOOPS", "idk");
-                }
-            }
-        }
-
-        @Override
-        public int getItemCount() {
-            if (mQuizzes != null) {
-                return mQuizzes.size();
-            }
-            return 0;
-        }
-    }
 
 
     @Override

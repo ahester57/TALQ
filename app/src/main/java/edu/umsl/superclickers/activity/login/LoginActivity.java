@@ -45,7 +45,7 @@ public class LoginActivity extends AppCompatActivity implements
         ssoId = (EditText) findViewById(R.id.sso_text_edit);
         userPass = (EditText) findViewById(R.id.pwd_text_edit);
 
-
+        skip.setEnabled(false);
         // Session manager
         SessionManager session = new SessionManager(getApplicationContext());
 

@@ -14,7 +14,7 @@ import edu.umsl.superclickers.quizdata.QuizListItem;
  * Created by Austin on 4/22/2017
  */
 
-public class QuizHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+public class QuizHolder extends RecyclerView.ViewHolder {
 
     private final String TAG = QuizHolder.class.getSimpleName();
     private TextView tQuizName;
@@ -35,7 +35,6 @@ public class QuizHolder extends RecyclerView.ViewHolder implements View.OnClickL
         tQuizText = (TextView) itemView.findViewById(R.id.text_quiz_text);
         tCourseName = (TextView) itemView.findViewById(R.id.text_course_name);
         tQuizTime = (TextView) itemView.findViewById(R.id.text_quiz_time);
-        itemView.setOnClickListener(this);
     }
 
     public void bindQuiz(QuizListItem quiz) {
@@ -45,11 +44,5 @@ public class QuizHolder extends RecyclerView.ViewHolder implements View.OnClickL
         tQuizTime.setText(String.valueOf(quiz.getTimedLength()));
     }
 
-    @Override
-    public void onClick(View v) {
-        Log.d(TAG, "Clicked: " + this + " @ pos: " + getAdapterPosition());
-        mListener.get().setQuiz(getAdapterPosition());
-        //mListener.get().goToDetails(mFriendNameText.getText().toString(),
-                //mFriendInfoText.getText().toString());
-    }
+
 }

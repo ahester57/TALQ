@@ -1,5 +1,6 @@
 package edu.umsl.superclickers.activity.home;
 
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -7,7 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import edu.umsl.superclickers.R;
 import edu.umsl.superclickers.app.FragmentConfig;
@@ -22,12 +22,9 @@ import edu.umsl.superclickers.userdata.User;
  */
 
 public class GroupActivity extends AppCompatActivity implements
-        View.OnClickListener, GroupController.GroupListener {
+        GroupController.GroupListener {
 
     private final String TAG = GroupActivity.class.getSimpleName();
-
-    private Button btnCreate, btnJoin;
-    private EditText editGroupName;
 
     private SessionManager session;
     private GroupController gController;
@@ -43,49 +40,40 @@ public class GroupActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group);
 
-        btnCreate = (Button) findViewById(R.id.create_group_button);
-        btnJoin = (Button) findViewById(R.id.join_group_button);
-        editGroupName = (EditText) findViewById(R.id.group_name_edit_text);
 
         session = new SessionManager(getApplicationContext());
         user = session.getCurrentUser();
         course = session.getEnrolledCourses().get(0);
 
-        gController = new GroupController();
-        // load fragment ... switch to recycler view
-        gViewFragment = new GroupViewFragment();
+        FragmentManager fm = getFragmentManager();
 
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.replace(R.id.group_frame, gViewFragment);
-        ft.add(gController, FragmentConfig.KEY_GROUP_CONTROLLER);
-        ft.commit();
-
-
-
-        btnCreate.setOnClickListener(this);
-        btnJoin.setOnClickListener(this);
-    }
-
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.create_group_button:
-                if (!editGroupName.getText().toString().trim().equals("")) {
-                    gController.createGroup(user.get_id(), editGroupName.getText().toString());
-                } else {
-                    Toast.makeText(getApplicationContext(), "Enter a group name, I say!",
-                            Toast.LENGTH_LONG).show();
-                }
-                break;
-            case R.id.join_group_button:
-                gController.getGroupFor(user.getUserId(), course.getCourseId());
-                break;
+        if (fm.findFragmentByTag(FragmentConfig.KEY_GROUP_VIEW) != null) {
+            gViewFragment = (GroupViewFragment) fm.findFragmentByTag(FragmentConfig.KEY_GROUP_VIEW);
+        } else {
+            gViewFragment = new GroupViewFragment();
+            fm.beginTransaction()
+                    .replace(R.id.group_frame, gViewFragment, FragmentConfig.KEY_GROUP_VIEW)
+                    .commit();
         }
-    }
+        if (fm.findFragmentByTag(FragmentConfig.KEY_GROUP_CONTROLLER) != null) {
+            gController = (GroupController) fm.findFragmentByTag(FragmentConfig.KEY_GROUP_CONTROLLER);
+        } else {
+            gController = new GroupController();
+            fm.beginTransaction()
+                    .add(gController, FragmentConfig.KEY_GROUP_CONTROLLER)
+                    .commit();
+            // only request groups if gController DNE
+            gController.getGroupForUser(user.getUserId(), course.getCourseId());
+            gController.getGroupForCourse(course.get_id());
+        }
 
+
+
+    }
 
     @Override
     public void setGroup(Group group) {
         gViewFragment.setGroup(group);
+
     }
 }
