@@ -104,9 +104,9 @@ public class HomeActivity extends AppCompatActivity implements
         if(user != null) {
             hController.getQuizzesFor(user.getUserId());
             hController.getGroupFor(user.getUserId(), courses.get(0).getCourseId());
+
         } else {
             hController.getQuizzesFor("arh5w6");
-            hController.getGroupFor("arh5w6", courses.get(0).getCourseId());
         }
 
 
@@ -131,6 +131,7 @@ public class HomeActivity extends AppCompatActivity implements
                 i.putExtra("QUIZ_ID", quizID);
                 i.putExtra("USER_ID", userId);
                 i.putExtra("COURSE_ID", courseId);
+                i.putExtra("GROUP_ID", group.getGroupId());
                 startActivity(i);
                 //finish();
                 break;
@@ -144,7 +145,6 @@ public class HomeActivity extends AppCompatActivity implements
     @Override
     public void setGroup(Group group) {
         this.group = group;
-        session.setGroupId(group.getGroupId());
     }
 
     @Override

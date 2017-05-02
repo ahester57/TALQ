@@ -33,6 +33,7 @@ public class WaitingRoomActivity extends AppCompatActivity
     private String userID;
     private String courseID;
     private String groupID;
+
     private Quiz curQuiz;
 
     private ArrayList<SelectedAnswer> selectedAnswers = new ArrayList<>();
@@ -52,7 +53,7 @@ public class WaitingRoomActivity extends AppCompatActivity
         Intent i = getIntent();
         courseID = i.getStringExtra("COURSE_ID");
         userID = i.getStringExtra("USER_ID");
-        groupID = session.getGroupId();
+        groupID = i.getStringExtra("GROUP_ID");
 
         curQuiz = session.getActiveQuiz();
 
@@ -96,7 +97,8 @@ public class WaitingRoomActivity extends AppCompatActivity
             Log.e("JSONError", e.getMessage());
         }
         if (quizResultUser != null) {
-            wFragment.setTextQuizInfo("You got " + quizResultUser.calculateTotalPoints());
+            wFragment.setTextQuizInfo("You got " + quizResultUser.calculateTotalPoints() +
+                    " points.\n\nYou can do better probably.");
         }
     }
 
@@ -113,7 +115,7 @@ public class WaitingRoomActivity extends AppCompatActivity
         } catch (JSONException e) {
             Log.e("JSONError", e.getMessage());
         }
-
+        wFragment.setTextGroupStatus(response);
 
     }
 
@@ -147,6 +149,12 @@ public class WaitingRoomActivity extends AppCompatActivity
         }
         Log.i(TAG, postObj.toString());
         return postObj;
+    }
+
+    @Override
+    protected void onDestroy() {
+        session.clearActiveQuiz();
+        super.onDestroy();
     }
 
     @Override

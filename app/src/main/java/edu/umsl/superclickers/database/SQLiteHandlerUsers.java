@@ -155,8 +155,9 @@ public class SQLiteHandlerUsers extends SQLiteOpenHelper {
         cursor.close();
         db.close();
 
-        Log.d(TAG, "Fectching user from Sqlite: " + user.toString());
-
+        if (user != null) {
+            Log.d(TAG, "Fectching user from Sqlite: " + user.toString());
+        }
         return user;
     }
 

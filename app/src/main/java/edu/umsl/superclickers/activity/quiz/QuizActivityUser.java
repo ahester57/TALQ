@@ -13,7 +13,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import edu.umsl.superclickers.R;
-import edu.umsl.superclickers.activity.home.HomeActivity;
 import edu.umsl.superclickers.app.FragmentConfig;
 import edu.umsl.superclickers.app.SessionManager;
 import edu.umsl.superclickers.quizdata.Quiz;
@@ -27,6 +26,7 @@ public class QuizActivityUser extends AppCompatActivity implements
     private String quizID;
     private String userID;
     private String courseID;
+    private String groupID;
 
     private Intent timerService;
     private QuizGET quizGET;
@@ -50,6 +50,7 @@ public class QuizActivityUser extends AppCompatActivity implements
         quizID = intent.getStringExtra("QUIZ_ID");
         userID = intent.getStringExtra("USER_ID");
         courseID = intent.getStringExtra("COURSE_ID");
+        groupID = intent.getStringExtra("GROUP_ID");
 
         // Session manager
         session = new SessionManager(getApplicationContext());
@@ -88,9 +89,10 @@ public class QuizActivityUser extends AppCompatActivity implements
         stopService(timerService);
 
         Intent quizIntent = new Intent(QuizActivityUser.this, WaitingRoomActivity.class);
-        quizIntent.putExtra("QUIZ_ID", getQuizID());
+        quizIntent.putExtra("QUIZ_ID", quizID);
         quizIntent.putExtra("COURSE_ID", courseID);
         quizIntent.putExtra("USER_ID", userID);
+        quizIntent.putExtra("GROUP_ID", groupID);
         startActivity(quizIntent);
         finish();
     }

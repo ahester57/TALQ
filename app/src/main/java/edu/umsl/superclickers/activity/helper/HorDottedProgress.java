@@ -19,8 +19,8 @@ public class HorDottedProgress extends View {
 
     private final static String TAG = HorDottedProgress.class.getSimpleName();
     private Canvas canvas;
-    private int dotRadius = 5;
-    private int bounceDotRadius = 8;
+    private int dotRadius = 6;
+    private int bounceDotRadius = 12;
     private int dotPosition;
     private int dotAmount = 4;
 
@@ -75,7 +75,7 @@ public class HorDottedProgress extends View {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         int width, height;
-        int calcWidth = (20*(dotAmount+1)*9);
+        int calcWidth = (20*(dotAmount+1)*(bounceDotRadius+1));
 
         width = calcWidth;
         height = bounceDotRadius * 2;

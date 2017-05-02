@@ -20,8 +20,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import edu.umsl.superclickers.app.AppController;
+import edu.umsl.superclickers.app.GroupConfig;
 import edu.umsl.superclickers.app.LoginConfig;
 import edu.umsl.superclickers.database.SQLiteHandlerUsers;
+import edu.umsl.superclickers.userdata.Group;
 
 /**
  * Created by Austin on 3/21/2017.
@@ -33,7 +35,11 @@ public class GroupController extends Fragment {
 
     private ProgressDialog pDialog;
     private SQLiteHandlerUsers db;
+    private GroupListener gListener;
 
+    interface GroupListener {
+        void setGroup(Group group);
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,8 +48,61 @@ public class GroupController extends Fragment {
         db = SQLiteHandlerUsers.sharedInstance(getActivity());
         pDialog = new ProgressDialog(getActivity());
         pDialog.setCancelable(false);
+        gListener = (GroupListener) getActivity();
     }
 
+    // @TODO getGroupById, list all groups
+
+    void getGroupFor(final String user_id, final String courseId) {
+        String tag_str_req = "req_group";
+        String uri = String.format(GroupConfig.URL_GROUP_FOR_USER, user_id, courseId);
+        // new string request
+        StringRequest strReq = new StringRequest(Request.Method.GET, uri,
+
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d(TAG, " Response: " + response);
+                        try {
+                            JSONObject jObj = new JSONObject(response);
+
+                            String error;
+                            try {
+                                error = jObj.getString("error");
+                            } catch (JSONException e) {
+                                error = "false";
+                            }
+
+                            // if no errors
+                            if (error.equals("false")) {
+                                // Group was found
+                                Group group = new Group(jObj);
+
+                                gListener.setGroup(group);
+
+                            } else {
+                                // Error
+                                String errMessage = "error";
+                                Toast.makeText(getActivity(), errMessage,
+                                        Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getActivity(), "JSON error: "
+                                    + e.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "Group error: " + error.getMessage());
+                Toast.makeText(getActivity(), error.getMessage(),
+                        Toast.LENGTH_LONG).show();
+
+            }
+        });
+        AppController.getInstance().addToRequestQueue(strReq, tag_str_req);
+    }
     // Store new group, uploads to group URL
     void createGroup(final String userId, final String name) {
         String tag_str_req = "req_create_group";

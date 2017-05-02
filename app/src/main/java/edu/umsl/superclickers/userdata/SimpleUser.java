@@ -16,6 +16,14 @@ public class SimpleUser {
     private String first;
     private String last;
 
+    public SimpleUser(String userId, String email, String first, String last) {
+        this.userId = userId;
+        this.email = email;
+        this.first = first;
+        this.last = last;
+    }
+
+
     public SimpleUser(JSONObject uObj) {
         try {
             this.userId = uObj.getString("userID");
@@ -42,5 +50,14 @@ public class SimpleUser {
 
     public String getLast() {
         return last;
+    }
+
+    @Override
+    public String toString() {
+        return "SimpleUser{" +
+                "userId='" + userId + '\'' +
+                ", first='" + first + '\'' +
+                ", last='" + last + '\'' +
+                '}';
     }
 }

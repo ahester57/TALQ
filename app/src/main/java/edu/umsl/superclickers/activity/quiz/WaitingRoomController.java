@@ -1,7 +1,6 @@
 package edu.umsl.superclickers.activity.quiz;
 
 import android.app.Fragment;
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -18,19 +17,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
-import java.util.Map;
 
-import edu.umsl.superclickers.activity.login.LoginController;
 import edu.umsl.superclickers.app.AppController;
 import edu.umsl.superclickers.app.GroupConfig;
-import edu.umsl.superclickers.app.LoginConfig;
 import edu.umsl.superclickers.app.QuizConfig;
 import edu.umsl.superclickers.app.SessionManager;
-import edu.umsl.superclickers.userdata.Group;
 
 /**
  * Created by Austin on 5/1/2017.
+ *
  */
 
 public class WaitingRoomController extends Fragment {
@@ -108,7 +103,7 @@ public class WaitingRoomController extends Fragment {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "Quiz error: " + error.getMessage());
-                Toast.makeText(getActivity(), error.getMessage(),
+                Toast.makeText(getActivity(), "Quiz already submitted.",
                         Toast.LENGTH_LONG).show();
             }
         }) {

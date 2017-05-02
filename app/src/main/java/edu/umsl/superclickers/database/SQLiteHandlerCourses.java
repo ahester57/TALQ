@@ -99,6 +99,25 @@ public class SQLiteHandlerCourses extends SQLiteOpenHelper {
         return courses;
     }
 
+    /// get course data
+    public Course getCourseById(String guid) { // change to return user object
+        String selectQuery = "SELECT * FROM " + TableSchema.TABLE_COURSE +
+                    " WHERE " + CourseSchema.KEY_UID + " = \"" + guid + "\";";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        CourseCursorWrapper uCursor = new CourseCursorWrapper(cursor);
+
+        Course course = uCursor.getCourses().get(0);
+
+        cursor.close();
+        db.close();
+
+        Log.d(TAG, "Fectching course from Sqlite: " + course.toString());
+
+        return course;
+    }
+
     public void deleteAllCourses() {
         SQLiteDatabase db = this.getWritableDatabase();
         // delete all users

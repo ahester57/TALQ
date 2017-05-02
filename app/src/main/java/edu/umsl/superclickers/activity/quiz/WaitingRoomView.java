@@ -20,8 +20,10 @@ public class WaitingRoomView extends Fragment {
     private final static String TAG = WaitingRoomView.class.getSimpleName();
 
     private TextView textQuizInfo;
+    private TextView textGroupStatus;
 
     private String quizInfo = "none";
+    private String groupStatus = "";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -35,14 +37,22 @@ public class WaitingRoomView extends Fragment {
         View view = inflater.inflate(R.layout.fragment_waiting_room, container, false);
 
         textQuizInfo = (TextView) view.findViewById(R.id.text_quiz_info);
+        textGroupStatus = (TextView) view.findViewById(R.id.text_group_status);
         textQuizInfo.setText(quizInfo);
+        textGroupStatus.setText(groupStatus);
 
 
         return view;
     }
 
     public void setTextQuizInfo(String quizInfo) {
+        this.quizInfo = quizInfo;
         textQuizInfo.setText(quizInfo);
+    }
+
+    public void setTextGroupStatus(String groupStatus) {
+        this.groupStatus = groupStatus;
+        textGroupStatus.setText(groupStatus);
     }
 
     void parseQuizResponse(String quizResponse) {

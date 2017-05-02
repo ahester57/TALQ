@@ -12,6 +12,8 @@ import android.widget.Toast;
 import edu.umsl.superclickers.R;
 import edu.umsl.superclickers.app.FragmentConfig;
 import edu.umsl.superclickers.app.SessionManager;
+import edu.umsl.superclickers.userdata.Course;
+import edu.umsl.superclickers.userdata.Group;
 import edu.umsl.superclickers.userdata.User;
 
 /**
@@ -19,7 +21,8 @@ import edu.umsl.superclickers.userdata.User;
  *
  */
 
-public class GroupActivity extends AppCompatActivity implements View.OnClickListener {
+public class GroupActivity extends AppCompatActivity implements
+        View.OnClickListener, GroupController.GroupListener {
 
     private final String TAG = GroupActivity.class.getSimpleName();
 
@@ -28,8 +31,10 @@ public class GroupActivity extends AppCompatActivity implements View.OnClickList
 
     private SessionManager session;
     private GroupController gController;
+    private GroupViewFragment gViewFragment;
 
     private User user;
+    private Course course;
 
     // @TODO if user is in a group, then show groups + members
 
@@ -44,15 +49,18 @@ public class GroupActivity extends AppCompatActivity implements View.OnClickList
 
         session = new SessionManager(getApplicationContext());
         user = session.getCurrentUser();
+        course = session.getEnrolledCourses().get(0);
 
         gController = new GroupController();
         // load fragment ... switch to recycler view
-        GroupViewFragment gFragment = new GroupViewFragment();
+        gViewFragment = new GroupViewFragment();
 
         FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.replace(R.id.group_frame, gFragment);
+        ft.replace(R.id.group_frame, gViewFragment);
         ft.add(gController, FragmentConfig.KEY_GROUP_CONTROLLER);
         ft.commit();
+
+
 
         btnCreate.setOnClickListener(this);
         btnJoin.setOnClickListener(this);
@@ -70,17 +78,14 @@ public class GroupActivity extends AppCompatActivity implements View.OnClickList
                 }
                 break;
             case R.id.join_group_button:
-                if (!editGroupName.getText().toString().trim().equals("")) {
-                    gController.joinGroup(user.get_id(), editGroupName.getText().toString());
-                } else {
-                    Toast.makeText(getApplicationContext(), "Enter a group name, I say!",
-                            Toast.LENGTH_LONG).show();
-                }
+                gController.getGroupFor(user.getUserId(), course.getCourseId());
                 break;
         }
     }
 
 
-
-
+    @Override
+    public void setGroup(Group group) {
+        gViewFragment.setGroup(group);
+    }
 }

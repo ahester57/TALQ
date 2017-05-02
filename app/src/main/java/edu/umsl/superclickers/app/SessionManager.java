@@ -85,6 +85,11 @@ public class SessionManager {
         return db.getCurrentCourses();
     }
 
+    public Course getCourseById(String guid) {
+        SQLiteHandlerCourses db = SQLiteHandlerCourses.sharedInstance(_context);
+        return db.getCourseById(guid);
+    }
+
     public void addQuizToDB(Quiz quiz) {
         SQLiteHandlerQuestions qdb = SQLiteHandlerQuestions.sharedInstance(_context);
         SQLiteHandlerQuizzes db = SQLiteHandlerQuizzes.sharedInstance(_context);
