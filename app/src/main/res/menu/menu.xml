@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_prev_question"
+        android:icon="@drawable/ic_action_back"
+        android:title="previous"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/action_next_question"
+        android:icon="@drawable/ic_action_forward"
+        android:title="next"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/action_submit_quiz"
+        android:icon="@drawable/ic_action_submit"
+        android:title="submit"
+        app:showAsAction="ifRoom"/>
+
+</menu>
