@@ -11,8 +11,10 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -73,8 +75,6 @@ public class HomeActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-
-
         // session manager
         session = new SessionManager(getApplicationContext());
 
@@ -128,7 +128,6 @@ public class HomeActivity extends AppCompatActivity implements
 
 
     }
-
 
     @Override
     public void setGroup(Group group) {

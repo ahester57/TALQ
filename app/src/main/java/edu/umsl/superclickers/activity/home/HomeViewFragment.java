@@ -5,10 +5,14 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -60,6 +64,9 @@ public class HomeViewFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
+        Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar_alt);
+        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+
         textName = (TextView) view.findViewById(R.id.name_text_view);
         textEmail = (TextView) view.findViewById(R.id.email_text_view);
         Button btnLogout = (Button) view.findViewById(R.id.logout_button);
@@ -79,13 +86,17 @@ public class HomeViewFragment extends Fragment implements View.OnClickListener {
 
         }
 
-
         btnLogout.setOnClickListener(this);
         btnPlay.setOnClickListener(this);
         btnCreateGroup.setOnClickListener(this);
 
 
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_alt, menu);
     }
 
     @Override

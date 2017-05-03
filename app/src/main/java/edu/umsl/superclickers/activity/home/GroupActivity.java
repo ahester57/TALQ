@@ -5,6 +5,8 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -40,6 +42,8 @@ public class GroupActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group);
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_alt);
+        setSupportActionBar(toolbar);
 
         session = new SessionManager(getApplicationContext());
         user = session.getCurrentUser();
@@ -69,6 +73,12 @@ public class GroupActivity extends AppCompatActivity implements
 
 
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_alt, menu);
+        return true;
     }
 
     @Override

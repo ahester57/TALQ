@@ -9,7 +9,10 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import edu.umsl.superclickers.R;
@@ -46,6 +49,9 @@ public class QuizActivityUser extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         Intent intent = getIntent();
         quizID = intent.getStringExtra("QUIZ_ID");
         userID = intent.getStringExtra("USER_ID");
@@ -79,6 +85,29 @@ public class QuizActivityUser extends AppCompatActivity implements
             reloadQuiz(quizID, userID, courseID);
         }
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.action_next_question:
+                quizViewUser.nextQuestion();
+                return true;
+            case R.id.action_prev_question:
+                quizViewUser.prevQuestion();
+                return true;
+            case R.id.action_submit_quiz:
+                quizViewUser.getqController().submitQuiz(quizViewUser.getCurQuiz());
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override

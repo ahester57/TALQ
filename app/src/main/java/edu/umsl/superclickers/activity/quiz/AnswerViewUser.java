@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -86,10 +88,10 @@ public class AnswerViewUser extends Fragment implements View.OnClickListener {
         cP = (SeekBar) view.findViewById(R.id.C_points);
         dP = (SeekBar) view.findViewById(R.id.D_points);
 
-        Button buttonNext = (Button) view.findViewById(R.id.next_question_button);
-        Button buttonPrevious = (Button) view.findViewById(R.id.prev_question_button);
-        buttonPrevious.setOnClickListener(this);
-        buttonNext.setOnClickListener(this);
+//        Button buttonNext = (Button) view.findViewById(R.id.next_question_button);
+//        Button buttonPrevious = (Button) view.findViewById(R.id.prev_question_button);
+//        buttonPrevious.setOnClickListener(this);
+//        buttonNext.setOnClickListener(this);
 
         pointsView = (TextView) view.findViewById(R.id.question_points);
         pointsView.setText(String.valueOf(curQuestion.getPointsPossible()));

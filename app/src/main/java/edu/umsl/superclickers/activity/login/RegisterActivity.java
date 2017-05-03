@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -38,6 +40,9 @@ public class RegisterActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_alt);
+        setSupportActionBar(toolbar);
+
         // @TODO switch to a fragment with retainInstance = true
         inSSO = (EditText) findViewById(R.id.reg_sso_text_edit);
         inPassword = (EditText) findViewById(R.id.reg_pwd_edit);
@@ -62,6 +67,12 @@ public class RegisterActivity extends AppCompatActivity implements
         btnBack.setOnClickListener(this);
         btnRegister.setOnClickListener(this);
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_alt, menu);
+        return true;
     }
 
     @Override

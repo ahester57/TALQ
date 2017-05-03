@@ -1,65 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_alt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:elevation="4dp"
+        android:theme="@style/ToolbarTheme"
+        app:popupTheme="@style/PopupTheme"
+        tools:layout_editor_absoluteY="0dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 
     <EditText
         android:id="@+id/reg_sso_text_edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/reg_name_text_edit"
-        android:ems="10"
+        android:fontFamily="casual"
         android:hint="@string/ssoId"
-        android:inputType="textPersonName" />
+        android:inputType="textPersonName"
+        android:textColor="@color/color5"
+        android:textColorHint="@color/color5"
+        android:textStyle="bold"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="16dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginLeft="16dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_alt"
+        app:layout_constraintHorizontal_bias="0.501" />
 
     <EditText
+        android:id="@+id/reg_pwd_edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:ems="10"
-        android:layout_marginTop="20dp"
-        android:id="@+id/reg_pwd_edit"
+        android:fontFamily="casual"
         android:hint="@string/pwd"
-        android:layout_below="@+id/reg_sso_text_edit"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:inputType="textPassword"
+        android:textColor="@color/color5"
+        android:textColorHint="@color/color5"
+        android:textStyle="bold"
+        android:layout_marginRight="16dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginLeft="16dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/reg_sso_text_edit"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp" />
 
     <EditText
         android:id="@+id/reg_pwd_confirm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/reg_pwd_edit"
-        android:ems="10"
+        android:fontFamily="casual"
         android:hint="@string/confirm"
-        android:inputType="textPassword" />
+        android:inputType="textPassword"
+        android:textColor="@color/color5"
+        android:textColorHint="@color/color5"
+        android:textStyle="bold"
+        android:layout_marginRight="16dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/reg_pwd_edit"
+        android:layout_marginLeft="16dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp" />
 
     <Button
         android:id="@+id/reg_back_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="18dp"
-        android:layout_marginLeft="23dp"
-        android:layout_marginStart="23dp"
-        android:text="@string/go" />
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="16dp"
+        android:background="@drawable/button_custom1"
+        android:fontFamily="casual"
+        android:text="@string/go"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginStart="16dp" />
 
     <Button
         android:id="@+id/register_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:text="@string/register" />
-</RelativeLayout>
+        android:layout_marginBottom="16dp"
+        android:layout_marginRight="16dp"
+        android:fontFamily="casual"
+        android:text="@string/register"
+        android:textStyle="bold"
+        android:background="@drawable/button_custom2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginEnd="16dp" />
+</android.support.constraint.ConstraintLayout>

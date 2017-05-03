@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -39,6 +41,9 @@ public class LoginActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_login);
         // @TODO switch to a fragment with retainInstance = true
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_alt);
+        setSupportActionBar(toolbar);
+
         Button login = (Button) findViewById(R.id.login_button);
         Button register = (Button) findViewById(R.id.new_user_button);
         Button skip = (Button) findViewById(R.id.skip_login_button);
@@ -68,6 +73,12 @@ public class LoginActivity extends AppCompatActivity implements
         register.setOnClickListener(this);
         skip.setOnClickListener(this);
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_alt, menu);
+        return true;
     }
 
     @Override

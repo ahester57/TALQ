@@ -8,27 +8,43 @@
         android:id="@+id/text_quiz_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="casual"
         android:text="TextView"
-        android:textSize="24sp" />
+        android:textAlignment="center"
+        android:textColor="@color/color5"
+        android:textSize="24sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/text_quiz_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="casual"
         android:text="TextView"
-        android:textSize="14sp" />
+        android:textAlignment="center"
+        android:textColor="@color/color5"
+        android:textSize="14sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/text_course_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="casual"
         android:text="TextView"
-        android:textSize="14sp" />
+        android:textAlignment="center"
+        android:textColor="@color/color5"
+        android:textSize="14sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/text_quiz_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="casual"
         android:text="TextView"
-        android:textSize="14sp" />
+        android:textAlignment="center"
+        android:textColor="@color/color5"
+        android:textSize="14sp"
+        android:textStyle="bold" />
 </LinearLayout>

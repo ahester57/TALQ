@@ -2,138 +2,157 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/answer_container"
-    android:orientation="vertical"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
-
-    <TextView
-        android:id="@+id/points_remaining"
-        android:text="Confidence Points Remaining: "
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="5dp"
-        android:textSize="14sp" />
-
-    <TextView
-        android:id="@+id/question_points"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:layout_toEndOf="@+id/points_remaining" />
+    android:id="@+id/answer_container_user"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <ScrollView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/points_remaining"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            tools:layout_editor_absoluteY="0dp"
+            tools:layout_editor_absoluteX="0dp">
 
-            <Button
-                android:id="@+id/A_button"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/points_remaining"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginTop="8dp"
-                android:enabled="false"
+                android:layout_marginTop="16dp"
+                android:fontFamily="casual"
+                android:text="Confidence Points Remaining: "
+                android:textColor="@color/color5"
+                android:textSize="18sp"
+                android:textStyle="bold"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <Button
-                android:id="@+id/B_button"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/question_points"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
+                android:layout_marginTop="16dp"
+                android:fontFamily="casual"
+                android:text="0"
+                android:textColor="@color/color5"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toRightOf="@+id/points_remaining"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/A_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/button_custom1"
                 android:enabled="false"
+                android:fontFamily="casual"
+                android:text="Test"
+                android:textColor="@color/color3"
+                android:textStyle="bold"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                android:layout_marginTop="8dp"
-                app:layout_constraintTop_toBottomOf="@+id/A_button"
-                app:layout_constraintHorizontal_bias="0.0" />
+                app:layout_constraintTop_toBottomOf="@+id/points_remaining" />
+
+            <Button
+                android:id="@+id/B_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/button_custom2"
+                android:enabled="false"
+                android:fontFamily="casual"
+                android:text="Test"
+                android:textColor="@color/color3"
+                android:textStyle="bold"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/A_button" />
 
             <Button
                 android:id="@+id/C_button"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="19dp"
+                android:background="@drawable/button_custom4"
                 android:enabled="false"
+                android:fontFamily="casual"
+                android:text="Test"
+                android:textColor="@color/color3"
+                android:textStyle="bold"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                android:layout_marginTop="8dp"
-                app:layout_constraintTop_toBottomOf="@+id/B_button"
-                app:layout_constraintHorizontal_bias="0.0" />
+                app:layout_constraintTop_toBottomOf="@+id/B_button" />
 
             <Button
                 android:id="@+id/D_button"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/button_custom3"
                 android:enabled="false"
+                android:fontFamily="casual"
+                android:text="Test"
+                android:textColor="@color/color3"
+                android:textStyle="bold"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                android:layout_marginTop="8dp"
-                app:layout_constraintTop_toBottomOf="@+id/C_button"
-                app:layout_constraintHorizontal_bias="0.0" />
+                app:layout_constraintTop_toBottomOf="@+id/C_button" />
 
             <SeekBar
                 android:id="@+id/A_points"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                tools:layout_editor_absoluteX="16dp"
                 app:layout_constraintBottom_toBottomOf="@+id/A_button"
-                android:layout_marginBottom="0dp" />
+                android:layout_marginLeft="16dp"
+                app:layout_constraintLeft_toLeftOf="@+id/A_button"
+                android:layout_marginRight="16dp"
+                app:layout_constraintRight_toRightOf="@+id/A_button" />
 
             <SeekBar
                 android:id="@+id/B_points"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                tools:layout_editor_absoluteX="16dp"
-                android:layout_marginBottom="8dp"
-                app:layout_constraintBottom_toTopOf="@+id/C_button" />
+                app:layout_constraintBottom_toBottomOf="@+id/B_button"
+                android:layout_marginLeft="16dp"
+                app:layout_constraintLeft_toLeftOf="@+id/B_button"
+                android:layout_marginRight="16dp"
+                app:layout_constraintRight_toRightOf="@+id/B_button" />
 
             <SeekBar
                 android:id="@+id/C_points"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                tools:layout_editor_absoluteX="16dp"
                 app:layout_constraintBottom_toBottomOf="@+id/C_button"
-                android:layout_marginBottom="0dp" />
+                android:layout_marginRight="16dp"
+                app:layout_constraintRight_toRightOf="@+id/C_button"
+                android:layout_marginLeft="16dp"
+                app:layout_constraintLeft_toLeftOf="@+id/C_button" />
 
             <SeekBar
                 android:id="@+id/D_points"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                tools:layout_editor_absoluteX="16dp"
                 app:layout_constraintBottom_toBottomOf="@+id/D_button"
-                android:layout_marginBottom="-18dp" />
+                android:layout_marginRight="16dp"
+                app:layout_constraintRight_toRightOf="@+id/D_button"
+                android:layout_marginLeft="16dp"
+                app:layout_constraintLeft_toLeftOf="@+id/D_button" />
         </android.support.constraint.ConstraintLayout>
     </ScrollView>
-
-    <Button
-        android:id="@+id/prev_question_button"
-        android:text="Previous Question"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"/>
-    <Button
-        android:id="@+id/next_question_button"
-        android:text="Next Question"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true" />
-    </RelativeLayout>
+</RelativeLayout>

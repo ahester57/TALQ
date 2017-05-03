@@ -4,8 +4,13 @@ import android.app.Fragment;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -41,7 +46,8 @@ public class QuizViewUser extends Fragment implements
     private int minutesLeft;
     private int secondsLeft;
 
-    private Button submit;
+    private TextView progressView;
+    private TextView numQuestionsView;
     private TextView questionView;
     private TextView quizTimeView;
     private QuizGET quizGET;
@@ -77,22 +83,20 @@ public class QuizViewUser extends Fragment implements
         }
     }
 
+    public QuizController getqController() {
+        return this.qController;
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_quiz, container, false);
 
+        numQuestionsView = (TextView) view.findViewById(R.id.num_questions);
+        progressView = (TextView) view.findViewById(R.id.quiz_progress);
         quizTimeView = (TextView) view.findViewById(R.id.quiz_timer_text);
         questionView = (TextView) view.findViewById(R.id.question_text_view);
-        submit = (Button) view.findViewById(R.id.submit_button);
-        submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                qController.submitQuiz(curQuiz);
-            }
-        });
-        horDottedProgress = (HorDottedProgress) view.findViewById(R.id.progress_quiz_dots);
-
+        //horDottedProgress = (HorDottedProgress) view.findViewById(R.id.progress_quiz_dots);
 
         currQuestion();
         return view;
@@ -129,6 +133,7 @@ public class QuizViewUser extends Fragment implements
         if (questionView != null) {
             currQuestion();
         }
+        numQuestionsView.setText("/" + curQuiz.getQuestions().size());
         if (horDottedProgress != null) {
             horDottedProgress.setDotAmount(curQuiz.getQuestions().size());
         }
@@ -153,20 +158,23 @@ public class QuizViewUser extends Fragment implements
     @Override
     public void nextQuestion() {
         curQuestion = curQuiz.getNextQuestion();
-        horDottedProgress.nextDot();
+        progressView.setText(Integer.toString(curQuiz.getqNum() + 1));
+        //horDottedProgress.nextDot();
         loadAnswerFragment();
     }
 
     @Override
     public void prevQuestion() {
         curQuestion = curQuiz.getPrevQuestion();
-        horDottedProgress.previousDot();
+        progressView.setText(Integer.toString(curQuiz.getqNum() + 1));
+        //horDottedProgress.previousDot();
         loadAnswerFragment();
     }
 
     private void loadAnswerFragment() {
         questionView.setText(curQuestion.getQuestion());
         qController.setQuizIndex(curQuiz.getqNum());
+        progressView.setText(Integer.toString(curQuiz.getqNum() + 1));
         // create instance of the answer fragment
         updateGUITimer(minutesLeft, secondsLeft);
         AnswerViewUser answerFrag = new AnswerViewUser();
