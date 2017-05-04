@@ -20,6 +20,7 @@ import edu.umsl.superclickers.app.FragmentConfig;
 import edu.umsl.superclickers.quizdata.Answer;
 import edu.umsl.superclickers.quizdata.Question;
 import edu.umsl.superclickers.quizdata.Quiz;
+import edu.umsl.superclickers.quizdata.SelectedAnswer;
 
 /**
  * Created by Austin on 4/22/2017.
@@ -43,7 +44,8 @@ public class QuizViewGroup extends Fragment implements
     private int minutesLeft;
     private int secondsLeft;
 
-    private Button submit;
+    private TextView progressView;
+    private TextView numQuestionsView;
     private TextView questionView;
     private TextView quizTimeView;
     private QuizGET quizGET;
@@ -59,6 +61,8 @@ public class QuizViewGroup extends Fragment implements
         void startQuizTimer();
         void setQuizIndex(int qNum);
         int getQuizIndex();
+        void setSelectedAnswers(ArrayList<SelectedAnswer> selectedAnswers);
+
     }
 
     public void setQuizInfo(String quizID, String userID, String courseID) {
@@ -82,23 +86,31 @@ public class QuizViewGroup extends Fragment implements
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_quiz, container, false);
+        View view = inflater.inflate(R.layout.fragment_quiz_group, container, false);
 
-        quizTimeView = (TextView) view.findViewById(R.id.quiz_timer_text);
-        questionView = (TextView) view.findViewById(R.id.question_text_view);
-//        submit = (Button) view.findViewById(R.id.submit_button);
-//        submit.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                qController.submitQuiz(curQuiz);
-//            }
-//        });
+
+        numQuestionsView = (TextView) view.findViewById(R.id.num_questions_group);
+        progressView = (TextView) view.findViewById(R.id.quiz_progress_group);
+        quizTimeView = (TextView) view.findViewById(R.id.quiz_timer_text_group);
+        questionView = (TextView) view.findViewById(R.id.question_text_view_group);
+
 //        horDottedProgress = (HorDottedProgress) view.findViewById(R.id.progress_quiz_dots);
 
 
         currQuestion();
         return view;
     }
+
+    public QuizViewGroup.QuizController getqController() {
+        return this.qController;
+    }
+
+    @Override
+    public void setSelectedAnswers(ArrayList<SelectedAnswer> selectedAnswers) {
+        qController.setSelectedAnswers(selectedAnswers);
+
+    }
+
 
     public void setResume(boolean flag) {
         resume = flag;
@@ -130,6 +142,7 @@ public class QuizViewGroup extends Fragment implements
         if (questionView != null) {
             currQuestion();
         }
+        numQuestionsView.setText("/" + curQuiz.getQuestions().size());
         if (horDottedProgress != null) {
             horDottedProgress.setDotAmount(curQuiz.getQuestions().size());
         }
@@ -143,6 +156,7 @@ public class QuizViewGroup extends Fragment implements
         if(curQuiz == null) {
             setBSQuiz();
         }
+        numQuestionsView.setText("/" + curQuiz.getQuestions().size());
         if (horDottedProgress != null) {
             horDottedProgress.setDotAmount(curQuiz.getQuestions().size());
             horDottedProgress.setProgress(curQuiz.getqNum());
@@ -154,27 +168,34 @@ public class QuizViewGroup extends Fragment implements
     @Override
     public void nextQuestion() {
         curQuestion = curQuiz.getNextQuestion();
-        horDottedProgress.nextDot();
+        progressView.setText(Integer.toString(curQuiz.getqNum() + 1));
+        if (horDottedProgress != null) {
+            horDottedProgress.nextDot();
+        }
         loadAnswerFragment();
     }
 
     @Override
     public void prevQuestion() {
         curQuestion = curQuiz.getPrevQuestion();
-        horDottedProgress.previousDot();
+        progressView.setText(Integer.toString(curQuiz.getqNum() + 1));
+        if (horDottedProgress != null) {
+            horDottedProgress.previousDot();
+        }
         loadAnswerFragment();
     }
 
     private void loadAnswerFragment() {
         questionView.setText(curQuestion.getQuestion());
         qController.setQuizIndex(curQuiz.getqNum());
+        progressView.setText(Integer.toString(curQuiz.getqNum() + 1));
         // create instance of the answer fragment
         updateGUITimer(minutesLeft, secondsLeft);
         AnswerViewGroup answerFrag = new AnswerViewGroup();
         // load answer fragment into answerSection of QuizActivityUser
         android.app.FragmentManager fm = getFragmentManager();
         android.app.FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(R.id.answer_segment, answerFrag, FragmentConfig.KEY_ANSWER_VIEW_GROUP);
+        ft.replace(R.id.answer_segment_group, answerFrag, FragmentConfig.KEY_ANSWER_VIEW_GROUP);
         ft.commit();
     }
 

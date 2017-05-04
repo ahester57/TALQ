@@ -15,11 +15,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 import edu.umsl.superclickers.R;
 import edu.umsl.superclickers.activity.waitingroom.WaitingRoomActivity;
 import edu.umsl.superclickers.app.FragmentConfig;
 import edu.umsl.superclickers.app.SessionManager;
 import edu.umsl.superclickers.quizdata.Quiz;
+import edu.umsl.superclickers.quizdata.SelectedAnswer;
 
 
 public class QuizActivityUser extends AppCompatActivity implements
@@ -60,7 +63,7 @@ public class QuizActivityUser extends AppCompatActivity implements
         groupID = intent.getStringExtra("GROUP_ID");
 
         // Session manager
-        session = new SessionManager(getApplicationContext());
+        session = new SessionManager(getBaseContext());
         timerService = new Intent(getBaseContext(), QuizService.class);
 
         FragmentManager fm = getFragmentManager();
@@ -104,7 +107,9 @@ public class QuizActivityUser extends AppCompatActivity implements
                 quizViewUser.prevQuestion();
                 return true;
             case R.id.action_submit_quiz:
-                quizViewUser.getqController().submitQuiz(quizViewUser.getCurQuiz());
+                // @TODO do we need this or can we do
+                submitQuiz(quizViewUser.getCurQuiz());
+                //quizViewUser.getqController().submitQuiz(quizViewUser.getCurQuiz());
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -112,8 +117,14 @@ public class QuizActivityUser extends AppCompatActivity implements
     }
 
     @Override
+    public void setSelectedAnswers(ArrayList<SelectedAnswer> selectedAnswers) {
+        session.setSelectedAnswersFor(selectedAnswers);
+
+    }
+
+    @Override
     public void submitQuiz(Quiz quiz) {
-        // @TODO POST quiz for grading
+        // @TODO Goto pending submit page
 
         Toast.makeText(getApplicationContext(), "Quiz Submitted", Toast.LENGTH_LONG).show();
         stopService(timerService);

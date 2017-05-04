@@ -47,6 +47,7 @@ public class AnswerViewUser extends Fragment implements View.OnClickListener {
         void nextQuestion();
         void currQuestion();
         void prevQuestion();
+        void setSelectedAnswers(ArrayList<SelectedAnswer> selectedAnswers);
     }
 
     @Override
@@ -107,6 +108,7 @@ public class AnswerViewUser extends Fragment implements View.OnClickListener {
 
         switch(view.getId()) {
             case R.id.action_next_question:
+                Log.d("ASDFAKLSDJFLAKSJDLFKA", "asdkfja;klsdjf;aksjd;flk");
                 session.setSelectedAnswersFor(selectedAnswers);
                 aListener.nextQuestion();
                 break;
@@ -177,7 +179,7 @@ public class AnswerViewUser extends Fragment implements View.OnClickListener {
                 curQuestion.setPointsPossible(p + pr);
                 pointsView.setText(String.valueOf(curQuestion.getPointsPossible()));
             }
-
+            aListener.setSelectedAnswers(selectedAnswers);
         }
         @Override
         public void onStartTrackingTouch(SeekBar seekBar) {}

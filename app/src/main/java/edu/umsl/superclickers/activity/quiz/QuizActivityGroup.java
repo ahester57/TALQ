@@ -8,15 +8,19 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 import edu.umsl.superclickers.R;
-import edu.umsl.superclickers.activity.home.HomeActivity;
-import edu.umsl.superclickers.activity.waitingroom.WaitingRoomActivity;
 import edu.umsl.superclickers.app.FragmentConfig;
 import edu.umsl.superclickers.app.SessionManager;
 import edu.umsl.superclickers.quizdata.Quiz;
+import edu.umsl.superclickers.quizdata.SelectedAnswer;
 
 /**
  * Created by Austin on 4/22/2017.
@@ -49,6 +53,9 @@ public class QuizActivityGroup extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         Intent intent = getIntent();
         quizID = intent.getStringExtra("QUIZ_ID");
@@ -86,13 +93,42 @@ public class QuizActivityGroup extends AppCompatActivity implements
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.action_next_question:
+                quizViewGroup.nextQuestion();
+                return true;
+            case R.id.action_prev_question:
+                quizViewGroup.prevQuestion();
+                return true;
+            case R.id.action_submit_quiz:
+                submitQuiz(quizViewGroup.getCurQuiz());
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void setSelectedAnswers(ArrayList<SelectedAnswer> selectedAnswers) {
+        //session.setSelectedAnswersFor(selectedAnswers);
+
+    }
+
+    @Override
     public void submitQuiz(Quiz quiz) {
         // @TODO POST quiz for grading
 
-        Toast.makeText(getApplicationContext(), "Quiz Submitted", Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), "Group Quiz Submitted", Toast.LENGTH_LONG).show();
         stopService(timerService);
 
-        Intent quizIntent = new Intent(QuizActivityGroup.this, QuizResultActivity.class);
+        Intent quizIntent = new Intent(QuizActivityGroup.this, QuizResultGroupActivity.class);
         quizIntent.putExtra("QUIZ_ID", quizID);
         quizIntent.putExtra("COURSE_ID", courseID);
         quizIntent.putExtra("USER_ID", userID);

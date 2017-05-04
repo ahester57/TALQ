@@ -25,6 +25,7 @@ import edu.umsl.superclickers.app.FragmentConfig;
 import edu.umsl.superclickers.quizdata.Answer;
 import edu.umsl.superclickers.quizdata.Question;
 import edu.umsl.superclickers.quizdata.Quiz;
+import edu.umsl.superclickers.quizdata.SelectedAnswer;
 
 /**
  * Created by Austin on 4/19/2017.
@@ -63,6 +64,7 @@ public class QuizViewUser extends Fragment implements
         void startQuizTimer();
         void setQuizIndex(int qNum);
         int getQuizIndex();
+        void setSelectedAnswers(ArrayList<SelectedAnswer> selectedAnswers);
     }
 
     public void setQuizInfo(String quizID, String userID, String courseID) {
@@ -100,6 +102,12 @@ public class QuizViewUser extends Fragment implements
 
         currQuestion();
         return view;
+    }
+
+    @Override
+    public void setSelectedAnswers(ArrayList<SelectedAnswer> selectedAnswers) {
+        qController.setSelectedAnswers(selectedAnswers);
+
     }
 
     public void setResume(boolean flag) {
@@ -147,6 +155,7 @@ public class QuizViewUser extends Fragment implements
         if(curQuiz == null) {
             setBSQuiz();
         }
+        numQuestionsView.setText("/" + curQuiz.getQuestions().size());
         if (horDottedProgress != null) {
             horDottedProgress.setDotAmount(curQuiz.getQuestions().size());
             horDottedProgress.setProgress(curQuiz.getqNum());

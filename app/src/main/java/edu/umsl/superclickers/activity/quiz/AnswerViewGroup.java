@@ -45,6 +45,8 @@ public class AnswerViewGroup extends Fragment implements View.OnClickListener {
         void nextQuestion();
         void currQuestion();
         void prevQuestion();
+        void setSelectedAnswers(ArrayList<SelectedAnswer> selectedAnswers);
+
     }
 
     @Override
@@ -150,16 +152,16 @@ public class AnswerViewGroup extends Fragment implements View.OnClickListener {
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             int index = -1;
             switch (seekBar.getId()) {
-                case R.id.A_points:
+                case R.id.A_points_group:
                     index = 0;
                     break;
-                case R.id.B_points:
+                case R.id.B_points_group:
                     index = 1;
                     break;
-                case R.id.C_points:
+                case R.id.C_points_group:
                     index = 2;
                     break;
-                case R.id.D_points:
+                case R.id.D_points_group:
                     index = 3;
                     break;
             }
@@ -175,6 +177,7 @@ public class AnswerViewGroup extends Fragment implements View.OnClickListener {
                 curQuestion.setPointsPossible(p + pr);
                 pointsView.setText(String.valueOf(curQuestion.getPointsPossible()));
             }
+            aListener.setSelectedAnswers(selectedAnswers);
 
         }
         @Override
