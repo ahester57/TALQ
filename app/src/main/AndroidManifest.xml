@@ -24,6 +24,9 @@
         <activity android:name=".activity.quiz.QuizActivityUser">
         </activity>
 
+        <activity android:name=".activity.quiz.QuizActivityGroup">
+        </activity>
+
         <activity android:name=".activity.login.RegisterActivity">
         </activity>
 
@@ -33,7 +36,10 @@
         <activity android:name=".activity.home.GroupActivity">
         </activity>
 
-        <activity android:name=".activity.quiz.WaitingRoomActivity">
+        <activity android:name=".activity.waitingroom.WaitingRoomActivity">
+        </activity>
+
+        <activity android:name=".activity.quiz.QuizResultActivity">
         </activity>
 
         <service

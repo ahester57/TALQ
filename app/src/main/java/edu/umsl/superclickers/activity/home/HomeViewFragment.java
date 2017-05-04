@@ -1,7 +1,6 @@
 package edu.umsl.superclickers.activity.home;
 
 import android.app.Fragment;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,12 +17,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import edu.umsl.superclickers.R;
 import edu.umsl.superclickers.activity.helper.QuizHolder;
-import edu.umsl.superclickers.activity.quiz.QuizActivityUser;
 import edu.umsl.superclickers.app.SessionManager;
 import edu.umsl.superclickers.quizdata.QuizListItem;
 import edu.umsl.superclickers.userdata.Course;

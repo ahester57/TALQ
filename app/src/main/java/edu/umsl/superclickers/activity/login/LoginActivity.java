@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -41,16 +39,12 @@ public class LoginActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_login);
         // @TODO switch to a fragment with retainInstance = true
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_alt);
-        setSupportActionBar(toolbar);
-
         Button login = (Button) findViewById(R.id.login_button);
         Button register = (Button) findViewById(R.id.new_user_button);
-        Button skip = (Button) findViewById(R.id.skip_login_button);
         ssoId = (EditText) findViewById(R.id.sso_text_edit);
         userPass = (EditText) findViewById(R.id.pwd_text_edit);
 
-        skip.setEnabled(false);
+
         // Session manager
         SessionManager session = new SessionManager(getApplicationContext());
 
@@ -61,24 +55,23 @@ public class LoginActivity extends AppCompatActivity implements
             finish();
         }
 
-        lController = new LoginController();
+
 
         FragmentManager fm = getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        ft.add(lController, FragmentConfig.KEY_LOGIN_CONTROLLER)
-            .commit();
+        if (fm.findFragmentByTag(FragmentConfig.KEY_LOGIN_CONTROLLER) != null) {
+            lController = (LoginController) fm.findFragmentByTag(FragmentConfig.KEY_LOGIN_CONTROLLER);
+        } else {lController = new LoginController();
+            fm.beginTransaction()
+                    .add(lController, FragmentConfig.KEY_LOGIN_CONTROLLER)
+                    .commit();
+        }
+
 
         userPass.setOnClickListener(this);
         login.setOnClickListener(this);
         register.setOnClickListener(this);
-        skip.setOnClickListener(this);
 
-    }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_alt, menu);
-        return true;
     }
 
     @Override
@@ -92,17 +85,10 @@ public class LoginActivity extends AppCompatActivity implements
                 tryLogin();
                 break;
             case R.id.new_user_button:
-                Intent i = new Intent(getApplicationContext(), RegisterActivity.class);
+                Intent i = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(i);
+                break;
 
-                break;
-            case R.id.skip_login_button:
-                Toast.makeText(getApplicationContext(), "Continuing without loggin in...",
-                        Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-                startActivity(intent);
-                finish();
-                break;
         }
     }
 

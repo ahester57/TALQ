@@ -1,4 +1,4 @@
-package edu.umsl.superclickers.activity.quiz;
+package edu.umsl.superclickers.activity.waitingroom;
 
 import android.app.FragmentManager;
 import android.content.Intent;
@@ -14,11 +14,14 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import edu.umsl.superclickers.R;
+import edu.umsl.superclickers.activity.quiz.QuizActivityGroup;
+import edu.umsl.superclickers.activity.quiz.QuizService;
 import edu.umsl.superclickers.app.FragmentConfig;
 import edu.umsl.superclickers.app.SessionManager;
+import edu.umsl.superclickers.quizdata.GradedQuiz;
 import edu.umsl.superclickers.quizdata.Question;
 import edu.umsl.superclickers.quizdata.Quiz;
-import edu.umsl.superclickers.quizdata.QuizResultUser;
+import edu.umsl.superclickers.quizdata.QuizListItem;
 import edu.umsl.superclickers.quizdata.SelectedAnswer;
 
 /**
@@ -26,10 +29,12 @@ import edu.umsl.superclickers.quizdata.SelectedAnswer;
  */
 
 public class WaitingRoomActivity extends AppCompatActivity
-        implements WaitingRoomController.WaitListener {
+        implements WaitingRoomController.WaitListener,
+        WaitingRoomView.WaitRoomListener {
 
     private final static String TAG = WaitingRoomActivity.class.getSimpleName();
 
+    private String quizID;
     private String userID;
     private String courseID;
     private String groupID;
@@ -51,6 +56,7 @@ public class WaitingRoomActivity extends AppCompatActivity
         session = new SessionManager(getApplicationContext());
 
         Intent i = getIntent();
+        quizID = i.getStringExtra("QUIZ_ID");
         courseID = i.getStringExtra("COURSE_ID");
         userID = i.getStringExtra("USER_ID");
         groupID = i.getStringExtra("GROUP_ID");
@@ -84,20 +90,33 @@ public class WaitingRoomActivity extends AppCompatActivity
                     curQuiz.get_id(), curQuiz.getSessionId());
         }
 
+        Intent timerService = new Intent(getBaseContext(), QuizService.class);
+        stopService(timerService);
 
         Log.d(TAG, "Waiting room created.");
     }
 
     @Override
+    public void startGroupQuiz() {
+        Intent quizIntent = new Intent(WaitingRoomActivity.this, QuizActivityGroup.class);
+        quizIntent.putExtra("QUIZ_ID", quizID);
+        quizIntent.putExtra("COURSE_ID", courseID);
+        quizIntent.putExtra("USER_ID", userID);
+        quizIntent.putExtra("GROUP_ID", groupID);
+        startActivity(quizIntent);
+        finish();
+    }
+
+    @Override
     public void postInfo(String response) {
-        QuizResultUser quizResultUser = null;
+        GradedQuiz gradedQuiz = null;
         try {
-            quizResultUser = new QuizResultUser(new JSONObject(response));
+            gradedQuiz = new GradedQuiz(new JSONObject(response));
         } catch (JSONException e) {
             Log.e("JSONError", e.getMessage());
         }
-        if (quizResultUser != null) {
-            wFragment.setTextQuizInfo("You got " + quizResultUser.calculateTotalPoints() +
+        if (gradedQuiz != null) {
+            wFragment.setTextQuizInfo("You got " + gradedQuiz.calculateTotalPoints() +
                     " points.\n\nYou can do better probably.");
         }
     }

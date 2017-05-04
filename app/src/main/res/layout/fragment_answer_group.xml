@@ -16,8 +16,35 @@
             tools:layout_editor_absoluteY="0dp"
             tools:layout_editor_absoluteX="0dp">
 
+            <TextView
+                android:id="@+id/points_remaining_group"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="casual"
+                android:text="Confidence Points Remaining: "
+                android:textColor="@color/color5"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/question_points_group"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="casual"
+                android:text="0"
+                android:textColor="@color/color5"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toRightOf="@+id/points_remaining_group"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <Button
-                android:id="@+id/A_button"
+                android:id="@+id/A_button_group"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
@@ -31,10 +58,10 @@
                 android:textStyle="bold"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/points_remaining" />
+                app:layout_constraintTop_toBottomOf="@+id/points_remaining_group" />
 
             <Button
-                android:id="@+id/B_button"
+                android:id="@+id/B_button_group"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
@@ -49,10 +76,10 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/A_button" />
+                app:layout_constraintTop_toBottomOf="@+id/A_button_group" />
 
             <Button
-                android:id="@+id/C_button"
+                android:id="@+id/C_button_group"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
@@ -67,10 +94,10 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/B_button" />
+                app:layout_constraintTop_toBottomOf="@+id/B_button_group" />
 
             <Button
-                android:id="@+id/D_button"
+                android:id="@+id/D_button_group"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
@@ -85,7 +112,47 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/C_button" />
+                app:layout_constraintTop_toBottomOf="@+id/C_button_group" />
+
+            <SeekBar
+                android:id="@+id/A_points_group"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="@+id/A_button_group"
+                android:layout_marginLeft="16dp"
+                app:layout_constraintLeft_toLeftOf="@+id/A_button_group"
+                android:layout_marginRight="16dp"
+                app:layout_constraintRight_toRightOf="@+id/A_button_group" />
+
+            <SeekBar
+                android:id="@+id/B_points_group"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="@+id/B_button_group"
+                android:layout_marginLeft="16dp"
+                app:layout_constraintLeft_toLeftOf="@+id/B_button_group"
+                android:layout_marginRight="16dp"
+                app:layout_constraintRight_toRightOf="@+id/B_button_group" />
+
+            <SeekBar
+                android:id="@+id/C_points_group"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="@+id/C_button_group"
+                android:layout_marginRight="16dp"
+                app:layout_constraintRight_toRightOf="@+id/C_button_group"
+                android:layout_marginLeft="16dp"
+                app:layout_constraintLeft_toLeftOf="@+id/C_button_group" />
+
+            <SeekBar
+                android:id="@+id/D_points_group"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="@+id/D_button_group"
+                android:layout_marginRight="16dp"
+                app:layout_constraintRight_toRightOf="@+id/D_button_group"
+                android:layout_marginLeft="16dp"
+                app:layout_constraintLeft_toLeftOf="@+id/D_button_group" />
         </android.support.constraint.ConstraintLayout>
     </ScrollView>
 </RelativeLayout>

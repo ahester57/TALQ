@@ -18,10 +18,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import edu.umsl.superclickers.app.AppController;
-import edu.umsl.superclickers.app.GroupConfig;
 import edu.umsl.superclickers.app.QuizConfig;
 import edu.umsl.superclickers.quizdata.QuizListItem;
-import edu.umsl.superclickers.userdata.Group;
 
 
 /**

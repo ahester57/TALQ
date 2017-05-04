@@ -13,7 +13,7 @@ import java.util.ArrayList;
  *
  */
 
-public class QuizResultUser {
+public class GradedQuiz {
 
     private String sessionId;
     private String userId;
@@ -22,7 +22,7 @@ public class QuizResultUser {
     private int totalPoints;
     private ArrayList<GradedQuestion> gradedQuestions = new ArrayList<>();
 
-    public QuizResultUser(JSONObject gradedQuizObj) {
+    public GradedQuiz(JSONObject gradedQuizObj) {
         try {
             this.sessionId = gradedQuizObj.getString("sessionId");
             this.userId = gradedQuizObj.getString("user");

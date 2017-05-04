@@ -106,11 +106,11 @@ public class AnswerViewUser extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
 
         switch(view.getId()) {
-            case R.id.next_question_button:
+            case R.id.action_next_question:
                 session.setSelectedAnswersFor(selectedAnswers);
                 aListener.nextQuestion();
                 break;
-            case R.id.prev_question_button:
+            case R.id.action_prev_question:
                 session.setSelectedAnswersFor(selectedAnswers);
                 aListener.prevQuestion();
                 break;

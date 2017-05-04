@@ -58,7 +58,7 @@ public class GroupViewFragment extends Fragment implements GroupController.Group
         gRecycler.setAdapter(new GroupAdapter(gGroups));
     }
 
-    class GroupAdapter extends RecyclerView.Adapter<GroupHolder> implements
+    private class GroupAdapter extends RecyclerView.Adapter<GroupHolder> implements
             GroupHolder.GroupHolderListener {
 
         private List<Group> mGroups;
@@ -91,16 +91,8 @@ public class GroupViewFragment extends Fragment implements GroupController.Group
                         holder.itemView.setBackgroundColor(Color.TRANSPARENT);
                     }
                     holder.bindGroup(mGroups.get(position));
-//                    holder.itemView.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//                            notifyItemChanged(selectedPos);
-//                            selectedPos = position;
-//                            notifyItemChanged(selectedPos);
-//                        }
-//                    });
                 } catch (IndexOutOfBoundsException e) {
-                    Log.e("WHOOPS", "idk");
+                    Log.e("GROUP_RECYCLER", e.getMessage());
                 }
             }
         }

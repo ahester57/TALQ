@@ -1,4 +1,4 @@
-package edu.umsl.superclickers.activity.quiz;
+package edu.umsl.superclickers.activity.waitingroom;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -56,7 +56,7 @@ public class WaitingRoomController extends Fragment {
 
 
     void POSTQuiz(final String courseId, final String userId, final String sessionId,
-                    final JSONObject quizObj) {
+                  final JSONObject quizObj) {
         String tag_str_req = "req_post_quiz";
         //pDialog.setMessage("Uploading quiz...");();
         String uri = String.format(QuizConfig.URL_POST_USER_QUIZ, courseId,
@@ -84,7 +84,7 @@ public class WaitingRoomController extends Fragment {
                             if (!error) {
                                 // Quiz POST SUCCESSFUL
                                 //JSONObject user = jObj.getJSONObject("user");
-                                  wListener.postInfo(response);
+                                wListener.postInfo(response);
 
                             } else {
                                 // Error uploading quiz
@@ -130,7 +130,7 @@ public class WaitingRoomController extends Fragment {
                         final String quiz_id, final String session_id) {
         String tag_str_req = "req_group";
         String uri = String.format(GroupConfig.URL_GROUP_STATUS, group_id, courseId,
-                                                               quiz_id, session_id);
+                quiz_id, session_id);
         // new string request
         StringRequest strReq = new StringRequest(Request.Method.GET, uri,
 

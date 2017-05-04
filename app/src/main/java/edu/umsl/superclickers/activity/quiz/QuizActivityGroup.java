@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import edu.umsl.superclickers.R;
 import edu.umsl.superclickers.activity.home.HomeActivity;
+import edu.umsl.superclickers.activity.waitingroom.WaitingRoomActivity;
 import edu.umsl.superclickers.app.FragmentConfig;
 import edu.umsl.superclickers.app.SessionManager;
 import edu.umsl.superclickers.quizdata.Quiz;
@@ -24,7 +25,12 @@ import edu.umsl.superclickers.quizdata.Quiz;
 public class QuizActivityGroup extends AppCompatActivity implements
         QuizViewGroup.QuizController {
 
-    private final String TAG = getClass().getSimpleName();
+    private final String TAG = QuizActivityGroup.class.getSimpleName();
+
+    private String quizID;
+    private String userID;
+    private String courseID;
+    private String groupID;
 
     private Intent timerService;
     private QuizGET quizGET;
@@ -45,9 +51,10 @@ public class QuizActivityGroup extends AppCompatActivity implements
         setContentView(R.layout.activity_quiz);
 
         Intent intent = getIntent();
-        String quizID = intent.getStringExtra("QUIZ_ID");
-        String userID = intent.getStringExtra("USER_ID");
-        String courseID = intent.getStringExtra("COURSE_ID");
+        quizID = intent.getStringExtra("QUIZ_ID");
+        userID = intent.getStringExtra("USER_ID");
+        courseID = intent.getStringExtra("COURSE_ID");
+        groupID = intent.getStringExtra("GROUP_ID");
 
         // Session manager
         session = new SessionManager(getApplicationContext());
@@ -84,8 +91,12 @@ public class QuizActivityGroup extends AppCompatActivity implements
 
         Toast.makeText(getApplicationContext(), "Quiz Submitted", Toast.LENGTH_LONG).show();
         stopService(timerService);
-        session.clearDatabase();
-        Intent quizIntent = new Intent(QuizActivityGroup.this, HomeActivity.class);
+
+        Intent quizIntent = new Intent(QuizActivityGroup.this, QuizResultActivity.class);
+        quizIntent.putExtra("QUIZ_ID", quizID);
+        quizIntent.putExtra("COURSE_ID", courseID);
+        quizIntent.putExtra("USER_ID", userID);
+        quizIntent.putExtra("GROUP_ID", groupID);
         startActivity(quizIntent);
         finish();
     }
@@ -196,7 +207,7 @@ public class QuizActivityGroup extends AppCompatActivity implements
 
     @Override
     protected void onDestroy() {
-        Log.d(TAG, "QUiz Activity destoyed");
+        Log.d(TAG, "Group QUiz Activity destoyed");
         super.onDestroy();
     }
 

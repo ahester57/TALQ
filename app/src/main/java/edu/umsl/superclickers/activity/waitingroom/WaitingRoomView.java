@@ -1,11 +1,13 @@
-package edu.umsl.superclickers.activity.quiz;
+package edu.umsl.superclickers.activity.waitingroom;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import edu.umsl.superclickers.R;
@@ -22,13 +24,21 @@ public class WaitingRoomView extends Fragment {
     private TextView textQuizInfo;
     private TextView textGroupStatus;
 
+
     private String quizInfo = "none";
     private String groupStatus = "";
+
+    private WaitRoomListener wrListener;
+
+    interface WaitRoomListener {
+        void startGroupQuiz();
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
+        wrListener = (WaitRoomListener) getActivity();
     }
 
     @Nullable
@@ -36,10 +46,18 @@ public class WaitingRoomView extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_waiting_room, container, false);
 
+        Button startGroupQuiz = (Button) view.findViewById(R.id.button_start_group_quiz);
         textQuizInfo = (TextView) view.findViewById(R.id.text_quiz_info);
         textGroupStatus = (TextView) view.findViewById(R.id.text_group_status);
         textQuizInfo.setText(quizInfo);
         textGroupStatus.setText(groupStatus);
+
+        startGroupQuiz.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                wrListener.startGroupQuiz();
+            }
+        });
 
 
         return view;
