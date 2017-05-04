@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
@@ -57,60 +58,84 @@ public class SQLiteHandlerAnswers extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(createAnswerTable());
-        db.execSQL(createSelectedAnswerTable());
-        Log.d(TAG, "Database answer tables created");
+        try {
+            db.execSQL(createAnswerTable());
+            db.execSQL(createSelectedAnswerTable());
+            Log.d(TAG, "Database answer tables created");
+        } catch (SQLiteException e) {
+            Log.d(TAG, "couldn't create answers table");
+        }
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TableSchema.TABLE_ANSWER);
-        db.execSQL("DROP TABLE IF EXISTS " + TableSchema.TABLE_SELECTED_ANSWER);
-        onCreate(db);
+        try {
+            db.execSQL("DROP TABLE IF EXISTS " + TableSchema.TABLE_ANSWER);
+            db.execSQL("DROP TABLE IF EXISTS " + TableSchema.TABLE_SELECTED_ANSWER);
+            onCreate(db);
+        } catch (SQLiteException e) {
+            Log.d(TAG, "couldn't create answers table");
+        }
     }
 
     // add new answer to database
     public void addAnswer(Answer answer) {
-        SQLiteDatabase db = this.getWritableDatabase();
 
-        db.execSQL(createAnswerTable());
 
-        ContentValues values = AnswerCursorWrapper.createAnswerValues(answer);
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            db.execSQL(createAnswerTable());
 
-        // inserting row
-        long id = db.insert(TableSchema.TABLE_ANSWER ,null, values);
-        db.close();
+            ContentValues values = AnswerCursorWrapper.createAnswerValues(answer);
 
-        Log.d(TAG, "New answer inserted into sqlite: " + id + answer.toString());
+            // inserting row
+            long id = db.insert(TableSchema.TABLE_ANSWER ,null, values);
+            db.close();
+
+            Log.d(TAG, "New answer inserted into sqlite: " + id + answer.toString());
+        } catch (SQLiteException e) {
+            Log.d(TAG, "couldn't add answers");
+        }
     }
 
     // add new selected answer to database
     public void addSelectedAnswer(SelectedAnswer answer) {
-        SQLiteDatabase db = this.getWritableDatabase();
 
-        db.execSQL(createSelectedAnswerTable());
 
-        ContentValues values = AnswerCursorWrapper.createSelectedAnswerValues(answer);
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            db.execSQL(createSelectedAnswerTable());
 
-        // inserting row
-        long id = db.insert(TableSchema.TABLE_SELECTED_ANSWER ,null, values);
-        db.close();
+            ContentValues values = AnswerCursorWrapper.createSelectedAnswerValues(answer);
 
-        Log.d(TAG, "Selected answer inserted into sqlite: " + id + answer.toString());
+            // inserting row
+            long id = db.insert(TableSchema.TABLE_SELECTED_ANSWER ,null, values);
+            db.close();
+            Log.d(TAG, "Selected answer inserted into sqlite: " + id + answer.toString());
+        } catch (SQLiteException e) {
+            Log.d(TAG, "couldn't add selected answers");
+        }
+
     }
 
     public ArrayList<Answer> getAnswers(String questionId) {
         String selectQuery = "SELECT * FROM " + TableSchema.TABLE_ANSWER +
                 " WHERE " + AnswerSchema.KEY_QUESTION_ID + " = \"" + questionId + "\"";
 
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, null);
-        AnswerCursorWrapper aCursor = new AnswerCursorWrapper(cursor);
+        ArrayList<Answer> answers = new ArrayList<>();
 
-        ArrayList<Answer> answers = aCursor.getAnswers();
+        try {
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(selectQuery, null);
+            AnswerCursorWrapper aCursor = new AnswerCursorWrapper(cursor);
 
-        cursor.close();
-        db.close();
+            answers = aCursor.getAnswers();
+
+            cursor.close();
+            db.close();
+        } catch (SQLiteException e) {
+            Log.d(TAG, "dang no  answers");
+        }
         Log.d(TAG, "Fectching answers from Sqlite: " + answers.toString());
         return answers;
     }
@@ -119,31 +144,45 @@ public class SQLiteHandlerAnswers extends SQLiteOpenHelper {
         String selectQuery = "SELECT * FROM " + TableSchema.TABLE_SELECTED_ANSWER +
                 " WHERE " + AnswerSchema.KEY_QUESTION_ID + " = \"" + questionId + "\"";
 
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, null);
-        AnswerCursorWrapper aCursor = new AnswerCursorWrapper(cursor);
+        ArrayList<SelectedAnswer> answers = new ArrayList<>();
+        try {
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(selectQuery, null);
+            AnswerCursorWrapper aCursor = new AnswerCursorWrapper(cursor);
 
-        ArrayList<SelectedAnswer> answers = aCursor.getSelectedAnswers();
+            answers = aCursor.getSelectedAnswers();
 
-        cursor.close();
-        db.close();
+            cursor.close();
+            db.close();
+        } catch (SQLiteException e) {
+            Log.d(TAG, "dang no selected answers");
+        }
         Log.d(TAG, "Fectching selected answers from Sqlite: " + answers.toString());
         return answers;
     }
 
     public void removeSelectedFromQuestion(String questionId) {
-        SQLiteDatabase db = this.getWritableDatabase();
 
-        db.execSQL("DELETE FROM " + TableSchema.TABLE_SELECTED_ANSWER +
-                " WHERE " + AnswerSchema.KEY_QUESTION_ID + "=\"" + questionId + "\";");
-        db.close();
+
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            db.execSQL("DELETE FROM " + TableSchema.TABLE_SELECTED_ANSWER +
+                    " WHERE " + AnswerSchema.KEY_QUESTION_ID + "=\"" + questionId + "\";");
+            db.close();
+        } catch (SQLiteException e) {
+            Log.d(TAG, "dang no selected answers");
+        }
     }
 
     public void removeAllAnswers() {
-        SQLiteDatabase db = this.getWritableDatabase();
 
-        db.execSQL("DELETE FROM " + TableSchema.TABLE_ANSWER + ";");
-        db.execSQL("DELETE FROM " + TableSchema.TABLE_SELECTED_ANSWER + ";");
-        db.close();
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            db.execSQL("DELETE FROM " + TableSchema.TABLE_ANSWER + ";");
+            db.execSQL("DELETE FROM " + TableSchema.TABLE_SELECTED_ANSWER + ";");
+            db.close();
+        } catch (SQLiteException e) {
+            Log.d(TAG, "dang no answers");
+        }
     }
 }

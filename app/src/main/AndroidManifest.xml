@@ -39,6 +39,9 @@
         <activity android:name=".activity.waitingroom.WaitingRoomActivity">
         </activity>
 
+        <activity android:name=".activity.quiz.QuizReviewUserActivity">
+        </activity>
+
         <activity android:name=".activity.quiz.QuizResultGroupActivity">
         </activity>
 

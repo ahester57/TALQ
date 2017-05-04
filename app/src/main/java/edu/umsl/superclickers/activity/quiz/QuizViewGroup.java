@@ -56,7 +56,6 @@ public class QuizViewGroup extends Fragment implements
     private QuizController qController;
 
     interface QuizController {
-        void submitQuiz(Quiz quiz);
         QuizGET getQuizGET();
         void startQuizTimer();
         void setQuizIndex(int qNum);
@@ -81,6 +80,7 @@ public class QuizViewGroup extends Fragment implements
         if (!resume || curQuiz == null) {
             downloadQuiz();
         }
+
     }
 
     @Nullable
@@ -101,9 +101,6 @@ public class QuizViewGroup extends Fragment implements
         return view;
     }
 
-    public QuizViewGroup.QuizController getqController() {
-        return this.qController;
-    }
 
     @Override
     public void setSelectedAnswers(ArrayList<SelectedAnswer> selectedAnswers) {
@@ -146,12 +143,11 @@ public class QuizViewGroup extends Fragment implements
         if (horDottedProgress != null) {
             horDottedProgress.setDotAmount(curQuiz.getQuestions().size());
         }
-        startTimer();
+
         Log.d(TAG, "Set the group quiz ");
 
     }
 
-    @Override
     public void currQuestion() {
         if(curQuiz == null) {
             setBSQuiz();
@@ -162,10 +158,10 @@ public class QuizViewGroup extends Fragment implements
             horDottedProgress.setProgress(curQuiz.getqNum());
         }
         curQuestion = curQuiz.getQuestion();
+        startTimer();
         loadAnswerFragment();
     }
 
-    @Override
     public void nextQuestion() {
         curQuestion = curQuiz.getNextQuestion();
         progressView.setText(Integer.toString(curQuiz.getqNum() + 1));
@@ -175,7 +171,6 @@ public class QuizViewGroup extends Fragment implements
         loadAnswerFragment();
     }
 
-    @Override
     public void prevQuestion() {
         curQuestion = curQuiz.getPrevQuestion();
         progressView.setText(Integer.toString(curQuiz.getqNum() + 1));

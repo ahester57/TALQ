@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
@@ -69,114 +70,142 @@ public class SQLiteHandlerUsers extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(createLoginTable());
-        db.execSQL(createGroupTable());
-        db.execSQL(createRelationTable());
-
-        Log.d(TAG, "Database tables created");
+        try {
+            db.execSQL(createLoginTable());
+            db.execSQL(createGroupTable());
+            db.execSQL(createRelationTable());
+            Log.d(TAG, "Database tables created");
+        } catch (SQLiteException e) {
+            Log.d(TAG, "Couldn't create user tables.");
+        }
     }
 
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldV, int newV) {
-        db.execSQL("DROP TABLE IF EXISTS " + TableSchema.TABLE_USER);
-        db.execSQL("DROP TABLE IF EXISTS " + TableSchema.TABLE_GROUP);
-        db.execSQL("DROP TABLE IF EXISTS " + TableSchema.TABLE_USER_GROUPS);
-        // drop old tables and...
-        // create them again
-        onCreate(db);
+        try {
+            db.execSQL("DROP TABLE IF EXISTS " + TableSchema.TABLE_USER);
+            db.execSQL("DROP TABLE IF EXISTS " + TableSchema.TABLE_GROUP);
+            db.execSQL("DROP TABLE IF EXISTS " + TableSchema.TABLE_USER_GROUPS);
+            // drop old tables and...
+            // create them again
+            onCreate(db);
+        } catch (SQLiteException e) {
+            Log.d(TAG, "Couldn't create user tables.");
+        }
     }
 
 
     // add new user to database
     public void addUser(User user) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            db.execSQL("DROP TABLE IF EXISTS " + TableSchema.TABLE_USER);
+            db.execSQL(createLoginTable());
 
-        db.execSQL("DROP TABLE IF EXISTS " + TableSchema.TABLE_USER);
-        db.execSQL(createLoginTable());
-
-        ContentValues values = UserCursorWrapper.createUserValues(user);
-
-        // inserting row
-        long id = db.insert(TableSchema.TABLE_USER ,null, values);
-        db.close();
-
-        Log.d(TAG, "New user inserted into sqlite: " + values.getAsString(UserSchema.KEY_USER_ID));
+            ContentValues values = UserCursorWrapper.createUserValues(user);
+            // inserting row
+            long id = db.insert(TableSchema.TABLE_USER, null, values);
+            db.close();
+            Log.d(TAG, "New user inserted into sqlite: " + values.getAsString(UserSchema.KEY_USER_ID));
+        } catch (SQLiteException e) {
+            Log.d(TAG, "Couldn't add user.");
+        }
     }
 
     // ad new group to database
     public void addGroup(String name, String guid, String created_at) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
 
-        db.execSQL("DROP TABLE IF EXISTS " + TableSchema.TABLE_GROUP);
-        db.execSQL(createGroupTable());
+            db.execSQL("DROP TABLE IF EXISTS " + TableSchema.TABLE_GROUP);
+            db.execSQL(createGroupTable());
 
-        ContentValues values = new ContentValues();
-        values.put(GroupSchema.KEY_NAME, name);
-        values.put(GroupSchema.KEY_GID, guid);
-        values.put(GroupSchema.KEY_CREATED_AT, created_at);
+            ContentValues values = new ContentValues();
+            values.put(GroupSchema.KEY_NAME, name);
+            values.put(GroupSchema.KEY_GID, guid);
+            values.put(GroupSchema.KEY_CREATED_AT, created_at);
 
-        //insert row
-        long id = db.insert(TableSchema.TABLE_GROUP, null, values);
-        db.close();
+            //insert row
+            long id = db.insert(TableSchema.TABLE_GROUP, null, values);
+            db.close();
 
-        Log.d(TAG, "New group inserted into sqlite: " + id);
+            Log.d(TAG, "New group inserted into sqlite: " + id);
+        } catch (SQLiteException e) {
+            Log.d(TAG, "Couldn't add group.");
+        }
     }
 
     // add user to a group
     public void addUserToGroup(String uid, String guid, String created_at) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
 
-        db.execSQL(createRelationTable());
+            db.execSQL(createRelationTable());
 
-        ContentValues values = new ContentValues();
-        values.put(UserSchema.KEY_UID, uid);
-        values.put(GroupSchema.KEY_GID, guid);
-        values.put(GroupSchema.KEY_CREATED_AT, created_at);
+            ContentValues values = new ContentValues();
+            values.put(UserSchema.KEY_UID, uid);
+            values.put(GroupSchema.KEY_GID, guid);
+            values.put(GroupSchema.KEY_CREATED_AT, created_at);
 
-        //insert row
-        long id = db.insert(TableSchema.TABLE_USER_GROUPS, null, values);
-        db.close();
+            //insert row
+            long id = db.insert(TableSchema.TABLE_USER_GROUPS, null, values);
+            db.close();
 
-        Log.d(TAG, "User " + uid + " added to group " + guid + ": " + id);
+            Log.d(TAG, "User " + uid + " added to group " + guid + ": " + id);
+        } catch (SQLiteException e) {
+            Log.d(TAG, "Couldn't add user to group.");
+        }
 
     }
 
     /// get user data
     public User getCurrentUser() { // change to return user object
         String selectQuery = "SELECT * FROM " + TableSchema.TABLE_USER;
+        User user = null;
+        try {
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(selectQuery, null);
+            UserCursorWrapper uCursor = new UserCursorWrapper(cursor);
 
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, null);
-        UserCursorWrapper uCursor = new UserCursorWrapper(cursor);
+            user = uCursor.getUser();
 
-        User user = uCursor.getUser();
+            cursor.close();
+            db.close();
 
-        cursor.close();
-        db.close();
-
-        if (user != null) {
-            Log.d(TAG, "Fectching user from Sqlite: " + user.toString());
+            if (user != null) {
+                Log.d(TAG, "Fectching user from Sqlite: " + user.toString());
+            }
+        } catch (SQLiteException e) {
+            Log.d(TAG, "Couldn't add group.");
         }
         return user;
     }
 
     public void deleteAllUsers() {
-        SQLiteDatabase db = this.getWritableDatabase();
-        // delete all users
-        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        db.delete(TableSchema.TABLE_USER, null, null);
-        db.close();
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            // delete all users
+            // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            db.delete(TableSchema.TABLE_USER, null, null);
+            db.close();
 
-        Log.d(TAG, "Deleted all users from database" + TableSchema.TABLE_USER);
+            Log.d(TAG, "Deleted all users from database" + TableSchema.TABLE_USER);
+        } catch (SQLiteException e) {
+            Log.d(TAG, "Couldn't delete all users.");
+        }
     }
 
     private void deleteUsersByEmail(String... emails) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TableSchema.TABLE_USER, "WHERE email = ", emails);
-        db.close();
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            db.delete(TableSchema.TABLE_USER, "WHERE email = ", emails);
+            db.close();
 
-        Log.d(TAG, "Deleted " + Arrays.toString(emails) + "from database" + TableSchema.TABLE_USER);
+            Log.d(TAG, "Deleted " + Arrays.toString(emails) + "from database" + TableSchema.TABLE_USER);
+        } catch (SQLiteException e) {
+            Log.d(TAG, "Couldn't delete users.");
+        }
     }
 
 }

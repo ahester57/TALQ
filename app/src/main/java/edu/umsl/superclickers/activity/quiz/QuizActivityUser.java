@@ -1,6 +1,7 @@
 package edu.umsl.superclickers.activity.quiz;
 
 
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.FragmentManager;
 import android.content.BroadcastReceiver;
@@ -66,6 +67,24 @@ public class QuizActivityUser extends AppCompatActivity implements
         session = new SessionManager(getBaseContext());
         timerService = new Intent(getBaseContext(), QuizService.class);
 
+
+
+        if (!session.isQuizRunning()) {
+            session.clearActiveQuiz(); // i have my reasons
+        } else {
+            Quiz q = session.getActiveQuiz();
+            if (q != null && !q.get_id().equals(quizID)) {
+                session.clearActiveQuiz();
+                stopService(timerService);
+            } else if (session.isDoneWithIndividual()) {
+                skipToWaitingRoom();
+            }
+        }
+
+
+
+
+
         FragmentManager fm = getFragmentManager();
         // Check if quizGET exists
         if (fm.findFragmentByTag(FragmentConfig.KEY_QUIZ_GET) != null) {
@@ -86,6 +105,9 @@ public class QuizActivityUser extends AppCompatActivity implements
                     .add(R.id.quiz_container, quizViewUser, FragmentConfig.KEY_QUIZ_VIEW_USER)
                     .commit();
             // Only try to reload quiz when fragment is not loaded
+
+
+
             reloadQuiz(quizID, userID, courseID);
         }
 
@@ -108,8 +130,7 @@ public class QuizActivityUser extends AppCompatActivity implements
                 return true;
             case R.id.action_submit_quiz:
                 // @TODO do we need this or can we do
-                submitQuiz(quizViewUser.getCurQuiz());
-                //quizViewUser.getqController().submitQuiz(quizViewUser.getCurQuiz());
+                reviewQuiz();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -122,20 +143,38 @@ public class QuizActivityUser extends AppCompatActivity implements
 
     }
 
-    @Override
-    public void submitQuiz(Quiz quiz) {
+
+    public void reviewQuiz() {
         // @TODO Goto pending submit page
-
-        Toast.makeText(getApplicationContext(), "Quiz Submitted", Toast.LENGTH_LONG).show();
-        stopService(timerService);
-
-        Intent quizIntent = new Intent(QuizActivityUser.this, WaitingRoomActivity.class);
+        Intent quizIntent = new Intent(QuizActivityUser.this, QuizReviewUserActivity.class);
         quizIntent.putExtra("QUIZ_ID", quizID);
         quizIntent.putExtra("COURSE_ID", courseID);
         quizIntent.putExtra("USER_ID", userID);
         quizIntent.putExtra("GROUP_ID", groupID);
-        startActivity(quizIntent);
+        startActivityForResult(quizIntent, 0);
+
+    }
+
+
+    public void skipToWaitingRoom() {
+        Intent waitIntent = new Intent(QuizActivityUser.this, WaitingRoomActivity.class);
+        waitIntent.putExtra("QUIZ_ID", quizID);
+        waitIntent.putExtra("COURSE_ID", courseID);
+        waitIntent.putExtra("USER_ID", userID);
+        waitIntent.putExtra("GROUP_ID", groupID);
+        startActivity(waitIntent);
         finish();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d(TAG, "req: " + requestCode + ", result: " + resultCode);
+        if (requestCode == 0) {
+            if (resultCode == Activity.RESULT_OK) {
+                finish();
+            }
+        }
     }
 
     void reloadQuiz(String quizID, String userID, String courseID) {
@@ -172,10 +211,6 @@ public class QuizActivityUser extends AppCompatActivity implements
         return session.getQuizIndex();
     }
 
-    Quiz getQuiz(String quizId) {
-        return session.getQuiz(quizId);
-    }
-
     Quiz getActiveQuiz() {
         return session.getActiveQuiz();
     }
@@ -199,7 +234,7 @@ public class QuizActivityUser extends AppCompatActivity implements
             secondsLeft = secondsLeft % 60;
             quizViewUser.updateGUITimer(minutesLeft, secondsLeft);
             if (millisUntilFinished < 2000) {
-                submitQuiz(quizViewUser.getCurQuiz());
+                reviewQuiz();
             }
         }
     }

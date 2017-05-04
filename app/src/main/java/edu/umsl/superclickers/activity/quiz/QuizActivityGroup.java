@@ -108,7 +108,7 @@ public class QuizActivityGroup extends AppCompatActivity implements
                 quizViewGroup.prevQuestion();
                 return true;
             case R.id.action_submit_quiz:
-                submitQuiz(quizViewGroup.getCurQuiz());
+                submitQuiz();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -117,12 +117,13 @@ public class QuizActivityGroup extends AppCompatActivity implements
 
     @Override
     public void setSelectedAnswers(ArrayList<SelectedAnswer> selectedAnswers) {
+
+        // @TODO if leader then do this.
         //session.setSelectedAnswersFor(selectedAnswers);
 
     }
 
-    @Override
-    public void submitQuiz(Quiz quiz) {
+    public void submitQuiz() {
         // @TODO POST quiz for grading
 
         Toast.makeText(getApplicationContext(), "Group Quiz Submitted", Toast.LENGTH_LONG).show();
@@ -171,10 +172,6 @@ public class QuizActivityGroup extends AppCompatActivity implements
         return session.getQuizIndex();
     }
 
-    Quiz getQuiz(String quizId) {
-        return session.getQuiz(quizId);
-    }
-
     Quiz getActiveQuiz() {
         return session.getActiveQuiz();
     }
@@ -198,7 +195,7 @@ public class QuizActivityGroup extends AppCompatActivity implements
             secondsLeft = secondsLeft % 60;
             quizViewGroup.updateGUITimer(minutesLeft, secondsLeft);
             if (millisUntilFinished < 2000) {
-                submitQuiz(quizViewGroup.getCurQuiz());
+                submitQuiz();
             }
         }
     }

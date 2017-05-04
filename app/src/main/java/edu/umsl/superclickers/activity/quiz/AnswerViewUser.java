@@ -26,7 +26,7 @@ import edu.umsl.superclickers.quizdata.SelectedAnswer;
  *
  */
 
-public class AnswerViewUser extends Fragment implements View.OnClickListener {
+public class AnswerViewUser extends Fragment {
     private static final String TAG = AnswerViewUser.class.getSimpleName();
 
     private Button A;
@@ -44,9 +44,6 @@ public class AnswerViewUser extends Fragment implements View.OnClickListener {
 
     interface AnswerListener {
         Question getQuestion();
-        void nextQuestion();
-        void currQuestion();
-        void prevQuestion();
         void setSelectedAnswers(ArrayList<SelectedAnswer> selectedAnswers);
     }
 
@@ -59,18 +56,8 @@ public class AnswerViewUser extends Fragment implements View.OnClickListener {
         aListener = (AnswerListener) getFragmentManager()
                 .findFragmentByTag(FragmentConfig.KEY_QUIZ_VIEW_USER);
         curQuestion = aListener.getQuestion();
-        String questionId = curQuestion.get_id();
 
-        // selected answers now store "prevProgress" as allocatedPoints
-        selectedAnswers = new ArrayList<>();
-        selectedAnswers = session.getSelectedAnswersFor(questionId);
-        if (selectedAnswers.size() != 4) {
-            Log.d(TAG, "New selected answers created.");
-            selectedAnswers.add(new SelectedAnswer(curQuestion.getA().getValue(), 0, questionId));
-            selectedAnswers.add(new SelectedAnswer(curQuestion.getB().getValue(), 0, questionId));
-            selectedAnswers.add(new SelectedAnswer(curQuestion.getC().getValue(), 0, questionId));
-            selectedAnswers.add(new SelectedAnswer(curQuestion.getD().getValue(), 0, questionId));
-        }
+        getSelectedAnswers();
 
         Log.d(TAG, "Answer view created.");
     }
@@ -103,23 +90,6 @@ public class AnswerViewUser extends Fragment implements View.OnClickListener {
         return view;
     }
 
-    @Override
-    public void onClick(View view) {
-
-        switch(view.getId()) {
-            case R.id.action_next_question:
-                Log.d("ASDFAKLSDJFLAKSJDLFKA", "asdkfja;klsdjf;aksjd;flk");
-                session.setSelectedAnswersFor(selectedAnswers);
-                aListener.nextQuestion();
-                break;
-            case R.id.action_prev_question:
-                session.setSelectedAnswersFor(selectedAnswers);
-                aListener.prevQuestion();
-                break;
-            default:
-                break;
-        }
-    }
 
     private void setAnswerText() {
         A.setText(curQuestion.getA().toString());
@@ -186,4 +156,18 @@ public class AnswerViewUser extends Fragment implements View.OnClickListener {
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {}
     };
+
+    void getSelectedAnswers() {
+        String questionId = curQuestion.get_id();
+        // selected answers now store "prevProgress" as allocatedPoints
+        selectedAnswers = new ArrayList<>();
+        selectedAnswers = session.getSelectedAnswersFor(questionId);
+        if (selectedAnswers.size() != 4) {
+            Log.d(TAG, "New selected answers created.");
+            selectedAnswers.add(new SelectedAnswer(curQuestion.getA().getValue(), 0, questionId));
+            selectedAnswers.add(new SelectedAnswer(curQuestion.getB().getValue(), 0, questionId));
+            selectedAnswers.add(new SelectedAnswer(curQuestion.getC().getValue(), 0, questionId));
+            selectedAnswers.add(new SelectedAnswer(curQuestion.getD().getValue(), 0, questionId));
+        }
+    }
 }

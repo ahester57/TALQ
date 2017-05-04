@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
@@ -51,51 +52,64 @@ public class SQLiteHandlerCourses extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(createCourseTable());
+        try {
+            db.execSQL(createCourseTable());
 
-        Log.d(TAG, "Course tables created");
+            Log.d(TAG, "Course tables created");
+        } catch (SQLiteException e) {
+            Log.d(TAG, "couldn't create course table");
+        }
     }
 
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldV, int newV) {
-        db.execSQL("DROP TABLE IF EXISTS " + TableSchema.TABLE_COURSE);
-        // drop old tables and...
-        // create them again
-        onCreate(db);
+        try {
+            db.execSQL("DROP TABLE IF EXISTS " + TableSchema.TABLE_COURSE);
+            // drop old tables and...
+            // create them again
+            onCreate(db);
+        } catch (SQLiteException e) {
+            Log.d(TAG, "couldn't create course table");
+        }
     }
 
 
     // add new course to database
     public void addCourse(Course course) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL(createCourseTable());
 
-        ContentValues values = CourseCursorWrapper.createCourseValues(course);
-
-        // inserting row
-        long id = db.insert(TableSchema.TABLE_COURSE ,null, values);
-        db.close();
-
-        Log.d(TAG, "New course inserted into sqlite: " + values.getAsString(CourseSchema.KEY_NAME));
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            db.execSQL(createCourseTable());
+            ContentValues values = CourseCursorWrapper.createCourseValues(course);
+            // inserting row
+            long id = db.insert(TableSchema.TABLE_COURSE, null, values);
+            db.close();
+            Log.d(TAG, "New course inserted into sqlite: " + values.getAsString(CourseSchema.KEY_NAME));
+        } catch (SQLiteException e) {
+            Log.d(TAG, "couldn't add course");
+        }
     }
 
 
     /// get course data
     public ArrayList<Course> getCurrentCourses() { // change to return user object
         String selectQuery = "SELECT * FROM " + TableSchema.TABLE_COURSE;
+        ArrayList<Course> courses = new ArrayList<>();
 
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, null);
-        CourseCursorWrapper uCursor = new CourseCursorWrapper(cursor);
+        try {
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(selectQuery, null);
+            CourseCursorWrapper uCursor = new CourseCursorWrapper(cursor);
 
-        ArrayList<Course> courses = uCursor.getCourses();
+            courses = uCursor.getCourses();
 
-        cursor.close();
-        db.close();
-
-        Log.d(TAG, "Fectching course from Sqlite: " + courses.toString());
-
+            cursor.close();
+            db.close();
+            Log.d(TAG, "Fectching course from Sqlite: " + courses.toString());
+        } catch (SQLiteException e) {
+            Log.d(TAG, "couldn't get courses");
+        }
         return courses;
     }
 
@@ -104,28 +118,34 @@ public class SQLiteHandlerCourses extends SQLiteOpenHelper {
         String selectQuery = "SELECT * FROM " + TableSchema.TABLE_COURSE +
                     " WHERE " + CourseSchema.KEY_UID + " = \"" + guid + "\";";
 
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, null);
-        CourseCursorWrapper uCursor = new CourseCursorWrapper(cursor);
+        Course course = null;
+        try {
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(selectQuery, null);
+            CourseCursorWrapper uCursor = new CourseCursorWrapper(cursor);
+            course = uCursor.getCourses().get(0);
 
-        Course course = uCursor.getCourses().get(0);
-
-        cursor.close();
-        db.close();
-
-        Log.d(TAG, "Fectching course from Sqlite: " + course.toString());
-
+            cursor.close();
+            db.close();
+            Log.d(TAG, "Fectching course from Sqlite: " + course.toString());
+        } catch (SQLiteException e) {
+            Log.d(TAG, "couldn't get courses");
+        }
         return course;
     }
 
     public void deleteAllCourses() {
-        SQLiteDatabase db = this.getWritableDatabase();
-        // delete all users
-        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        db.delete(TableSchema.TABLE_COURSE, null, null);
-        db.close();
 
-        Log.d(TAG, "Deleted all course from database" + TableSchema.TABLE_COURSE);
+        // delete all courses
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            db.delete(TableSchema.TABLE_COURSE, null, null);
+            db.close();
+            Log.d(TAG, "Deleted all course from database" + TableSchema.TABLE_COURSE);
+        } catch (SQLiteException e) {
+            Log.d(TAG, "couldn't delete courses");
+        }
     }
 
 

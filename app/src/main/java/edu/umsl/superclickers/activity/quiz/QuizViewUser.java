@@ -59,7 +59,7 @@ public class QuizViewUser extends Fragment implements
     private QuizController qController;
 
     interface QuizController {
-        void submitQuiz(Quiz quiz);
+
         QuizGET getQuizGET();
         void startQuizTimer();
         void setQuizIndex(int qNum);
@@ -83,11 +83,9 @@ public class QuizViewUser extends Fragment implements
         if (!resume || curQuiz == null) {
             downloadQuiz();
         }
+
     }
 
-    public QuizController getqController() {
-        return this.qController;
-    }
 
     @Nullable
     @Override
@@ -145,12 +143,12 @@ public class QuizViewUser extends Fragment implements
         if (horDottedProgress != null) {
             horDottedProgress.setDotAmount(curQuiz.getQuestions().size());
         }
-        startTimer();
+
         Log.d(TAG, "Set the quiz ");
 
     }
 
-    @Override
+
     public void currQuestion() {
         if(curQuiz == null) {
             setBSQuiz();
@@ -161,10 +159,10 @@ public class QuizViewUser extends Fragment implements
             horDottedProgress.setProgress(curQuiz.getqNum());
         }
         curQuestion = curQuiz.getQuestion();
+        startTimer();
         loadAnswerFragment();
     }
 
-    @Override
     public void nextQuestion() {
         curQuestion = curQuiz.getNextQuestion();
         progressView.setText(Integer.toString(curQuiz.getqNum() + 1));
@@ -172,7 +170,6 @@ public class QuizViewUser extends Fragment implements
         loadAnswerFragment();
     }
 
-    @Override
     public void prevQuestion() {
         curQuestion = curQuiz.getPrevQuestion();
         progressView.setText(Integer.toString(curQuiz.getqNum() + 1));
@@ -199,8 +196,6 @@ public class QuizViewUser extends Fragment implements
     }
 
     public String getQuizID() { return curQuiz.get_id(); }
-
-    public Quiz getCurQuiz() { return curQuiz; }
 
     public void updateGUITimer(int minutes, int seconds) {
         minutesLeft = minutes;

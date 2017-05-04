@@ -85,6 +85,8 @@ public class WaitingRoomController extends Fragment {
                                 // Quiz POST SUCCESSFUL
                                 //JSONObject user = jObj.getJSONObject("user");
                                 wListener.postInfo(response);
+                                Toast.makeText(getActivity(), "Quiz submitted.",
+                                        Toast.LENGTH_LONG).show();
 
                             } else {
                                 // Error uploading quiz

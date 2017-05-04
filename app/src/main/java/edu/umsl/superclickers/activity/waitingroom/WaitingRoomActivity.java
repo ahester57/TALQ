@@ -38,6 +38,7 @@ public class WaitingRoomActivity extends AppCompatActivity
     private String userID;
     private String courseID;
     private String groupID;
+    private String leader;
 
     private Quiz curQuiz;
 
@@ -62,6 +63,7 @@ public class WaitingRoomActivity extends AppCompatActivity
         groupID = i.getStringExtra("GROUP_ID");
 
         curQuiz = session.getActiveQuiz();
+        session.setDoneWithIndividualQuiz(true);
 
         FragmentManager fm = getFragmentManager();
         // Check if quizGET exists
@@ -131,6 +133,7 @@ public class WaitingRoomActivity extends AppCompatActivity
             JSONArray statusArr = gObj.getJSONArray("status");
 
             JSONObject leaderObj =gObj.getJSONObject("leader");
+            leader = leaderObj.getString("userId");
 
         } catch (JSONException e) {
             Log.e("JSONError", e.getMessage());

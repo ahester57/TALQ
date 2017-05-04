@@ -35,6 +35,7 @@ public class SessionManager {
     private static final String KEY_QUIZ_INDEX = "quizIndex";
     private static final String KEY_QUIZ_ID = "quizId";
     private static final String KEY_GROUP_ID = "groupId";
+    private static final String KEY_DONE_INDIVIDUAL = "doneIndividual";
 
     public SessionManager(Context context) {
         this._context = context;
@@ -135,6 +136,14 @@ public class SessionManager {
         Log.d(TAG, "Active Quiz set = " + quizId);
     }
 
+    public void setDoneWithIndividualQuiz(boolean flag) {
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putInt(KEY_DONE_INDIVIDUAL, flag ? 1 : 0);
+        editor.apply();
+
+        Log.d(TAG, "Done with individual quiz: " + flag);
+    }
+
     public int getQuizIndex() {
         return pref.getInt(KEY_QUIZ_INDEX, 0);
     }
@@ -186,7 +195,12 @@ public class SessionManager {
         } catch (SQLiteException e) {
             e.printStackTrace();
         }
+        setDoneWithIndividualQuiz(false);
         removeQuizIndex();
+    }
+
+    public boolean isDoneWithIndividual() {
+        return pref.getInt(KEY_DONE_INDIVIDUAL, 0) != 0;
     }
 
     public boolean isQuizRunning() {

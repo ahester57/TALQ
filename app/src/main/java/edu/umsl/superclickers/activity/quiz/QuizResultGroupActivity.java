@@ -26,6 +26,8 @@ public class QuizResultGroupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         session = new SessionManager(getBaseContext());
+        session.setDoneWithIndividualQuiz(false);
+
         Intent i = getIntent();
         quizID = i.getStringExtra("QUIZ_ID");
         courseID = i.getStringExtra("COURSE_ID");
