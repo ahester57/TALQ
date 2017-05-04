@@ -8,6 +8,9 @@ import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import edu.umsl.superclickers.database.schema.QuizSchema;
 import edu.umsl.superclickers.database.schema.TableSchema;
 import edu.umsl.superclickers.quizdata.Quiz;
@@ -100,7 +103,7 @@ public class SQLiteHandlerQuizzes extends SQLiteOpenHelper {
             Cursor cursor = db.rawQuery(selectQuery, null);
 
             QuizCursorWrapper qCursor = new QuizCursorWrapper(cursor, context);
-            quiz = qCursor.getQuiz();
+            quiz = qCursor.getQuizzes().get(0);
 
             if (quiz != null) {
                 Log.d(TAG, "Fectching quiz from Sqlite: " + quiz.toString());
@@ -113,6 +116,30 @@ public class SQLiteHandlerQuizzes extends SQLiteOpenHelper {
             Log.d(TAG, "Couldn't get quiz.");
         }
         return quiz;
+    }
+
+    public List<Quiz> getQuizzes() {
+        List<Quiz> quizzes = new ArrayList<>();
+        String selectQuery = "SELECT * FROM " + TableSchema.TABLE_QUIZ + ";";
+
+        try {
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(selectQuery, null);
+
+            QuizCursorWrapper qCursor = new QuizCursorWrapper(cursor, context);
+            quizzes = qCursor.getQuizzes();
+
+            if (quizzes != null) {
+                Log.d(TAG, "Fectching quizzes from Sqlite: " + quizzes.toString());
+            } else {
+                Log.e(TAG, "Error fetching quizzes from SQlite.");
+            }
+            cursor.close();
+            db.close();
+        } catch (SQLiteException e) {
+            Log.d(TAG, "Couldn't get quizzes.");
+        }
+        return quizzes;
     }
 
     public void removeQuiz(String quizId) {

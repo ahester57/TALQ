@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteException;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import edu.umsl.superclickers.database.SQLiteHandlerAnswers;
 import edu.umsl.superclickers.database.SQLiteHandlerCourses;
@@ -110,18 +111,12 @@ public class SessionManager {
         return db.getQuiz(quizId);
     }
 
-    public ArrayList<SelectedAnswer> getSelectedAnswersFor(String questionId) {
-        SQLiteHandlerAnswers db = SQLiteHandlerAnswers.sharedInstance(_context);
-        return db.getSelectedAnswers(questionId);
+    public List<Quiz> getQuizzes() {
+        SQLiteHandlerQuizzes db = SQLiteHandlerQuizzes.sharedInstance(_context);
+        return db.getQuizzes();
+
     }
 
-    public void setSelectedAnswersFor(ArrayList<SelectedAnswer> answers) {
-        SQLiteHandlerAnswers db = SQLiteHandlerAnswers.sharedInstance(_context);
-        db.removeSelectedFromQuestion(answers.get(0).getQuestionId());
-        for (SelectedAnswer a : answers) {
-            db.addSelectedAnswer(a);
-        }
-    }
 
     public Quiz getActiveQuiz() {
         SQLiteHandlerQuizzes db = SQLiteHandlerQuizzes.sharedInstance(_context);
@@ -135,6 +130,20 @@ public class SessionManager {
 
         Log.d(TAG, "Active Quiz set = " + quizId);
     }
+
+    public ArrayList<SelectedAnswer> getSelectedAnswersFor(String questionId) {
+        SQLiteHandlerAnswers db = SQLiteHandlerAnswers.sharedInstance(_context);
+        return db.getSelectedAnswers(questionId);
+    }
+
+    public void setSelectedAnswersFor(ArrayList<SelectedAnswer> answers) {
+        SQLiteHandlerAnswers db = SQLiteHandlerAnswers.sharedInstance(_context);
+        db.removeSelectedFromQuestion(answers.get(0).getQuestionId());
+        for (SelectedAnswer a : answers) {
+            db.addSelectedAnswer(a);
+        }
+    }
+
 
     public void setDoneWithIndividualQuiz(boolean flag) {
         SharedPreferences.Editor editor = pref.edit();

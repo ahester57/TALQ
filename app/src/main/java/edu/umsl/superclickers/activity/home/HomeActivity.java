@@ -94,7 +94,7 @@ public class HomeActivity extends AppCompatActivity implements
                     .add(hController, FragmentConfig.KEY_HOME_CONTROLLER)
                     .commit();
             // only request quizzes if hController DNE
-            if(user != null || quizzes == null) {
+            if(user != null) {
                 hController.getQuizzesFor(user.getUserId());
             } else {
                 hController.getQuizzesFor("arh5w6");

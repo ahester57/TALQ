@@ -19,6 +19,8 @@ import java.util.ArrayList;
 
 import edu.umsl.superclickers.app.AppController;
 import edu.umsl.superclickers.app.QuizConfig;
+import edu.umsl.superclickers.app.SessionManager;
+import edu.umsl.superclickers.quizdata.Quiz;
 import edu.umsl.superclickers.quizdata.QuizListItem;
 
 
@@ -30,6 +32,7 @@ public class HomeController extends Fragment {
 
     private final String TAG = HomeController.class.getSimpleName();
 
+    private SessionManager session;
     private HomeListener hListener;
     private ArrayList<QuizListItem> quizzes;
     private ArrayList<String> courseIds;
@@ -42,6 +45,7 @@ public class HomeController extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        session = new SessionManager(getActivity());
         hListener = (HomeListener) getActivity();
         quizzes = new ArrayList<>();
         courseIds = new ArrayList<>();
@@ -75,7 +79,7 @@ public class HomeController extends Fragment {
                                     String courseId = jObj.getString("courseId");
 
                                     JSONObject quiz = jObj.getJSONObject("quiz");
-
+                                    //session.addQuizToDB(new Quiz());
                                     // @TODO return quiz object
                                     quizzes.add(new QuizListItem(quiz, courseId));
                                     courseIds.add(courseId);

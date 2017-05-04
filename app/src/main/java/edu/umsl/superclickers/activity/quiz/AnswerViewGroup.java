@@ -14,6 +14,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import edu.umsl.superclickers.R;
+import edu.umsl.superclickers.activity.helper.SeekBarText;
 import edu.umsl.superclickers.app.FragmentConfig;
 import edu.umsl.superclickers.app.SessionManager;
 import edu.umsl.superclickers.quizdata.Question;
@@ -70,10 +71,10 @@ public class AnswerViewGroup extends Fragment {
         B = (Button) view.findViewById(R.id.B_button_group);
         C = (Button) view.findViewById(R.id.C_button_group);
         D = (Button) view.findViewById(R.id.D_button_group);
-        aP = (SeekBar) view.findViewById(R.id.A_points_group);
-        bP = (SeekBar) view.findViewById(R.id.B_points_group);
-        cP = (SeekBar) view.findViewById(R.id.C_points_group);
-        dP = (SeekBar) view.findViewById(R.id.D_points_group);
+        aP = (SeekBarText) view.findViewById(R.id.A_points_group);
+        bP = (SeekBarText) view.findViewById(R.id.B_points_group);
+        cP = (SeekBarText) view.findViewById(R.id.C_points_group);
+        dP = (SeekBarText) view.findViewById(R.id.D_points_group);
 
 //        Button buttonNext = (Button) view.findViewById(R.id.next_question_button);
 //        Button buttonPrevious = (Button) view.findViewById(R.id.prev_question_button);

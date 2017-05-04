@@ -36,7 +36,6 @@ class QuestionCursorWrapper extends CursorWrapper {
                 int points = getInt(5);
                 ArrayList<Answer> answers = adb.getAnswers(_id);
                 questions.add(new Question(_id, title, text, points, answers));
-                // @TODO get add answers
             } while (moveToNext());
         }
         return questions;
