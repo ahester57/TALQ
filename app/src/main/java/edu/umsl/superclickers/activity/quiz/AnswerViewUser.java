@@ -3,6 +3,7 @@ package edu.umsl.superclickers.activity.quiz;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.AppCompatSeekBar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import edu.umsl.superclickers.R;
+import edu.umsl.superclickers.activity.helper.SeekBarText;
 import edu.umsl.superclickers.app.FragmentConfig;
 import edu.umsl.superclickers.app.SessionManager;
 import edu.umsl.superclickers.quizdata.Question;
@@ -33,7 +35,7 @@ public class AnswerViewUser extends Fragment {
     private Button B;
     private Button C;
     private Button D;
-    private SeekBar aP, bP, cP, dP;
+    private SeekBarText aP, bP, cP, dP;
     private TextView pointsView;
 
     private Question curQuestion;
@@ -45,19 +47,31 @@ public class AnswerViewUser extends Fragment {
     interface AnswerListener {
         Question getQuestion();
         void setSelectedAnswers(ArrayList<SelectedAnswer> selectedAnswers);
+        void nextQuestion();
+        void currQuestion();
+        void prevQuestion();
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-
         session = new SessionManager(getActivity());
         aListener = (AnswerListener) getFragmentManager()
                 .findFragmentByTag(FragmentConfig.KEY_QUIZ_VIEW_USER);
         curQuestion = aListener.getQuestion();
+        String questionId = curQuestion.get_id();
 
-        getSelectedAnswers();
+        // selected answers now store "prevProgress" as allocatedPoints
+        selectedAnswers = new ArrayList<>();
+        selectedAnswers = session.getSelectedAnswersFor(questionId);
+        if (selectedAnswers.size() != 4) {
+            Log.d(TAG, "New selected answers created.");
+            selectedAnswers.add(new SelectedAnswer(curQuestion.getA().getValue(), 0, questionId));
+            selectedAnswers.add(new SelectedAnswer(curQuestion.getB().getValue(), 0, questionId));
+            selectedAnswers.add(new SelectedAnswer(curQuestion.getC().getValue(), 0, questionId));
+            selectedAnswers.add(new SelectedAnswer(curQuestion.getD().getValue(), 0, questionId));
+        }
 
         Log.d(TAG, "Answer view created.");
     }
@@ -71,16 +85,10 @@ public class AnswerViewUser extends Fragment {
         B = (Button) view.findViewById(R.id.B_button);
         C = (Button) view.findViewById(R.id.C_button);
         D = (Button) view.findViewById(R.id.D_button);
-        aP = (SeekBar) view.findViewById(R.id.A_points);
-        bP = (SeekBar) view.findViewById(R.id.B_points);
-        cP = (SeekBar) view.findViewById(R.id.C_points);
-        dP = (SeekBar) view.findViewById(R.id.D_points);
-
-//        Button buttonNext = (Button) view.findViewById(R.id.next_question_button);
-//        Button buttonPrevious = (Button) view.findViewById(R.id.prev_question_button);
-//        buttonPrevious.setOnClickListener(this);
-//        buttonNext.setOnClickListener(this);
-
+        aP = (SeekBarText) view.findViewById(R.id.A_points);
+        bP = (SeekBarText) view.findViewById(R.id.B_points);
+        cP = (SeekBarText) view.findViewById(R.id.C_points);
+        dP = (SeekBarText) view.findViewById(R.id.D_points);
         pointsView = (TextView) view.findViewById(R.id.question_points);
         pointsView.setText(String.valueOf(curQuestion.getPointsPossible()));
 
@@ -89,7 +97,6 @@ public class AnswerViewUser extends Fragment {
 
         return view;
     }
-
 
     private void setAnswerText() {
         A.setText(curQuestion.getA().toString());
@@ -119,7 +126,7 @@ public class AnswerViewUser extends Fragment {
         pointsView.setText(String.valueOf(curQuestion.getPointsPossible()));
     }
 
-    private SeekBar.OnSeekBarChangeListener seekListener = new SeekBar.OnSeekBarChangeListener() {
+    private AppCompatSeekBar.OnSeekBarChangeListener seekListener = new SeekBar.OnSeekBarChangeListener() {
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             int index = -1;
@@ -152,22 +159,10 @@ public class AnswerViewUser extends Fragment {
             aListener.setSelectedAnswers(selectedAnswers);
         }
         @Override
-        public void onStartTrackingTouch(SeekBar seekBar) {}
-        @Override
-        public void onStopTrackingTouch(SeekBar seekBar) {}
-    };
-
-    void getSelectedAnswers() {
-        String questionId = curQuestion.get_id();
-        // selected answers now store "prevProgress" as allocatedPoints
-        selectedAnswers = new ArrayList<>();
-        selectedAnswers = session.getSelectedAnswersFor(questionId);
-        if (selectedAnswers.size() != 4) {
-            Log.d(TAG, "New selected answers created.");
-            selectedAnswers.add(new SelectedAnswer(curQuestion.getA().getValue(), 0, questionId));
-            selectedAnswers.add(new SelectedAnswer(curQuestion.getB().getValue(), 0, questionId));
-            selectedAnswers.add(new SelectedAnswer(curQuestion.getC().getValue(), 0, questionId));
-            selectedAnswers.add(new SelectedAnswer(curQuestion.getD().getValue(), 0, questionId));
+        public void onStartTrackingTouch(SeekBar seekBar) {
         }
-    }
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+        }
+    };
 }

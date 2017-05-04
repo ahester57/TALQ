@@ -50,6 +50,10 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="16dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="20dp"
                 android:background="@drawable/button_custom1"
                 android:enabled="false"
                 android:fontFamily="casual"
@@ -66,7 +70,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
                 android:layout_marginTop="16dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="20dp"
                 android:background="@drawable/button_custom2"
                 android:enabled="false"
                 android:fontFamily="casual"
@@ -84,7 +92,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:layout_marginTop="19dp"
+                android:layout_marginTop="16dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="20dp"
                 android:background="@drawable/button_custom4"
                 android:enabled="false"
                 android:fontFamily="casual"
@@ -103,6 +115,10 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="16dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="20dp"
                 android:background="@drawable/button_custom3"
                 android:enabled="false"
                 android:fontFamily="casual"
@@ -114,7 +130,8 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/C_button" />
 
-            <SeekBar
+            <edu.umsl.superclickers.activity.helper.SeekBarText
+                android:thumb="@drawable/seek_bar_text_thumb"
                 android:id="@+id/A_points"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
@@ -124,7 +141,8 @@
                 android:layout_marginRight="16dp"
                 app:layout_constraintRight_toRightOf="@+id/A_button" />
 
-            <SeekBar
+            <edu.umsl.superclickers.activity.helper.SeekBarText
+                android:thumb="@drawable/seek_bar_text_thumb"
                 android:id="@+id/B_points"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
@@ -134,7 +152,8 @@
                 android:layout_marginRight="16dp"
                 app:layout_constraintRight_toRightOf="@+id/B_button" />
 
-            <SeekBar
+            <edu.umsl.superclickers.activity.helper.SeekBarText
+                android:thumb="@drawable/seek_bar_text_thumb"
                 android:id="@+id/C_points"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
@@ -144,7 +163,8 @@
                 android:layout_marginLeft="16dp"
                 app:layout_constraintLeft_toLeftOf="@+id/C_button" />
 
-            <SeekBar
+            <edu.umsl.superclickers.activity.helper.SeekBarText
+                android:thumb="@drawable/seek_bar_text_thumb"
                 android:id="@+id/D_points"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
