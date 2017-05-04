@@ -66,7 +66,7 @@ public class HomeActivity extends AppCompatActivity implements
         // session manager
         session = new SessionManager(getApplicationContext());
 
-        User user = null;
+        User user;
 
         user = session.getCurrentUser();
         courses = session.getEnrolledCourses();
@@ -93,8 +93,8 @@ public class HomeActivity extends AppCompatActivity implements
             fm.beginTransaction()
                     .add(hController, FragmentConfig.KEY_HOME_CONTROLLER)
                     .commit();
-            // only request groups if hController DNE
-            if(user != null) {
+            // only request quizzes if hController DNE
+            if(user != null || quizzes == null) {
                 hController.getQuizzesFor(user.getUserId());
             } else {
                 hController.getQuizzesFor("arh5w6");

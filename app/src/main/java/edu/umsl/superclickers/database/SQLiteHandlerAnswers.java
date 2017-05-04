@@ -154,10 +154,10 @@ public class SQLiteHandlerAnswers extends SQLiteOpenHelper {
 
             cursor.close();
             db.close();
+            Log.d(TAG, "Fectching selected answers from Sqlite: " + answers.toString());
         } catch (SQLiteException e) {
             Log.d(TAG, "dang no selected answers");
         }
-        Log.d(TAG, "Fectching selected answers from Sqlite: " + answers.toString());
         return answers;
     }
 

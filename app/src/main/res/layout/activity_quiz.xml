@@ -12,6 +12,6 @@
         android:layout_height="?attr/actionBarSize"
         android:elevation="4dp"
         android:theme="@style/ToolbarTheme"
-        app:popupTheme="@style/PopupTheme"/>
+        app:popupTheme="@style/PopupTheme" />
 
 </LinearLayout>
