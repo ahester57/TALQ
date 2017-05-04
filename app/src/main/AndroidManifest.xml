@@ -39,10 +39,10 @@
         <activity android:name=".activity.waitingroom.WaitingRoomActivity">
         </activity>
 
-        <activity android:name=".activity.quiz.QuizReviewUserActivity">
+        <activity android:name=".activity.quiz.QuizReviewActivityUser">
         </activity>
 
-        <activity android:name=".activity.quiz.QuizResultGroupActivity">
+        <activity android:name=".activity.quiz.QuizResultActivityGroup">
         </activity>
 
         <service

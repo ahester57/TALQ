@@ -16,10 +16,11 @@ public class QuizListItem {
     private String text;
     private String availableDate;
     private String expiryDate;
+    private String courseId;
     private boolean timed;
     private int timedLength;
 
-    public QuizListItem(JSONObject jObj) throws JSONException {
+    public QuizListItem(JSONObject jObj, String courseId) throws JSONException {
         try {
 
             String id = jObj.getString(QuizSchema.KEY_QID);
@@ -38,7 +39,7 @@ public class QuizListItem {
             this.text = text;
             this.availableDate = avail;
             this.expiryDate = exp;
-
+            this.courseId = courseId;
             this.timed = timed;
             this.timedLength = length;
 
@@ -66,6 +67,10 @@ public class QuizListItem {
 
     public String getExpiryDate() {
         return expiryDate;
+    }
+
+    public String getCourseId() {
+        return courseId;
     }
 
     public boolean getTimed() { return timed; }

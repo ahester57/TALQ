@@ -39,7 +39,7 @@ public class QuizHolder extends RecyclerView.ViewHolder {
     public void bindQuiz(QuizListItem quiz) {
         tQuizName.setText(quiz.getDescription());
         tQuizText.setText(quiz.getText());
-        tCourseName.setText(quiz.getAvailableDate()); ////////
+        tCourseName.setText(quiz.getCourseId()); ////////
         tQuizTime.setText(String.valueOf(quiz.getTimedLength()));
     }
 

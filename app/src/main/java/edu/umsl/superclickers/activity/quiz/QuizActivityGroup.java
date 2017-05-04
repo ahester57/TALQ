@@ -129,7 +129,7 @@ public class QuizActivityGroup extends AppCompatActivity implements
         Toast.makeText(getApplicationContext(), "Group Quiz Submitted", Toast.LENGTH_LONG).show();
         stopService(timerService);
 
-        Intent quizIntent = new Intent(QuizActivityGroup.this, QuizResultGroupActivity.class);
+        Intent quizIntent = new Intent(QuizActivityGroup.this, QuizResultActivityGroup.class);
         quizIntent.putExtra("QUIZ_ID", quizID);
         quizIntent.putExtra("COURSE_ID", courseID);
         quizIntent.putExtra("USER_ID", userID);

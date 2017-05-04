@@ -11,7 +11,7 @@ import edu.umsl.superclickers.app.SessionManager;
  * Created by Austin on 5/2/2017.
  */
 
-public class QuizResultGroupActivity extends AppCompatActivity {
+public class QuizResultActivityGroup extends AppCompatActivity {
 
 
     private String quizID;

@@ -14,7 +14,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -146,7 +145,7 @@ public class QuizActivityUser extends AppCompatActivity implements
 
     public void reviewQuiz() {
         // @TODO Goto pending submit page
-        Intent quizIntent = new Intent(QuizActivityUser.this, QuizReviewUserActivity.class);
+        Intent quizIntent = new Intent(QuizActivityUser.this, QuizReviewActivityUser.class);
         quizIntent.putExtra("QUIZ_ID", quizID);
         quizIntent.putExtra("COURSE_ID", courseID);
         quizIntent.putExtra("USER_ID", userID);

@@ -1,18 +1,15 @@
 package edu.umsl.superclickers.activity.quiz;
 
 import android.app.Activity;
-import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import edu.umsl.superclickers.R;
 import edu.umsl.superclickers.activity.waitingroom.WaitingRoomActivity;
-import edu.umsl.superclickers.app.FragmentConfig;
 import edu.umsl.superclickers.app.SessionManager;
 import edu.umsl.superclickers.quizdata.Quiz;
 
@@ -20,9 +17,9 @@ import edu.umsl.superclickers.quizdata.Quiz;
  * Created by Austin on 5/3/2017.
  */
 
-public class QuizReviewUserActivity extends AppCompatActivity {
+public class QuizReviewActivityUser extends AppCompatActivity {
 
-    private static final String TAG = QuizReviewUserActivity.class.getSimpleName();
+    private static final String TAG = QuizReviewActivityUser.class.getSimpleName();
 
     private String quizID;
     private String userID;
@@ -100,7 +97,7 @@ public class QuizReviewUserActivity extends AppCompatActivity {
 
         stopService(timerService);
 
-        Intent quizIntent = new Intent(QuizReviewUserActivity.this, WaitingRoomActivity.class);
+        Intent quizIntent = new Intent(QuizReviewActivityUser.this, WaitingRoomActivity.class);
         quizIntent.putExtra("QUIZ_ID", quizID);
         quizIntent.putExtra("COURSE_ID", courseID);
         quizIntent.putExtra("USER_ID", userID);

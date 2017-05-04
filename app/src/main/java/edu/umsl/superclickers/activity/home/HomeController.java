@@ -77,7 +77,7 @@ public class HomeController extends Fragment {
                                     JSONObject quiz = jObj.getJSONObject("quiz");
 
                                     // @TODO return quiz object
-                                    quizzes.add(new QuizListItem(quiz));
+                                    quizzes.add(new QuizListItem(quiz, courseId));
                                     courseIds.add(courseId);
                                 }
 

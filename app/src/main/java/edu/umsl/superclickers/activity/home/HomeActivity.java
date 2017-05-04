@@ -130,6 +130,7 @@ public class HomeActivity extends AppCompatActivity implements
         setActiveQuiz(0);
         hViewFragment.setQuizAdapter(quizzes);
         // @TODO display running quizzes
+        // @TODO display full course name
     }
 
     @Override
