@@ -53,7 +53,7 @@ public class QuizActivityUser extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_quiz);
         setSupportActionBar(toolbar);
 
         Intent intent = getIntent();
@@ -127,7 +127,7 @@ public class QuizActivityUser extends AppCompatActivity implements
             case R.id.action_prev_question:
                 quizViewUser.prevQuestion();
                 return true;
-            case R.id.action_submit_quiz:
+            case R.id.action_review_quiz:
                 // @TODO do we need this or can we do
                 reviewQuiz();
                 return true;

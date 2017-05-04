@@ -54,7 +54,7 @@ public class QuizActivityGroup extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_quiz);
         setSupportActionBar(toolbar);
 
         Intent intent = getIntent();
@@ -107,7 +107,7 @@ public class QuizActivityGroup extends AppCompatActivity implements
             case R.id.action_prev_question:
                 quizViewGroup.prevQuestion();
                 return true;
-            case R.id.action_submit_quiz:
+            case R.id.action_review_quiz:
                 submitQuiz();
                 return true;
             default:

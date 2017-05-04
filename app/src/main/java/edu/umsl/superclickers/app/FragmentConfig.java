@@ -14,6 +14,7 @@ public class FragmentConfig {
     public static String KEY_QUIZ_VIEW_GROUP = "QUIZ_VIEW_GROUP";
     public static String KEY_GROUP_VIEW = "GROUP_VIEW";
     public static String KEY_HOME_VIEW = "HOME_VIEW";
+    public static String KEY_REVIEW_VIEW_USER = "REVIEW_VIEW_USER";
     // Controllers
     public static String KEY_LOGIN_CONTROLLER = "LOGIN_CONTROLLER";
     public static String KEY_REGISTER_CONTROLLER = "REGISTER_CONTROLLER";

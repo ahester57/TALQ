@@ -3,9 +3,14 @@ package edu.umsl.superclickers.activity.waitingroom;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -47,12 +52,16 @@ public class WaitingRoomActivity extends AppCompatActivity
     private WaitingRoomView wFragment;
     private WaitingRoomController wController;
     private SessionManager session;
-
+    private Handler mHandler;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_quiz);
+        setSupportActionBar(toolbar);
+
 
         session = new SessionManager(getApplicationContext());
 
@@ -88,20 +97,49 @@ public class WaitingRoomActivity extends AppCompatActivity
             wController.POSTQuiz(courseID, userID,
                     curQuiz.getSessionId(),
                     quizPOSTObj);
-            wController.getGroupStatus(groupID, courseID,
-                    curQuiz.get_id(), curQuiz.getSessionId());
+
         }
 
         Intent timerService = new Intent(getBaseContext(), QuizService.class);
         stopService(timerService);
 
+
         Log.d(TAG, "Waiting room created.");
+    }
+
+
+
+    private Runnable checkGroupStatus = new Runnable() {
+        @Override
+        public void run() {
+            if (wController != null) {
+                wController.getGroupStatus(groupID, courseID,
+                        curQuiz.get_id(), curQuiz.getSessionId());
+                mHandler.postDelayed(checkGroupStatus, 2000);
+
+            }
+        }
+    };
+
+    void startPolling() {
+        if (mHandler == null) {
+            mHandler = new Handler(Looper.getMainLooper());
+            mHandler.postDelayed(checkGroupStatus, 500);
+        }
+    }
+
+    void stopPolling() {
+        if (mHandler != null) {
+            mHandler.removeCallbacks(checkGroupStatus);
+            mHandler = null;
+        }
     }
 
     @Override
     public void startGroupQuiz() {
         Intent quizIntent = new Intent(WaitingRoomActivity.this, QuizActivityGroup.class);
         session.setQuizIndex(0);
+        stopPolling();
         quizIntent.putExtra("QUIZ_ID", quizID);
         quizIntent.putExtra("COURSE_ID", courseID);
         quizIntent.putExtra("USER_ID", userID);
@@ -121,7 +159,12 @@ public class WaitingRoomActivity extends AppCompatActivity
         if (gradedQuiz != null) {
             wFragment.setTextQuizInfo("You got " + gradedQuiz.calculateTotalPoints() +
                     " points.\n\nYou can do better probably.");
+        } else {
+            wFragment.setTextQuizInfo("You've already taken this quiz.");
         }
+        // start checking group status once graded
+        startPolling();
+
     }
 
     @Override
@@ -131,6 +174,9 @@ public class WaitingRoomActivity extends AppCompatActivity
             gObj = new JSONObject(response);
 
             JSONArray statusArr = gObj.getJSONArray("status");
+            if (statusArr.length() >= 4) {
+                stopPolling(); // @TODO fix this
+            }
 
             JSONObject leaderObj =gObj.getJSONObject("leader");
             leader = leaderObj.getString("userId");
@@ -172,6 +218,24 @@ public class WaitingRoomActivity extends AppCompatActivity
         }
         Log.i(TAG, postObj.toString());
         return postObj;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_alt, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+
+            case R.id.action_submit_quiz:
+                startGroupQuiz();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override

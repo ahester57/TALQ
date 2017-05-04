@@ -105,6 +105,7 @@ public class WaitingRoomController extends Fragment {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "Quiz error: " + error.getMessage());
+                wListener.postInfo("oops");
                 Toast.makeText(getActivity(), "Quiz already submitted.",
                         Toast.LENGTH_LONG).show();
             }

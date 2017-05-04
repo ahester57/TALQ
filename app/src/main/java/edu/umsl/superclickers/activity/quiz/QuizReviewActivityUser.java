@@ -1,6 +1,7 @@
 package edu.umsl.superclickers.activity.quiz;
 
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +11,7 @@ import android.view.MenuItem;
 
 import edu.umsl.superclickers.R;
 import edu.umsl.superclickers.activity.waitingroom.WaitingRoomActivity;
+import edu.umsl.superclickers.app.FragmentConfig;
 import edu.umsl.superclickers.app.SessionManager;
 import edu.umsl.superclickers.quizdata.Quiz;
 
@@ -17,7 +19,8 @@ import edu.umsl.superclickers.quizdata.Quiz;
  * Created by Austin on 5/3/2017.
  */
 
-public class QuizReviewActivityUser extends AppCompatActivity {
+public class QuizReviewActivityUser extends AppCompatActivity
+        implements QuizReviewViewUser.ReviewListener {
 
     private static final String TAG = QuizReviewActivityUser.class.getSimpleName();
 
@@ -27,6 +30,7 @@ public class QuizReviewActivityUser extends AppCompatActivity {
     private String groupID;
     private Quiz curQuiz;
 
+    private QuizReviewViewUser qReviewView;
     private SessionManager session;
     private Intent timerService;
 
@@ -35,7 +39,7 @@ public class QuizReviewActivityUser extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_quiz);
         setSupportActionBar(toolbar);
 
         Intent intent = getIntent();
@@ -50,33 +54,25 @@ public class QuizReviewActivityUser extends AppCompatActivity {
 
         curQuiz = session.getActiveQuiz();
 
-//        FragmentManager fm = getFragmentManager();
-//        // Check if quizGET exists
-//        if (fm.findFragmentByTag(FragmentConfig.KEY_QUIZ_GET) != null) {
-//            quizGET = (QuizGET) fm.findFragmentByTag(FragmentConfig.KEY_QUIZ_GET);
-//        } else {
-//            quizGET = new QuizGET();
-//            fm.beginTransaction()
-//                    .add(quizGET, FragmentConfig.KEY_QUIZ_GET)
-//                    .commit();
-//        }
-//        // Check if fragment exists
-//        if (fm.findFragmentByTag(FragmentConfig.KEY_QUIZ_VIEW_USER) != null) {
-//            quizViewUser = (QuizViewUser) fm.findFragmentByTag(FragmentConfig.KEY_QUIZ_VIEW_USER);
-//        } else {
-//            // Add new quizFragment and reload quiz
-//            quizViewUser = new QuizViewUser();
-//            fm.beginTransaction()
-//                    .add(R.id.quiz_container, quizViewUser, FragmentConfig.KEY_QUIZ_VIEW_USER)
-//                    .commit();
-//
-//        }
+        FragmentManager fm = getFragmentManager();
+
+        // Check if fragment exists
+        if (fm.findFragmentByTag(FragmentConfig.KEY_REVIEW_VIEW_USER) != null) {
+            qReviewView = (QuizReviewViewUser) fm.findFragmentByTag(FragmentConfig.KEY_REVIEW_VIEW_USER);
+        } else {
+            // Add new quizFragment and reload quiz
+            qReviewView = new QuizReviewViewUser();
+            fm.beginTransaction()
+                    .add(R.id.quiz_container, qReviewView, FragmentConfig.KEY_REVIEW_VIEW_USER)
+                    .commit();
+
+        }
 
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
+        getMenuInflater().inflate(R.menu.menu_alt, menu);
         return true;
     }
 
@@ -92,7 +88,7 @@ public class QuizReviewActivityUser extends AppCompatActivity {
         }
     }
 
-    //@Override
+    @Override
     public void submitQuiz() {
 
         stopService(timerService);
