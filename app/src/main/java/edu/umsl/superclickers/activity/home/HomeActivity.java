@@ -67,14 +67,10 @@ public class HomeActivity extends AppCompatActivity implements
         session = new SessionManager(getApplicationContext());
 
         User user;
-
         user = session.getCurrentUser();
         courses = session.getEnrolledCourses();
 
-
         FragmentManager fm = getFragmentManager();
-
-
         if (fm.findFragmentByTag(FragmentConfig.KEY_HOME_VIEW) != null) {
             hViewFragment = (HomeViewFragment) fm.findFragmentByTag(FragmentConfig.KEY_HOME_VIEW);
         } else {
@@ -83,8 +79,6 @@ public class HomeActivity extends AppCompatActivity implements
                     .replace(R.id.home_frame, hViewFragment, FragmentConfig.KEY_HOME_VIEW)
                     .commit();
         }
-
-
 
         if (fm.findFragmentByTag(FragmentConfig.KEY_HOME_CONTROLLER) != null) {
             hController = (HomeController) fm.findFragmentByTag(FragmentConfig.KEY_HOME_CONTROLLER);
@@ -114,7 +108,6 @@ public class HomeActivity extends AppCompatActivity implements
             }
         }
 
-
     }
 
     @Override
@@ -140,11 +133,28 @@ public class HomeActivity extends AppCompatActivity implements
         Log.d(TAG, "Selected quiz: " + quizzes.get(pos).getDescription());
     }
 
+
+    @Override
+    public void startQuiz() {
+        Intent i = new Intent(HomeActivity.this, QuizActivityUser.class);
+        i.putExtra("QUIZ_ID", quizID);
+        i.putExtra("USER_ID", userId);
+        i.putExtra("COURSE_ID", courseId);
+        i.putExtra("GROUP_ID", group.getGroupId());
+        startActivity(i);
+    }
+
     public void stopQuiz() {
         // @TODO POST quiz for grading
         Toast.makeText(getApplicationContext(), "Quiz Submitted", Toast.LENGTH_LONG).show();
         stopService(new Intent(getBaseContext(), QuizService.class));
         session.clearActiveQuiz();
+    }
+
+    @Override
+    public void goToGroups() {
+        Intent in = new Intent(HomeActivity.this, GroupActivity.class);
+        startActivity(in);
     }
 
     void handleQuizTimer(Intent intent) {
@@ -157,23 +167,6 @@ public class HomeActivity extends AppCompatActivity implements
         }
     }
 
-
-
-    @Override
-    public void startQuiz() {
-        Intent i = new Intent(HomeActivity.this, QuizActivityUser.class);
-        i.putExtra("QUIZ_ID", quizID);
-        i.putExtra("USER_ID", userId);
-        i.putExtra("COURSE_ID", courseId);
-        i.putExtra("GROUP_ID", group.getGroupId());
-        startActivity(i);
-    }
-
-    @Override
-    public void goToGroups() {
-        Intent in = new Intent(HomeActivity.this, GroupActivity.class);
-        startActivity(in);
-    }
     // logout user,
     @Override
     public void logoutUser() {
@@ -186,20 +179,26 @@ public class HomeActivity extends AppCompatActivity implements
     }
 
 
-
     @Override
     protected void onResume() {
+        try {
+            registerReceiver(br, new IntentFilter(QuizService.COUNTDOWN_BR));
+            Log.d(TAG, "Registered broadcast reciever");
+        } catch (Exception e) {
+            // Receiver stopped onPause
+        }
         super.onResume();
-        registerReceiver(br, new IntentFilter(QuizService.COUNTDOWN_BR));
-        Log.d(TAG, "Registered broadcast reciever");
     }
 
     @Override
     protected void onPause() {
+        try {
+            unregisterReceiver(br);
+            Log.d(TAG, "Unregistered broadcast reciever");
+        } catch (Exception e) {
+            // Receiver stopped onPause
+        }
         super.onPause();
-        unregisterReceiver(br);
-        Log.d(TAG, "Unregistered broadcast reciever");
-
     }
 
     @Override

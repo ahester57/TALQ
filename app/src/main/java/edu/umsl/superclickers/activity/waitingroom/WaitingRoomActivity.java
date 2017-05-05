@@ -26,7 +26,6 @@ import edu.umsl.superclickers.app.SessionManager;
 import edu.umsl.superclickers.quizdata.GradedQuiz;
 import edu.umsl.superclickers.quizdata.Question;
 import edu.umsl.superclickers.quizdata.Quiz;
-import edu.umsl.superclickers.quizdata.QuizListItem;
 import edu.umsl.superclickers.quizdata.SelectedAnswer;
 
 /**
@@ -139,7 +138,6 @@ public class WaitingRoomActivity extends AppCompatActivity
     public void startGroupQuiz() {
         Intent quizIntent = new Intent(WaitingRoomActivity.this, QuizActivityGroup.class);
         session.setQuizIndex(0);
-        stopPolling();
         quizIntent.putExtra("QUIZ_ID", quizID);
         quizIntent.putExtra("COURSE_ID", courseID);
         quizIntent.putExtra("USER_ID", userID);
@@ -241,6 +239,7 @@ public class WaitingRoomActivity extends AppCompatActivity
     @Override
     protected void onDestroy() {
         //session.clearActiveQuiz();
+        stopPolling();
         super.onDestroy();
     }
 

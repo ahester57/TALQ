@@ -66,16 +66,17 @@ public class Quiz implements Serializable{
             this.availableDate = avail;
             this.expiryDate = exp;
             this.questions = questions;
-            this.sessionId = sessionId;
             this.qNum = 0;
             this.timed = timed;
             this.timedLength = length;
+            this.sessionId = sessionId;
 
         } catch (JSONException e) {
             e.printStackTrace();
             throw new JSONException(e.getMessage());
         }
     }
+
 
     public String get_id() {
         return _id;

@@ -79,7 +79,7 @@ public class HomeController extends Fragment {
                                     String courseId = jObj.getString("courseId");
 
                                     JSONObject quiz = jObj.getJSONObject("quiz");
-                                    //session.addQuizToDB(new Quiz());
+                                    //session.addQuizToDB(new Quiz(quiz));
                                     // @TODO return quiz object
                                     quizzes.add(new QuizListItem(quiz, courseId));
                                     courseIds.add(courseId);

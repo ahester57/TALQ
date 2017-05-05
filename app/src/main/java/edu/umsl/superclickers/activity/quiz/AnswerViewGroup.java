@@ -25,27 +25,8 @@ import edu.umsl.superclickers.quizdata.SelectedAnswer;
  *
  */
 
-public class AnswerViewGroup extends Fragment {
+public class AnswerViewGroup extends AnswerView {
     private static final String TAG = AnswerViewGroup.class.getSimpleName();
-
-    private Button A;
-    private Button B;
-    private Button C;
-    private Button D;
-    private SeekBar aP, bP, cP, dP;
-    private TextView pointsView;
-
-    private Question curQuestion;
-    private ArrayList<SelectedAnswer> selectedAnswers;
-
-    private SessionManager session;
-    private AnswerListener aListener;
-
-    interface AnswerListener {
-        Question getQuestion();
-        void setSelectedAnswers(ArrayList<SelectedAnswer> selectedAnswers);
-
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,7 +34,7 @@ public class AnswerViewGroup extends Fragment {
         setRetainInstance(true);
 
         session = new SessionManager(getActivity());
-        aListener = (AnswerListener) getFragmentManager()
+        aListener = (AnswerView.AnswerListener) getFragmentManager()
                 .findFragmentByTag(FragmentConfig.KEY_QUIZ_VIEW_GROUP);
         curQuestion = aListener.getQuestion();
 
@@ -76,10 +57,6 @@ public class AnswerViewGroup extends Fragment {
         cP = (SeekBarText) view.findViewById(R.id.C_points_group);
         dP = (SeekBarText) view.findViewById(R.id.D_points_group);
 
-//        Button buttonNext = (Button) view.findViewById(R.id.next_question_button);
-//        Button buttonPrevious = (Button) view.findViewById(R.id.prev_question_button);
-//        buttonPrevious.setOnClickListener(this);
-//        buttonNext.setOnClickListener(this);
 
         pointsView = (TextView) view.findViewById(R.id.question_points_group);
         pointsView.setText(String.valueOf(curQuestion.getPointsPossible()));
@@ -91,85 +68,7 @@ public class AnswerViewGroup extends Fragment {
     }
 
 
-    private void setAnswerText() {
-        A.setText(curQuestion.getA().toString());
-        B.setText(curQuestion.getB().toString());
-        C.setText(curQuestion.getC().toString());
-        D.setText(curQuestion.getD().toString());
-    }
 
-    private void setSeekBarListeners() {
-        aP.setMax(4);
-        bP.setMax(4);
-        cP.setMax(4);
-        dP.setMax(4);
-        aP.setOnSeekBarChangeListener(seekListener);
-        bP.setOnSeekBarChangeListener(seekListener);
-        cP.setOnSeekBarChangeListener(seekListener);
-        dP.setOnSeekBarChangeListener(seekListener);
-        aP.setProgress(selectedAnswers.get(0).getAllocatedPoints());
-        bP.setProgress(selectedAnswers.get(1).getAllocatedPoints());
-        cP.setProgress(selectedAnswers.get(2).getAllocatedPoints());
-        dP.setProgress(selectedAnswers.get(3).getAllocatedPoints());
-        int count = 0;
-        for (SelectedAnswer a : selectedAnswers) {
-            count += a.getAllocatedPoints();
-        }
-        curQuestion.setPointsPossible(4 - count);
-        pointsView.setText(String.valueOf(curQuestion.getPointsPossible()));
-    }
 
-    private SeekBar.OnSeekBarChangeListener seekListener = new SeekBar.OnSeekBarChangeListener() {
-        @Override
-        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-            int index = -1;
-            switch (seekBar.getId()) {
-                case R.id.A_points_group:
-                    index = 0;
-                    break;
-                case R.id.B_points_group:
-                    index = 1;
-                    break;
-                case R.id.C_points_group:
-                    index = 2;
-                    break;
-                case R.id.D_points_group:
-                    index = 3;
-                    break;
-            }
-            if (index == -1) {
-                return;
-            }
-            int p = curQuestion.getPointsPossible();
-            int pr = selectedAnswers.get(index).getAllocatedPoints() - progress;
-            if (p + pr < 0) {
-                seekBar.setProgress(selectedAnswers.get(index).getAllocatedPoints());
-            } else {
-                selectedAnswers.get(index).setAllocatedPoints(progress);
-                curQuestion.setPointsPossible(p + pr);
-                pointsView.setText(String.valueOf(curQuestion.getPointsPossible()));
-            }
-            aListener.setSelectedAnswers(selectedAnswers);
 
-        }
-        @Override
-        public void onStartTrackingTouch(SeekBar seekBar) {}
-        @Override
-        public void onStopTrackingTouch(SeekBar seekBar) {}
-    };
-
-    void getSelectedAnswers() {
-        String questionId = curQuestion.get_id();
-
-        // selected answers now store "prevProgress" as allocatedPoints
-        selectedAnswers = new ArrayList<>();
-        selectedAnswers = session.getSelectedAnswersFor(questionId);
-        if (selectedAnswers.size() != 4) {
-            Log.d(TAG, "New selected answers created.");
-            selectedAnswers.add(new SelectedAnswer(curQuestion.getA().getValue(), 0, questionId));
-            selectedAnswers.add(new SelectedAnswer(curQuestion.getB().getValue(), 0, questionId));
-            selectedAnswers.add(new SelectedAnswer(curQuestion.getC().getValue(), 0, questionId));
-            selectedAnswers.add(new SelectedAnswer(curQuestion.getD().getValue(), 0, questionId));
-        }
-    }
 }

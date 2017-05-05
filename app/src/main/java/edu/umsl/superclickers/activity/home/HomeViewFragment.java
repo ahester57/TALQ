@@ -23,7 +23,6 @@ import edu.umsl.superclickers.R;
 import edu.umsl.superclickers.activity.helper.QuizHolder;
 import edu.umsl.superclickers.app.SessionManager;
 import edu.umsl.superclickers.quizdata.QuizListItem;
-import edu.umsl.superclickers.userdata.Course;
 import edu.umsl.superclickers.userdata.User;
 
 /**

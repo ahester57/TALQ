@@ -64,8 +64,6 @@ public class WaitingRoomView extends Fragment {
         return view;
     }
 
-
-
     public void setTextQuizInfo(String quizInfo) {
         this.quizInfo = quizInfo;
         textQuizInfo.setText(quizInfo);
@@ -76,9 +74,4 @@ public class WaitingRoomView extends Fragment {
         textGroupStatus.setText(groupStatus);
     }
 
-    void parseQuizResponse(String quizResponse) {
-
-
-        this.quizInfo = quizResponse;
-    }
 }
