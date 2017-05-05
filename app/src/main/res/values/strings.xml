@@ -14,4 +14,6 @@
     <string name="skip">Skip</string>
     <string name="play">Play</string>
     <string name="quiz_service">Quiz Service</string>
+    <string name="check_mark">\u2714</string>
+    <string name="x_mark">\u2717</string>
 </resources>
