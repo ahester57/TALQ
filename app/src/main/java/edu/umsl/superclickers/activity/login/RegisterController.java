@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.Html;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -49,8 +50,6 @@ public class RegisterController extends Fragment {
     // Store new user, uploads to register URL
     void registerUser(final String name, final String userId, final String password) {
         String tag_str_req = "req_register";
-
-        pDialog.setMessage("Registerin...");
         showDialog();
         // new string request
         StringRequest strReq = new StringRequest(Request.Method.POST, LoginConfig.URL_REGISTER,
@@ -59,7 +58,6 @@ public class RegisterController extends Fragment {
                     public void onResponse(String response) {
                         Log.d(TAG, "Register Response: " + response);
                         hideDialog();
-
                         try {
                             JSONObject jObj = new JSONObject(response);
                             boolean error = jObj.getBoolean("error");
@@ -67,9 +65,10 @@ public class RegisterController extends Fragment {
                             if (!error) {
                                 // REGISTER SUCCESSFUL
                                 // store user in remote db
-
-                                Log.d(TAG, "User " + userId + " stored in remote database.");
-                                Toast.makeText(getActivity(), "User registered", Toast.LENGTH_LONG).show();
+                                Log.d(TAG, "User " + userId +
+                                        " stored in remote database.");
+                                Toast.makeText(getActivity(), "User registered",
+                                        Toast.LENGTH_LONG).show();
                                 rListener.goToLogin();
 
                             } else {
@@ -134,7 +133,8 @@ public class RegisterController extends Fragment {
                             // if no errors
                             if (error.equals("false")) {
                                 // user was found
-                                String name = jObj.getString("first") + " " + jObj.getString("last");
+                                String name = jObj.getString("first") + " " +
+                                                    jObj.getString("last");
                                 rListener.registerUser(name, userId, pwd);
 
                             } else {
@@ -154,7 +154,8 @@ public class RegisterController extends Fragment {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "Quiz error: " + error.getMessage());
-                Toast.makeText(getActivity(), error.getMessage(),
+                Toast.makeText(getActivity(),
+                        Html.fromHtml("<i>You</i> don't exist."),
                         Toast.LENGTH_LONG).show();
 
             }
@@ -165,13 +166,14 @@ public class RegisterController extends Fragment {
     }
 
     private void showDialog() {
-        if (!pDialog.isShowing()) {
+        if (pDialog != null && !pDialog.isShowing()) {
+            pDialog.setMessage("Registerin...");
             pDialog.show();
         }
     }
 
     private void hideDialog() {
-        if (pDialog.isShowing()) {
+        if (pDialog != null && pDialog.isShowing()) {
             pDialog.dismiss();
         }
     }

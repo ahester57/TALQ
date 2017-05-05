@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.CursorWrapper;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import edu.umsl.superclickers.database.schema.QuizSchema;
 import edu.umsl.superclickers.quizdata.Question;
@@ -25,24 +26,26 @@ class QuizCursorWrapper extends CursorWrapper {
         this.qdb = SQLiteHandlerQuestions.sharedInstance(context);
     }
 
-    Quiz getQuiz() {
-        Quiz quiz = null;
 
+    List<Quiz> getQuizzes() {
+        ArrayList<Quiz> quizzes = new ArrayList<>();
         moveToFirst();
         if (getCount() > 0) {
-            String sessionId = getString(1);
-            String _id = getString(2);
-            String desc = getString(3);
-            String text = getString(4);
-            String avail = getString(5);
-            String expiry = getString(6);
-            boolean timed = getInt(7) > 0;
-            int length = getInt(8);
+            do {
+                String sessionId = getString(1);
+                String _id = getString(2);
+                String desc = getString(3);
+                String text = getString(4);
+                String avail = getString(5);
+                String expiry = getString(6);
+                boolean timed = getInt(7) > 0;
+                int length = getInt(8);
 
-            ArrayList<Question> questions = qdb.getQuestions(sessionId);
-            quiz = new Quiz(_id, desc, text, avail, expiry, questions, sessionId, timed, length);
+                ArrayList<Question> questions = qdb.getQuestions(sessionId);
+                quizzes.add(new Quiz(_id, desc, text, avail, expiry, questions, sessionId, timed, length));
+            } while (moveToNext());
         }
-        return quiz;
+        return quizzes;
     }
 
     static ContentValues createQuizValues(Quiz quiz) {

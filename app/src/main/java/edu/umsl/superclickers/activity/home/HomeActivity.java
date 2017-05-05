@@ -1,5 +1,6 @@
 package edu.umsl.superclickers.activity.home;
 
+import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -9,14 +10,14 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import edu.umsl.superclickers.R;
 import edu.umsl.superclickers.activity.login.LoginActivity;
 import edu.umsl.superclickers.activity.quiz.QuizActivityUser;
-import edu.umsl.superclickers.activity.quiz.QuizService;
+import edu.umsl.superclickers.activity.quiz.helper.QuizService;
+import edu.umsl.superclickers.activity.waitingroom.WaitingRoomActivity;
 import edu.umsl.superclickers.app.FragmentConfig;
 import edu.umsl.superclickers.app.SessionManager;
 import edu.umsl.superclickers.quizdata.QuizListItem;
@@ -63,18 +64,16 @@ public class HomeActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        // @TODO add AlarmManager for submitting quiz
         // session manager
         session = new SessionManager(getApplicationContext());
 
         User user;
-
         user = session.getCurrentUser();
+        userId = user.getUserId();
         courses = session.getEnrolledCourses();
 
-
         FragmentManager fm = getFragmentManager();
-
-
         if (fm.findFragmentByTag(FragmentConfig.KEY_HOME_VIEW) != null) {
             hViewFragment = (HomeViewFragment) fm.findFragmentByTag(FragmentConfig.KEY_HOME_VIEW);
         } else {
@@ -84,8 +83,6 @@ public class HomeActivity extends AppCompatActivity implements
                     .commit();
         }
 
-
-
         if (fm.findFragmentByTag(FragmentConfig.KEY_HOME_CONTROLLER) != null) {
             hController = (HomeController) fm.findFragmentByTag(FragmentConfig.KEY_HOME_CONTROLLER);
         } else {
@@ -94,7 +91,7 @@ public class HomeActivity extends AppCompatActivity implements
                     .add(hController, FragmentConfig.KEY_HOME_CONTROLLER)
                     .commit();
             // only request quizzes if hController DNE
-            if(user != null || quizzes == null) {
+            if(user != null) {
                 hController.getQuizzesFor(user.getUserId());
             } else {
                 hController.getQuizzesFor("arh5w6");
@@ -113,7 +110,6 @@ public class HomeActivity extends AppCompatActivity implements
                 gController.getGroupForUser(user.getUserId(), courses.get(0).getCourseId());
             }
         }
-
 
     }
 
@@ -140,11 +136,34 @@ public class HomeActivity extends AppCompatActivity implements
         Log.d(TAG, "Selected quiz: " + quizzes.get(pos).getDescription());
     }
 
+
+    @Override
+    public void startQuiz() {
+        Intent i = new Intent(HomeActivity.this, QuizActivityUser.class);
+        i.putExtra("QUIZ_ID", quizID);
+        i.putExtra("USER_ID", userId);
+        i.putExtra("COURSE_ID", courseId);
+        i.putExtra("GROUP_ID", group.getGroupId());
+        startActivity(i);
+    }
+
     public void stopQuiz() {
         // @TODO POST quiz for grading
-        Toast.makeText(getApplicationContext(), "Quiz Submitted", Toast.LENGTH_LONG).show();
         stopService(new Intent(getBaseContext(), QuizService.class));
-        session.clearActiveQuiz();
+
+        Intent quizIntent = new Intent(HomeActivity.this, WaitingRoomActivity.class);
+        quizIntent.putExtra("QUIZ_ID", quizID);
+        quizIntent.putExtra("COURSE_ID", courseId);
+        quizIntent.putExtra("USER_ID", userId);
+        quizIntent.putExtra("GROUP_ID", group.getGroupId());
+        setResult(Activity.RESULT_OK);
+        startActivity(quizIntent);
+    }
+
+    @Override
+    public void goToGroups() {
+        Intent in = new Intent(HomeActivity.this, GroupActivity.class);
+        startActivity(in);
     }
 
     void handleQuizTimer(Intent intent) {
@@ -157,23 +176,6 @@ public class HomeActivity extends AppCompatActivity implements
         }
     }
 
-
-
-    @Override
-    public void startQuiz() {
-        Intent i = new Intent(HomeActivity.this, QuizActivityUser.class);
-        i.putExtra("QUIZ_ID", quizID);
-        i.putExtra("USER_ID", userId);
-        i.putExtra("COURSE_ID", courseId);
-        i.putExtra("GROUP_ID", group.getGroupId());
-        startActivity(i);
-    }
-
-    @Override
-    public void goToGroups() {
-        Intent in = new Intent(HomeActivity.this, GroupActivity.class);
-        startActivity(in);
-    }
     // logout user,
     @Override
     public void logoutUser() {
@@ -186,20 +188,26 @@ public class HomeActivity extends AppCompatActivity implements
     }
 
 
-
     @Override
     protected void onResume() {
+        try {
+            registerReceiver(br, new IntentFilter(QuizService.COUNTDOWN_BR));
+            Log.d(TAG, "Registered broadcast reciever");
+        } catch (Exception e) {
+            // Receiver stopped onPause
+        }
         super.onResume();
-        registerReceiver(br, new IntentFilter(QuizService.COUNTDOWN_BR));
-        Log.d(TAG, "Registered broadcast reciever");
     }
 
     @Override
     protected void onPause() {
+        try {
+            unregisterReceiver(br);
+            Log.d(TAG, "Unregistered broadcast reciever");
+        } catch (Exception e) {
+            // Receiver stopped onPause
+        }
         super.onPause();
-        unregisterReceiver(br);
-        Log.d(TAG, "Unregistered broadcast reciever");
-
     }
 
     @Override

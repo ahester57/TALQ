@@ -20,10 +20,9 @@ import android.widget.TextView;
 import java.util.List;
 
 import edu.umsl.superclickers.R;
-import edu.umsl.superclickers.activity.helper.QuizHolder;
+import edu.umsl.superclickers.activity.quiz.helper.QuizHolder;
 import edu.umsl.superclickers.app.SessionManager;
 import edu.umsl.superclickers.quizdata.QuizListItem;
-import edu.umsl.superclickers.userdata.Course;
 import edu.umsl.superclickers.userdata.User;
 
 /**
@@ -124,14 +123,13 @@ public class HomeViewFragment extends Fragment implements View.OnClickListener {
     }
 
 
-    class QuizAdapter extends RecyclerView.Adapter<QuizHolder> implements
+    private class QuizAdapter extends RecyclerView.Adapter<QuizHolder> implements
             QuizHolder.QuizHolderListener {
 
         private int selectedPos = 0;
         private List<QuizListItem> mQuizzes;
-        private List<Course> mCourses;
 
-        public QuizAdapter(List<QuizListItem> quizzes) {
+        QuizAdapter(List<QuizListItem> quizzes) {
             mQuizzes = quizzes;
         }
 
@@ -139,8 +137,7 @@ public class HomeViewFragment extends Fragment implements View.OnClickListener {
         public QuizHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater inflater = LayoutInflater.from(getActivity());
             View view = inflater.inflate(R.layout.quiz_recycler_item, parent, false);
-            QuizHolder qHolder = new QuizHolder(view, this);
-            return qHolder;
+            return new QuizHolder(view, this);
         }
 
         @Override

@@ -59,34 +59,29 @@ public class LoginController extends Fragment {
     // check login credentials
     void checkLogin(final String ssoId, final String password) {
         String tag_str_req = "req_login";
-        pDialog.setMessage("Logging in...");
         showDialog();
-
         // new string request
-        StringRequest strReq = new StringRequest(Request.Method.POST, LoginConfig.URL_LOGIN,
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                LoginConfig.URL_LOGIN,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         Log.d(TAG, "Login Response: " + response);
                         hideDialog();
-
                         try {
                             JSONObject jObj = new JSONObject(response);
                             boolean error = jObj.getBoolean("error");
-
                             if (!error) {
                                 // LOGIN SUCCESSFUL
                                 JSONObject user = jObj.getJSONObject("user");
                                 String ssoId = user.getString("email");
                                 verifyUser(ssoId);
-
                             } else {
                                 // Error loggin in
                                 String errMessage = jObj.getString("error_msg");
                                 Toast.makeText(getActivity(), errMessage,
                                         Toast.LENGTH_LONG).show();
                             }
-
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Toast.makeText(getActivity(), "JSON error: "
@@ -122,7 +117,6 @@ public class LoginController extends Fragment {
         String uri = String.format(LoginConfig.URL_USER_BY_SSO, user_id);
         // new string request
         StringRequest strReq = new StringRequest(Request.Method.GET, uri,
-
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -145,18 +139,19 @@ public class LoginController extends Fragment {
                                 String first = jObj.getString("first");
                                 String last = jObj.getString("last");
 
-                                JSONArray courseArr = jObj.getJSONArray("enrolledCourses");
+                                JSONArray courseArr = jObj
+                                        .getJSONArray("enrolledCourses");
                                 // Handle enrolled courses
                                 for (int i = 0; i < courseArr.length(); i++) {
-                                    JSONObject courseObj = courseArr.getJSONObject(i);
+                                    JSONObject courseObj = courseArr
+                                            .getJSONObject(i);
                                     session.addCourseToDB(new Course(courseObj));
                                 }
-
                                 // create session
-                                session.addUserToDB(new User(first, last, userID, email, _id));
+                                session.addUserToDB(new User(first, last,
+                                            userID, email, _id));
                                 session.setLogin(true);
                                 lListener.goToHome();
-
                             } else {
                                 // Error
                                 String errMessage = "Oops! User not found.";
@@ -176,7 +171,6 @@ public class LoginController extends Fragment {
                 Log.e(TAG, "Quiz error: " + error.getMessage());
                 Toast.makeText(getActivity(), error.getMessage(),
                         Toast.LENGTH_LONG).show();
-
             }
         });
         // end string request.. phew!
@@ -184,13 +178,14 @@ public class LoginController extends Fragment {
     }
 
     private void showDialog() {
-        if (!pDialog.isShowing()) {
+        if (pDialog != null && !pDialog.isShowing()) {
+            pDialog.setMessage("Logging in...");
             pDialog.show();
         }
     }
     ////////////////
     private void hideDialog() {
-        if (pDialog.isShowing()) {
+        if (pDialog != null && pDialog.isShowing()) {
             pDialog.dismiss();
         }
     }

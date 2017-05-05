@@ -4,13 +4,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 import edu.umsl.superclickers.database.schema.QuizSchema;
 
 
-public class Quiz implements Serializable{
+public class Quiz {
 
     private String _id;
     private String sessionId;
@@ -21,9 +20,7 @@ public class Quiz implements Serializable{
     private ArrayList<Question> questions;
     private boolean timed;
     private int timedLength;
-
     private int qNum;
-
 
     public Quiz(String id, String description, String text, String availableDate, String expiryDate,
                 ArrayList<Question> questions, String sessionId, boolean timed, int length) {
@@ -41,7 +38,6 @@ public class Quiz implements Serializable{
 
     public Quiz(JSONObject jObj, String sessionId) throws JSONException{
         try {
-
             String id = jObj.getString(QuizSchema.KEY_QID);
             String desc = jObj.getString(QuizSchema.KEY_DESC);
             String text = jObj.getString(QuizSchema.KEY_TEXT);
@@ -66,16 +62,17 @@ public class Quiz implements Serializable{
             this.availableDate = avail;
             this.expiryDate = exp;
             this.questions = questions;
-            this.sessionId = sessionId;
             this.qNum = 0;
             this.timed = timed;
             this.timedLength = length;
+            this.sessionId = sessionId;
 
         } catch (JSONException e) {
             e.printStackTrace();
             throw new JSONException(e.getMessage());
         }
     }
+
 
     public String get_id() {
         return _id;

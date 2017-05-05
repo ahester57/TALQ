@@ -1,4 +1,4 @@
-package edu.umsl.superclickers.activity.helper;
+package edu.umsl.superclickers.activity.quiz.helper;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -99,7 +99,7 @@ public class HorDottedProgress extends View {
 
     private void startAnimation() {
         BounceAnimation bAnimation = new BounceAnimation();
-        bAnimation.setDuration(0);
+        bAnimation.setDuration(10);
         bAnimation.setRepeatCount(Animation.INFINITE);
         bAnimation.setInterpolator(new LinearInterpolator());
         bAnimation.setAnimationListener(new Animation.AnimationListener() {

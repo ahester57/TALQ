@@ -1,4 +1,4 @@
-package edu.umsl.superclickers.activity.quiz;
+package edu.umsl.superclickers.activity.quiz.helper;
 
 import android.app.Service;
 import android.content.Intent;
@@ -51,7 +51,7 @@ public class QuizService extends Service {
             @Override
             public void onFinish() {
                 Log.d(TAG, "Quiz timer finished.");
-                session.clearDatabase();
+                //session.clearDatabase();
                 stopSelf();
             }
         };

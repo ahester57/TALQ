@@ -1,7 +1,6 @@
 package edu.umsl.superclickers.activity.login;
 
 import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -59,7 +58,8 @@ public class LoginActivity extends AppCompatActivity implements
 
         FragmentManager fm = getFragmentManager();
         if (fm.findFragmentByTag(FragmentConfig.KEY_LOGIN_CONTROLLER) != null) {
-            lController = (LoginController) fm.findFragmentByTag(FragmentConfig.KEY_LOGIN_CONTROLLER);
+            lController = (LoginController)
+                    fm.findFragmentByTag(FragmentConfig.KEY_LOGIN_CONTROLLER);
         } else {lController = new LoginController();
             fm.beginTransaction()
                     .add(lController, FragmentConfig.KEY_LOGIN_CONTROLLER)

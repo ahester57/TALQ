@@ -15,14 +15,15 @@ public class Question {
     private String text;
     private String sessionId;
     private int pointsPossible;
+    private int maxPoints;
     private ArrayList<Answer> availableAnswers;
-
 
     public Question(String id, String title, String text, int pointsPossible, ArrayList<Answer> availableAnswers) {
         this._id = id;
         this.title = title;
         this.text = text;
         this.pointsPossible = pointsPossible;
+        this.maxPoints = pointsPossible;
         this.availableAnswers = availableAnswers; // sort by sortOrder
     }
 
@@ -63,6 +64,8 @@ public class Question {
     public int getPointsPossible() {
         return pointsPossible;
     }
+
+    public int getMaxPoints() { return maxPoints; }
 
     public void setPointsPossible(int newPoints) {
         this.pointsPossible = newPoints;

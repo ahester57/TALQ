@@ -1,15 +1,9 @@
 package edu.umsl.superclickers.activity.waitingroom;
 
-import android.app.Activity;
 import android.app.Fragment;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -53,7 +47,7 @@ public class WaitingRoomView extends Fragment {
 
 
 
-        Button startGroupQuiz = (Button) view.findViewById(R.id.button_start_group_quiz);
+        Button startGroupQuiz = (Button) view.findViewById(R.id.button_submit_quiz);
         textQuizInfo = (TextView) view.findViewById(R.id.text_quiz_info);
         textGroupStatus = (TextView) view.findViewById(R.id.text_group_status);
         textQuizInfo.setText(quizInfo);
@@ -70,8 +64,6 @@ public class WaitingRoomView extends Fragment {
         return view;
     }
 
-
-
     public void setTextQuizInfo(String quizInfo) {
         this.quizInfo = quizInfo;
         textQuizInfo.setText(quizInfo);
@@ -82,9 +74,4 @@ public class WaitingRoomView extends Fragment {
         textGroupStatus.setText(groupStatus);
     }
 
-    void parseQuizResponse(String quizResponse) {
-
-
-        this.quizInfo = quizResponse;
-    }
 }

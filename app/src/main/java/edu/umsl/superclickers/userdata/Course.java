@@ -38,7 +38,6 @@ public class Course {
             String semester = cObj.getString(CourseSchema.KEY_SEMESTER);
             String instructor = cObj.getString(CourseSchema.KEY_INSTRUCTOR);
 
-
             this._id = id;
             this.courseId = courseId;
             this.extendedID = extendedID;

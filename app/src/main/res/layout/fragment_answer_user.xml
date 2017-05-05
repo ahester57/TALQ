@@ -130,7 +130,7 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/C_button" />
 
-            <edu.umsl.superclickers.activity.helper.SeekBarText
+            <edu.umsl.superclickers.activity.quiz.helper.SeekBarText
                 android:thumb="@drawable/seek_bar_text_thumb"
                 android:id="@+id/A_points"
                 android:layout_width="300dp"
@@ -141,7 +141,7 @@
                 android:layout_marginRight="16dp"
                 app:layout_constraintRight_toRightOf="@+id/A_button" />
 
-            <edu.umsl.superclickers.activity.helper.SeekBarText
+            <edu.umsl.superclickers.activity.quiz.helper.SeekBarText
                 android:thumb="@drawable/seek_bar_text_thumb"
                 android:id="@+id/B_points"
                 android:layout_width="300dp"
@@ -152,7 +152,7 @@
                 android:layout_marginRight="16dp"
                 app:layout_constraintRight_toRightOf="@+id/B_button" />
 
-            <edu.umsl.superclickers.activity.helper.SeekBarText
+            <edu.umsl.superclickers.activity.quiz.helper.SeekBarText
                 android:thumb="@drawable/seek_bar_text_thumb"
                 android:id="@+id/C_points"
                 android:layout_width="300dp"
@@ -163,7 +163,7 @@
                 android:layout_marginLeft="16dp"
                 app:layout_constraintLeft_toLeftOf="@+id/C_button" />
 
-            <edu.umsl.superclickers.activity.helper.SeekBarText
+            <edu.umsl.superclickers.activity.quiz.helper.SeekBarText
                 android:thumb="@drawable/seek_bar_text_thumb"
                 android:id="@+id/D_points"
                 android:layout_width="300dp"

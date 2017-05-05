@@ -1,13 +1,12 @@
-package edu.umsl.superclickers.activity.helper;
+package edu.umsl.superclickers.activity.quiz.helper;
 
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.graphics.Typeface;
+import android.support.v7.widget.AppCompatSeekBar;
 import android.text.TextPaint;
 import android.util.AttributeSet;
-import android.support.v7.widget.AppCompatSeekBar;
 import android.widget.TextView;
 
 import edu.umsl.superclickers.R;

@@ -1,12 +1,7 @@
-package edu.umsl.superclickers.activity.quiz;
+package edu.umsl.superclickers.activity.quiz.view;
 
 import android.app.Fragment;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -14,90 +9,46 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import edu.umsl.superclickers.R;
-import edu.umsl.superclickers.app.FragmentConfig;
+import edu.umsl.superclickers.activity.quiz.helper.SeekBarText;
 import edu.umsl.superclickers.app.SessionManager;
 import edu.umsl.superclickers.quizdata.Question;
 import edu.umsl.superclickers.quizdata.SelectedAnswer;
 
 /**
- * Created by Austin on 4/22/2017.
+ * Created by Austin on 5/4/2017.
  *
  */
 
-public class AnswerViewGroup extends Fragment {
-    private static final String TAG = AnswerViewGroup.class.getSimpleName();
+public abstract class AnswerView extends Fragment {
 
-    private Button A;
-    private Button B;
-    private Button C;
-    private Button D;
-    private SeekBar aP, bP, cP, dP;
-    private TextView pointsView;
+    private final static String TAG = AnswerView.class.getSimpleName();
 
-    private Question curQuestion;
-    private ArrayList<SelectedAnswer> selectedAnswers;
+    Button A;
+    Button B;
+    Button C;
+    Button D;
+    SeekBarText aP, bP, cP, dP;
+    TextView pointsView;
 
-    private SessionManager session;
-    private AnswerListener aListener;
+    Question curQuestion;
+    ArrayList<SelectedAnswer> selectedAnswers;
+
+    SessionManager session;
+    AnswerViewGroup.AnswerListener aListener;
 
     interface AnswerListener {
         Question getQuestion();
         void setSelectedAnswers(ArrayList<SelectedAnswer> selectedAnswers);
-
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setRetainInstance(true);
-
-        session = new SessionManager(getActivity());
-        aListener = (AnswerListener) getFragmentManager()
-                .findFragmentByTag(FragmentConfig.KEY_QUIZ_VIEW_GROUP);
-        curQuestion = aListener.getQuestion();
-
-        getSelectedAnswers();
-
-        Log.d(TAG, "Answer view created.");
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_answer_group, container, false);
-
-        A = (Button) view.findViewById(R.id.A_button_group);
-        B = (Button) view.findViewById(R.id.B_button_group);
-        C = (Button) view.findViewById(R.id.C_button_group);
-        D = (Button) view.findViewById(R.id.D_button_group);
-        aP = (SeekBar) view.findViewById(R.id.A_points_group);
-        bP = (SeekBar) view.findViewById(R.id.B_points_group);
-        cP = (SeekBar) view.findViewById(R.id.C_points_group);
-        dP = (SeekBar) view.findViewById(R.id.D_points_group);
-
-//        Button buttonNext = (Button) view.findViewById(R.id.next_question_button);
-//        Button buttonPrevious = (Button) view.findViewById(R.id.prev_question_button);
-//        buttonPrevious.setOnClickListener(this);
-//        buttonNext.setOnClickListener(this);
-
-        pointsView = (TextView) view.findViewById(R.id.question_points_group);
-        pointsView.setText(String.valueOf(curQuestion.getPointsPossible()));
-
-        setSeekBarListeners();
-        setAnswerText();
-
-        return view;
-    }
-
-
-    private void setAnswerText() {
+    void setAnswerText() {
         A.setText(curQuestion.getA().toString());
         B.setText(curQuestion.getB().toString());
         C.setText(curQuestion.getC().toString());
         D.setText(curQuestion.getD().toString());
     }
 
-    private void setSeekBarListeners() {
+    void setSeekBarListeners() {
         aP.setMax(4);
         bP.setMax(4);
         cP.setMax(4);
@@ -114,15 +65,28 @@ public class AnswerViewGroup extends Fragment {
         for (SelectedAnswer a : selectedAnswers) {
             count += a.getAllocatedPoints();
         }
-        curQuestion.setPointsPossible(4 - count);
+        int maxPoints = curQuestion.getMaxPoints();
+        curQuestion.setPointsPossible(4 - count); // @TODO add getMaxPoints in Question
         pointsView.setText(String.valueOf(curQuestion.getPointsPossible()));
     }
 
-    private SeekBar.OnSeekBarChangeListener seekListener = new SeekBar.OnSeekBarChangeListener() {
+    SeekBar.OnSeekBarChangeListener seekListener = new SeekBar.OnSeekBarChangeListener() {
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             int index = -1;
             switch (seekBar.getId()) {
+                case R.id.A_points:
+                    index = 0;
+                    break;
+                case R.id.B_points:
+                    index = 1;
+                    break;
+                case R.id.C_points:
+                    index = 2;
+                    break;
+                case R.id.D_points:
+                    index = 3;
+                    break;
                 case R.id.A_points_group:
                     index = 0;
                     break;
@@ -148,8 +112,9 @@ public class AnswerViewGroup extends Fragment {
                 curQuestion.setPointsPossible(p + pr);
                 pointsView.setText(String.valueOf(curQuestion.getPointsPossible()));
             }
-            aListener.setSelectedAnswers(selectedAnswers);
-
+            if (aListener != null) {
+                aListener.setSelectedAnswers(selectedAnswers);
+            }
         }
         @Override
         public void onStartTrackingTouch(SeekBar seekBar) {}
@@ -159,7 +124,6 @@ public class AnswerViewGroup extends Fragment {
 
     void getSelectedAnswers() {
         String questionId = curQuestion.get_id();
-
         // selected answers now store "prevProgress" as allocatedPoints
         selectedAnswers = new ArrayList<>();
         selectedAnswers = session.getSelectedAnswersFor(questionId);

@@ -28,7 +28,6 @@ public class GradedAnswer {
         }
     }
 
-
     public String getValue() {
         return value;
     }
