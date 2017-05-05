@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import edu.umsl.superclickers.app.AppController;
 import edu.umsl.superclickers.app.QuizConfig;
 import edu.umsl.superclickers.app.SessionManager;
-import edu.umsl.superclickers.quizdata.Quiz;
 import edu.umsl.superclickers.quizdata.QuizListItem;
 
 

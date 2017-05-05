@@ -16,6 +16,7 @@ import edu.umsl.superclickers.quizdata.SelectedAnswer;
 
 /**
  * Created by Austin on 5/4/2017.
+ *
  */
 
 public abstract class AnswerView extends Fragment {

@@ -1,6 +1,5 @@
 package edu.umsl.superclickers.activity.quiz;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -8,17 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.SeekBar;
 import android.widget.TextView;
-
-import java.util.ArrayList;
 
 import edu.umsl.superclickers.R;
 import edu.umsl.superclickers.activity.helper.SeekBarText;
 import edu.umsl.superclickers.app.FragmentConfig;
 import edu.umsl.superclickers.app.SessionManager;
-import edu.umsl.superclickers.quizdata.Question;
-import edu.umsl.superclickers.quizdata.SelectedAnswer;
 
 /**
  * Created by Austin on 4/22/2017.

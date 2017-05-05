@@ -1,25 +1,18 @@
 package edu.umsl.superclickers.activity.quiz;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.AppCompatSeekBar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.SeekBar;
 import android.widget.TextView;
-
-import java.util.ArrayList;
 
 import edu.umsl.superclickers.R;
 import edu.umsl.superclickers.activity.helper.SeekBarText;
 import edu.umsl.superclickers.app.FragmentConfig;
 import edu.umsl.superclickers.app.SessionManager;
-import edu.umsl.superclickers.quizdata.Question;
-import edu.umsl.superclickers.quizdata.SelectedAnswer;
 
 /**
  * Created by stin on 1/31/17.
@@ -28,7 +21,7 @@ import edu.umsl.superclickers.quizdata.SelectedAnswer;
 
 public class AnswerViewUser extends AnswerView {
     private static final String TAG = AnswerViewUser.class.getSimpleName();
-    
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

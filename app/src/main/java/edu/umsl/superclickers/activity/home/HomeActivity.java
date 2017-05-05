@@ -1,5 +1,6 @@
 package edu.umsl.superclickers.activity.home;
 
+import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -9,7 +10,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -17,6 +17,7 @@ import edu.umsl.superclickers.R;
 import edu.umsl.superclickers.activity.login.LoginActivity;
 import edu.umsl.superclickers.activity.quiz.QuizActivityUser;
 import edu.umsl.superclickers.activity.quiz.QuizService;
+import edu.umsl.superclickers.activity.waitingroom.WaitingRoomActivity;
 import edu.umsl.superclickers.app.FragmentConfig;
 import edu.umsl.superclickers.app.SessionManager;
 import edu.umsl.superclickers.quizdata.QuizListItem;
@@ -146,9 +147,15 @@ public class HomeActivity extends AppCompatActivity implements
 
     public void stopQuiz() {
         // @TODO POST quiz for grading
-        Toast.makeText(getApplicationContext(), "Quiz Submitted", Toast.LENGTH_LONG).show();
         stopService(new Intent(getBaseContext(), QuizService.class));
-        session.clearActiveQuiz();
+
+        Intent quizIntent = new Intent(HomeActivity.this, WaitingRoomActivity.class);
+        quizIntent.putExtra("QUIZ_ID", quizID);
+        quizIntent.putExtra("COURSE_ID", courseId);
+        quizIntent.putExtra("USER_ID", userId);
+        quizIntent.putExtra("GROUP_ID", group.getGroupId());
+        setResult(Activity.RESULT_OK);
+        startActivity(quizIntent);
     }
 
     @Override

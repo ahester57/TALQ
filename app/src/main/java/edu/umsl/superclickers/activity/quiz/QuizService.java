@@ -51,7 +51,7 @@ public class QuizService extends Service {
             @Override
             public void onFinish() {
                 Log.d(TAG, "Quiz timer finished.");
-                session.clearDatabase();
+                //session.clearDatabase();
                 stopSelf();
             }
         };

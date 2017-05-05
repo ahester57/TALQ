@@ -71,12 +71,16 @@ public class QuizActivityUser extends AppCompatActivity implements
         if (!session.isQuizRunning()) {
             session.clearActiveQuiz(); // i have my reasons
         } else {
-            Quiz q = session.getActiveQuiz();
-            if (q != null && !q.get_id().equals(quizID)) {
+            try {
+                Quiz q = session.getActiveQuiz();
+                if (q != null && !q.get_id().equals(quizID)) {
+                    session.clearActiveQuiz();
+                    stopService(timerService);
+                } else if (session.isDoneWithIndividual()) {
+                    skipToWaitingRoom();
+                }
+            } catch (IndexOutOfBoundsException e) {
                 session.clearActiveQuiz();
-                stopService(timerService);
-            } else if (session.isDoneWithIndividual()) {
-                skipToWaitingRoom();
             }
         }
 
