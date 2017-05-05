@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import java.util.List;
 
@@ -50,11 +51,16 @@ public class QuizReviewViewUser extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_user_review, container, false);
 
+        Button submit = (Button) view.findViewById(R.id.button_submit_quiz);
         qRecyclerView = (RecyclerView) view.findViewById(R.id.review_quiz_recycler);
         qRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
         setQuestionAdapter();
-
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rListener.submitQuiz();
+            }
+        });
         return view;
     }
 
@@ -78,7 +84,7 @@ public class QuizReviewViewUser extends Fragment {
         @Override
         public QuestionHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater inflater = LayoutInflater.from(getActivity());
-            View view = inflater.inflate(R.layout.quiz_recycler_item, parent, false);
+            View view = inflater.inflate(R.layout.question_recycler_item, parent, false);
             return new QuestionHolder(view, this);
         }
 
@@ -97,7 +103,7 @@ public class QuizReviewViewUser extends Fragment {
                     } else {
                         holder.itemView.setBackgroundColor(Color.TRANSPARENT);
                     }
-                    holder.bindQuiz(mQuestions.get(position));
+                    holder.bindQuestion(mQuestions.get(position), mQuestions.size(), position);
                     holder.itemView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

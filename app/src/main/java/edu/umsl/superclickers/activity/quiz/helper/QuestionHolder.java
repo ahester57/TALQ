@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import java.lang.ref.WeakReference;
+import java.util.Locale;
 
 import edu.umsl.superclickers.R;
 import edu.umsl.superclickers.quizdata.Question;
@@ -16,10 +17,11 @@ import edu.umsl.superclickers.quizdata.Question;
 public class QuestionHolder extends RecyclerView.ViewHolder {
 
     private final String TAG = QuestionHolder.class.getSimpleName();
-    private TextView tQuizName;
-    private TextView tQuizText;
-    private TextView tCourseName;
-    private TextView tQuizTime;
+    private TextView tQuestionNumber;
+    private TextView tQuestionText;
+    private TextView tQuestionAnswers;
+    private TextView tCheckMark;
+    private TextView tXMark;
     private WeakReference<QuestionHolderListener> mListener;
 
     public interface QuestionHolderListener {
@@ -30,17 +32,20 @@ public class QuestionHolder extends RecyclerView.ViewHolder {
     public QuestionHolder(View itemView, QuestionHolderListener listener) {
         super(itemView);
         this.mListener = new WeakReference<>(listener);
-        tQuizName = (TextView) itemView.findViewById(R.id.text_quiz_name);
-        tQuizText = (TextView) itemView.findViewById(R.id.text_quiz_text);
-        tCourseName = (TextView) itemView.findViewById(R.id.text_course_name);
-        tQuizTime = (TextView) itemView.findViewById(R.id.text_quiz_time);
+        tQuestionNumber = (TextView) itemView.findViewById(R.id.question_number);
+        tQuestionText = (TextView) itemView.findViewById(R.id.question_review_text);
+        tQuestionAnswers = (TextView) itemView.findViewById(R.id.selected_answers);
+        tCheckMark = (TextView) itemView.findViewById(R.id.check_mark);
+        tXMark = (TextView) itemView.findViewById(R.id.x_mark);
     }
 
-    public void bindQuiz(Question quiz) {
-//        tQuizName.setText(quiz.getDescription());
-        tQuizText.setText(quiz.getText());
-//        tCourseName.setText(quiz.getCourseId()); ////////
-//        tQuizTime.setText(String.valueOf(quiz.getTimedLength()));
+    public void bindQuestion(Question question, int numQuestions, int qNum) {
+        tQuestionNumber.setText(String.format(Locale.getDefault(),
+                "%d/%d", qNum+1, numQuestions));
+        tQuestionText.setText(question.getText());
+//        tQuestionAnswers.setText(question.getCourseId()); ////////
+//        tXMark.setText(String.valueOf(question.getTimedLength()));
+//        tXMark.setText(String.valueOf(question.getTimedLength()));
     }
 
 }

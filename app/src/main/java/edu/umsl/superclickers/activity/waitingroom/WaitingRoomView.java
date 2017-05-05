@@ -47,7 +47,7 @@ public class WaitingRoomView extends Fragment {
 
 
 
-        Button startGroupQuiz = (Button) view.findViewById(R.id.button_submit_quiz);
+        Button startGroupQuiz = (Button) view.findViewById(R.id.button_start_group_quiz);
         textQuizInfo = (TextView) view.findViewById(R.id.text_quiz_info);
         textGroupStatus = (TextView) view.findViewById(R.id.text_group_status);
         textQuizInfo.setText(quizInfo);

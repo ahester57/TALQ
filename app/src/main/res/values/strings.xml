@@ -16,4 +16,6 @@
     <string name="quiz_service">Quiz Service</string>
     <string name="check_mark">\u2714</string>
     <string name="x_mark">\u2717</string>
+    <string name="submit_quiz">Submit Quiz</string>
+    <string name="start_group_quiz">Start Group Quiz</string>
 </resources>
