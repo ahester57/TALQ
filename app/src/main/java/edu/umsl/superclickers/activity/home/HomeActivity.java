@@ -64,6 +64,7 @@ public class HomeActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        // @TODO add AlarmManager for submitting quiz
         // session manager
         session = new SessionManager(getApplicationContext());
 
