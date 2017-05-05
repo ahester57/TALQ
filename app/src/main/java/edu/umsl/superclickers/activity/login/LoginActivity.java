@@ -58,7 +58,8 @@ public class LoginActivity extends AppCompatActivity implements
 
         FragmentManager fm = getFragmentManager();
         if (fm.findFragmentByTag(FragmentConfig.KEY_LOGIN_CONTROLLER) != null) {
-            lController = (LoginController) fm.findFragmentByTag(FragmentConfig.KEY_LOGIN_CONTROLLER);
+            lController = (LoginController)
+                    fm.findFragmentByTag(FragmentConfig.KEY_LOGIN_CONTROLLER);
         } else {lController = new LoginController();
             fm.beginTransaction()
                     .add(lController, FragmentConfig.KEY_LOGIN_CONTROLLER)

@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import edu.umsl.superclickers.R;
 import edu.umsl.superclickers.activity.login.LoginActivity;
 import edu.umsl.superclickers.activity.quiz.QuizActivityUser;
-import edu.umsl.superclickers.activity.quiz.QuizService;
+import edu.umsl.superclickers.activity.quiz.helper.QuizService;
 import edu.umsl.superclickers.activity.waitingroom.WaitingRoomActivity;
 import edu.umsl.superclickers.app.FragmentConfig;
 import edu.umsl.superclickers.app.SessionManager;
@@ -69,6 +69,7 @@ public class HomeActivity extends AppCompatActivity implements
 
         User user;
         user = session.getCurrentUser();
+        userId = user.getUserId();
         courses = session.getEnrolledCourses();
 
         FragmentManager fm = getFragmentManager();

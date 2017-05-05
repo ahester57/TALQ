@@ -20,7 +20,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import edu.umsl.superclickers.R;
-import edu.umsl.superclickers.activity.helper.QuizHolder;
+import edu.umsl.superclickers.activity.quiz.helper.QuizHolder;
 import edu.umsl.superclickers.app.SessionManager;
 import edu.umsl.superclickers.quizdata.QuizListItem;
 import edu.umsl.superclickers.userdata.User;

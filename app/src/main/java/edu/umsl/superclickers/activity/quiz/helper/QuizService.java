@@ -1,4 +1,4 @@
-package edu.umsl.superclickers.activity.quiz;
+package edu.umsl.superclickers.activity.quiz.helper;
 
 import android.app.Service;
 import android.content.Intent;

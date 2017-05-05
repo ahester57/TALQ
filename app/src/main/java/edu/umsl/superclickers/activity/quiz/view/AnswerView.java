@@ -1,4 +1,4 @@
-package edu.umsl.superclickers.activity.quiz;
+package edu.umsl.superclickers.activity.quiz.view;
 
 import android.app.Fragment;
 import android.util.Log;
@@ -9,7 +9,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import edu.umsl.superclickers.R;
-import edu.umsl.superclickers.activity.helper.SeekBarText;
+import edu.umsl.superclickers.activity.quiz.helper.SeekBarText;
 import edu.umsl.superclickers.app.SessionManager;
 import edu.umsl.superclickers.quizdata.Question;
 import edu.umsl.superclickers.quizdata.SelectedAnswer;
@@ -41,14 +41,12 @@ public abstract class AnswerView extends Fragment {
         void setSelectedAnswers(ArrayList<SelectedAnswer> selectedAnswers);
     }
 
-
     void setAnswerText() {
         A.setText(curQuestion.getA().toString());
         B.setText(curQuestion.getB().toString());
         C.setText(curQuestion.getC().toString());
         D.setText(curQuestion.getD().toString());
     }
-
 
     void setSeekBarListeners() {
         aP.setMax(4);
@@ -67,6 +65,7 @@ public abstract class AnswerView extends Fragment {
         for (SelectedAnswer a : selectedAnswers) {
             count += a.getAllocatedPoints();
         }
+        int maxPoints = curQuestion.getMaxPoints();
         curQuestion.setPointsPossible(4 - count); // @TODO add getMaxPoints in Question
         pointsView.setText(String.valueOf(curQuestion.getPointsPossible()));
     }
@@ -113,8 +112,9 @@ public abstract class AnswerView extends Fragment {
                 curQuestion.setPointsPossible(p + pr);
                 pointsView.setText(String.valueOf(curQuestion.getPointsPossible()));
             }
-            aListener.setSelectedAnswers(selectedAnswers);
-
+            if (aListener != null) {
+                aListener.setSelectedAnswers(selectedAnswers);
+            }
         }
         @Override
         public void onStartTrackingTouch(SeekBar seekBar) {}
@@ -124,7 +124,6 @@ public abstract class AnswerView extends Fragment {
 
     void getSelectedAnswers() {
         String questionId = curQuestion.get_id();
-
         // selected answers now store "prevProgress" as allocatedPoints
         selectedAnswers = new ArrayList<>();
         selectedAnswers = session.getSelectedAnswersFor(questionId);

@@ -16,11 +16,9 @@ public class Group {
     private ArrayList<String> courseIds = new ArrayList<>();
     private ArrayList<SimpleUser> users = new ArrayList<>();
 
-
     public Group(String groupName, String groupId) {
         this.groupName = groupName;
         this.groupId = groupId;
-
     }
 
     public Group(JSONObject gObj) {

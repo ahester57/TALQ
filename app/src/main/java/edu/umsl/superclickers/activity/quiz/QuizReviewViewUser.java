@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import edu.umsl.superclickers.R;
-import edu.umsl.superclickers.activity.helper.QuestionHolder;
+import edu.umsl.superclickers.activity.quiz.helper.QuestionHolder;
 import edu.umsl.superclickers.app.SessionManager;
 import edu.umsl.superclickers.quizdata.Question;
 

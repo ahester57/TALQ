@@ -16,11 +16,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-
 import edu.umsl.superclickers.R;
 import edu.umsl.superclickers.activity.quiz.QuizActivityGroup;
-import edu.umsl.superclickers.activity.quiz.QuizService;
+import edu.umsl.superclickers.activity.quiz.helper.QuizService;
 import edu.umsl.superclickers.app.FragmentConfig;
 import edu.umsl.superclickers.app.SessionManager;
 import edu.umsl.superclickers.quizdata.GradedQuiz;
@@ -43,10 +41,7 @@ public class WaitingRoomActivity extends AppCompatActivity
     private String courseID;
     private String groupID;
     private String leader;
-
     private Quiz curQuiz;
-
-    private ArrayList<SelectedAnswer> selectedAnswers = new ArrayList<>();
 
     private WaitingRoomView wFragment;
     private WaitingRoomController wController;
@@ -61,15 +56,14 @@ public class WaitingRoomActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_quiz);
         setSupportActionBar(toolbar);
 
-
         session = new SessionManager(getApplicationContext());
-
-        Intent i = getIntent();
-        quizID = i.getStringExtra("QUIZ_ID");
-        courseID = i.getStringExtra("COURSE_ID");
-        userID = i.getStringExtra("USER_ID");
-        groupID = i.getStringExtra("GROUP_ID");
-
+        Intent intent = getIntent();
+        if (intent.getExtras() != null) {
+            quizID = intent.getStringExtra("QUIZ_ID");
+            courseID = intent.getStringExtra("COURSE_ID");
+            userID = intent.getStringExtra("USER_ID");
+            groupID = intent.getStringExtra("GROUP_ID");
+        }
         curQuiz = session.getActiveQuiz();
         session.setDoneWithIndividualQuiz(true);
 
@@ -90,23 +84,17 @@ public class WaitingRoomActivity extends AppCompatActivity
             fm.beginTransaction()
                     .add(wController, FragmentConfig.KEY_WAITING_CONTROLLER)
                     .commit();
-
             // if WaitingRoomController DNE, post quiz for grading
             JSONObject quizPOSTObj = buildAnswersForPOST();
             wController.POSTQuiz(courseID, userID,
                     curQuiz.getSessionId(),
                     quizPOSTObj);
-
         }
 
         Intent timerService = new Intent(getBaseContext(), QuizService.class);
         stopService(timerService);
-
-
         Log.d(TAG, "Waiting room created.");
     }
-
-
 
     private Runnable checkGroupStatus = new Runnable() {
         @Override
@@ -114,8 +102,7 @@ public class WaitingRoomActivity extends AppCompatActivity
             if (wController != null) {
                 wController.getGroupStatus(groupID, courseID,
                         curQuiz.get_id(), curQuiz.getSessionId());
-                mHandler.postDelayed(checkGroupStatus, 2000);
-
+                mHandler.postDelayed(checkGroupStatus, 3500);
             }
         }
     };
@@ -142,6 +129,7 @@ public class WaitingRoomActivity extends AppCompatActivity
         quizIntent.putExtra("COURSE_ID", courseID);
         quizIntent.putExtra("USER_ID", userID);
         quizIntent.putExtra("GROUP_ID", groupID);
+        quizIntent.putExtra("LEADER_ID", leader);
         startActivity(quizIntent);
         finish();
     }
@@ -154,15 +142,16 @@ public class WaitingRoomActivity extends AppCompatActivity
         } catch (JSONException e) {
             Log.e("JSONError", e.getMessage());
         }
-        if (gradedQuiz != null) {
-            wFragment.setTextQuizInfo("You got " + gradedQuiz.calculateTotalPoints() +
-                    " points.\n\nYou can do better probably.");
-        } else {
-            wFragment.setTextQuizInfo("You've already taken this quiz.");
+        if( wFragment != null) {
+            if (gradedQuiz != null) {
+                wFragment.setTextQuizInfo("You got " + gradedQuiz.calculateTotalPoints() +
+                        " points.\n\nYou can do better probably.");
+            } else {
+                wFragment.setTextQuizInfo("You've already taken this quiz.");
+            }
         }
         // start checking group status once graded
         startPolling();
-
     }
 
     @Override
@@ -174,6 +163,7 @@ public class WaitingRoomActivity extends AppCompatActivity
             JSONArray statusArr = gObj.getJSONArray("status");
             if (statusArr.length() >= 4) {
                 stopPolling(); // @TODO fix this
+                startGroupQuiz();
             }
 
             JSONObject leaderObj =gObj.getJSONObject("leader");
@@ -182,8 +172,9 @@ public class WaitingRoomActivity extends AppCompatActivity
         } catch (JSONException e) {
             Log.e("JSONError", e.getMessage());
         }
-        wFragment.setTextGroupStatus(response);
-
+        if (wFragment != null) {
+            wFragment.setTextGroupStatus(response);
+        }
     }
 
     private JSONObject buildAnswersForPOST() {
@@ -205,7 +196,6 @@ public class WaitingRoomActivity extends AppCompatActivity
                     }
                 }
                 questionObj.put("submittedAnswers", subAnswerArr);
-
                 questionArr.put(questionObj);
             }
             // and finally put it all together
@@ -227,7 +217,6 @@ public class WaitingRoomActivity extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
-
             case R.id.action_submit_quiz:
                 startGroupQuiz();
                 return true;

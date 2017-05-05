@@ -5,10 +5,6 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-/**
- * Created by Austin on 5/1/2017.
- */
-
 public class SimpleUser {
 
     private String userId;
@@ -22,7 +18,6 @@ public class SimpleUser {
         this.first = first;
         this.last = last;
     }
-
 
     public SimpleUser(JSONObject uObj) {
         try {

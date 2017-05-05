@@ -18,6 +18,9 @@ import android.view.MenuItem;
 import java.util.ArrayList;
 
 import edu.umsl.superclickers.R;
+import edu.umsl.superclickers.activity.quiz.helper.QuizGET;
+import edu.umsl.superclickers.activity.quiz.helper.QuizService;
+import edu.umsl.superclickers.activity.quiz.view.QuizViewUser;
 import edu.umsl.superclickers.activity.waitingroom.WaitingRoomActivity;
 import edu.umsl.superclickers.app.FragmentConfig;
 import edu.umsl.superclickers.app.SessionManager;
@@ -57,16 +60,15 @@ public class QuizActivityUser extends AppCompatActivity implements
         setSupportActionBar(toolbar);
 
         Intent intent = getIntent();
-        quizID = intent.getStringExtra("QUIZ_ID");
-        userID = intent.getStringExtra("USER_ID");
-        courseID = intent.getStringExtra("COURSE_ID");
-        groupID = intent.getStringExtra("GROUP_ID");
-
+        if (intent.getExtras() != null) {
+            quizID = intent.getStringExtra("QUIZ_ID");
+            userID = intent.getStringExtra("USER_ID");
+            courseID = intent.getStringExtra("COURSE_ID");
+            groupID = intent.getStringExtra("GROUP_ID");
+        }
         // Session manager
         session = new SessionManager(getBaseContext());
         timerService = new Intent(getBaseContext(), QuizService.class);
-
-
 
         if (!session.isQuizRunning()) {
             session.clearActiveQuiz(); // i have my reasons
@@ -142,8 +144,8 @@ public class QuizActivityUser extends AppCompatActivity implements
 
     @Override
     public void setSelectedAnswers(ArrayList<SelectedAnswer> selectedAnswers) {
+        // add selected answers to database
         session.setSelectedAnswersFor(selectedAnswers);
-
     }
 
 
@@ -256,17 +258,24 @@ public class QuizActivityUser extends AppCompatActivity implements
 
     @Override
     protected void onResume() {
+        try {
+            registerReceiver(br, new IntentFilter(QuizService.COUNTDOWN_BR));
+            Log.d(TAG, "Registered broadcast reciever");
+        } catch (Exception e) {
+            // Receiver stopped onPause
+        }
         super.onResume();
-        registerReceiver(br, new IntentFilter(QuizService.COUNTDOWN_BR));
-        Log.d(TAG, "Registered broadcast reciever");
     }
 
     @Override
     protected void onPause() {
+        try {
+            unregisterReceiver(br);
+            Log.d(TAG, "Unregistered broadcast reciever");
+        } catch (Exception e) {
+            // Receiver stopped onPause
+        }
         super.onPause();
-        unregisterReceiver(br);
-        Log.d(TAG, "Unregistered broadcast reciever");
-
     }
 
     @Override

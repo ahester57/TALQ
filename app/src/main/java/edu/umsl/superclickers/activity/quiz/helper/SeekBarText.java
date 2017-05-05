@@ -1,4 +1,4 @@
-package edu.umsl.superclickers.activity.helper;
+package edu.umsl.superclickers.activity.quiz.helper;
 
 import android.content.Context;
 import android.graphics.Canvas;

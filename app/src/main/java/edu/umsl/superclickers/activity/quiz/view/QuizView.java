@@ -1,4 +1,4 @@
-package edu.umsl.superclickers.activity.quiz;
+package edu.umsl.superclickers.activity.quiz.view;
 
 import android.app.Fragment;
 import android.graphics.Color;
@@ -10,7 +10,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import edu.umsl.superclickers.activity.helper.HorDottedProgress;
+import edu.umsl.superclickers.activity.quiz.helper.HorDottedProgress;
+import edu.umsl.superclickers.activity.quiz.helper.QuizGET;
 import edu.umsl.superclickers.quizdata.Answer;
 import edu.umsl.superclickers.quizdata.Question;
 import edu.umsl.superclickers.quizdata.Quiz;
@@ -48,7 +49,7 @@ public abstract class QuizView extends Fragment implements
 
     QuizController qController;
 
-    interface QuizController {
+    public interface QuizController {
         QuizGET getQuizGET();
         void startQuizTimer();
         void setQuizIndex(int qNum);
@@ -71,9 +72,8 @@ public abstract class QuizView extends Fragment implements
         quizGET = qController.getQuizGET();
         quizGET.setController(this);
         if (!resume || curQuiz == null) {
-            downloadQuiz();
+            getToken();
         }
-
     }
 
     @Override
@@ -85,12 +85,13 @@ public abstract class QuizView extends Fragment implements
         resume = flag;
     }
 
-    public void downloadQuiz() {
+    public void getToken() {
+        // @TODO ask for token
         quizGET.getToken(quizID);
     }
 
     @Override
-    public void setToken(String token) {
+    public void downloadQuiz(String token) {
         // Get the quiz after got token
         quizGET.getQuiz(userID, courseID, quizID, token);
     }
@@ -115,7 +116,6 @@ public abstract class QuizView extends Fragment implements
         if (horDottedProgress != null) {
             horDottedProgress.setDotAmount(curQuiz.getQuestions().size());
         }
-
         Log.d(TAG, "Set the group quiz ");
 
     }
@@ -152,7 +152,7 @@ public abstract class QuizView extends Fragment implements
         loadAnswerFragment();
     }
 
-    abstract void loadAnswerFragment();
+    public abstract void loadAnswerFragment();
 
     public int getQuizTime() {
         return curQuiz.getTimedLength();
@@ -166,28 +166,30 @@ public abstract class QuizView extends Fragment implements
 
         String time = String.format(Locale.getDefault(), "%02d", minutesLeft) +
                 String.format(Locale.getDefault(), ":%02d", secondsLeft);
-        if (minutesLeft > curQuiz.getTimedLength() / 2) {
-            quizTimeView.setTextColor(Color.GREEN);
-        } else if (minutesLeft > curQuiz.getTimedLength() / 2 / 2) {
-            quizTimeView.setTextColor(Color.YELLOW);
-        } else if (minutesLeft == 0 && secondsLeft == 1) {
-            quizTimeView.setTextColor(Color.CYAN);
-        } else {
-            quizTimeView.setTextColor(Color.RED);
+        if (quizTimeView != null) {
+            if (minutesLeft > curQuiz.getTimedLength() / 2) {
+                quizTimeView.setTextColor(Color.GREEN);
+            } else if (minutesLeft > curQuiz.getTimedLength() / 2 / 2) {
+                quizTimeView.setTextColor(Color.YELLOW);
+            } else if (minutesLeft == 0 && secondsLeft == 1) {
+                quizTimeView.setTextColor(Color.CYAN);
+            } else {
+                quizTimeView.setTextColor(Color.RED);
+            }
+            quizTimeView.setText(time);
         }
-
-        quizTimeView.setText(time);
     }
 
-    void startTimer() {
-        qController.startQuizTimer();
+    public void startTimer() {
+        if (qController != null) {
+            qController.startQuizTimer();
+        }
     }
 
     @Override
     public Question getQuestion() {
         return curQuestion;
     }
-
 
     public void setBSQuiz() {
         ArrayList<Answer> answers = new ArrayList<>();

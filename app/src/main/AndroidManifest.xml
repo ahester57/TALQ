@@ -46,7 +46,7 @@
         </activity>
 
         <service
-            android:name=".activity.quiz.QuizService"
+            android:name=".activity.quiz.helper.QuizService"
             android:label="@string/quiz_service">
         </service>
 

@@ -1,7 +1,6 @@
 package edu.umsl.superclickers.activity.login;
 
 import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,7 +13,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import edu.umsl.superclickers.R;
-import edu.umsl.superclickers.activity.quiz.QuizActivityUser;
+import edu.umsl.superclickers.activity.home.HomeActivity;
 import edu.umsl.superclickers.app.FragmentConfig;
 import edu.umsl.superclickers.app.SessionManager;
 
@@ -52,18 +51,22 @@ public class RegisterActivity extends AppCompatActivity implements
 
         SessionManager session = new SessionManager(getApplicationContext());
         if (session.isLoggedIn()) {
-            Intent intent = new Intent(RegisterActivity.this, QuizActivityUser.class);
+            Intent intent = new Intent(RegisterActivity.this, HomeActivity.class);
             startActivity(intent);
             finish();
         }
 
-        rController = new RegisterController();
 
         FragmentManager fm = getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        ft.add(rController, FragmentConfig.KEY_REGISTER_CONTROLLER)
-                .commit();
-
+        if (fm.findFragmentByTag(FragmentConfig.KEY_REGISTER_CONTROLLER) != null) {
+            rController = (RegisterController)
+                    fm.findFragmentByTag(FragmentConfig.KEY_REGISTER_CONTROLLER);
+        } else {
+            rController = new RegisterController();
+            fm.beginTransaction()
+                    .add(rController, FragmentConfig.KEY_REGISTER_CONTROLLER)
+                    .commit();
+        }
         btnBack.setOnClickListener(this);
         btnRegister.setOnClickListener(this);
 
@@ -77,7 +80,9 @@ public class RegisterActivity extends AppCompatActivity implements
 
     @Override
     public void registerUser(final String name, final String ssoId, final String pwd) {
-        rController.registerUser(name, ssoId, pwd);
+        if (rController != null) {
+            rController.registerUser(name, ssoId, pwd);
+        }
     }
 
     @Override
@@ -92,11 +97,14 @@ public class RegisterActivity extends AppCompatActivity implements
                 if (!ssoId.isEmpty() && !password.isEmpty()) {
                     if (password.equals(confirm)) {
                         // checks userId tblearn-api
-                        rController.getUserDetails(ssoId, password);
+                        if (rController != null) {
+                            rController.getUserDetails(ssoId, password);
+                        }
                         // if finds existing user, registers with given credentials
                     } else {
                         Toast.makeText(getApplicationContext(),
-                                "Ya done goofed. Passwords don't match.", Toast.LENGTH_LONG).show();
+                                "Ya done goofed. Passwords don't match.",
+                                Toast.LENGTH_LONG).show();
                     }
                 } else {
                     Toast.makeText(getApplicationContext(),

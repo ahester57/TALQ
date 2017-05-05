@@ -11,11 +11,6 @@ git clone http://umsl.vigilantestudio.com/superClickers/superClickers.git
 
 @TODO [04/20/17]
 
-	- make groupViewFragment
-	- make it look nice
-	- display progress, i.e. 5/10
 	- input token to unlock quiz
-	- Build WaitingRoom --> Then QuizActivityGroup
-	- submit quizzes for grading
-	- set leader to first user finished
+	- submit group quizzes for grading
 	- fix timer on app force close --> allows for infinite time

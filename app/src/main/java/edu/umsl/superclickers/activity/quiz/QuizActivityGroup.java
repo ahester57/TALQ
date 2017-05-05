@@ -17,6 +17,9 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import edu.umsl.superclickers.R;
+import edu.umsl.superclickers.activity.quiz.helper.QuizGET;
+import edu.umsl.superclickers.activity.quiz.helper.QuizService;
+import edu.umsl.superclickers.activity.quiz.view.QuizViewGroup;
 import edu.umsl.superclickers.app.FragmentConfig;
 import edu.umsl.superclickers.app.SessionManager;
 import edu.umsl.superclickers.quizdata.Quiz;
@@ -35,11 +38,14 @@ public class QuizActivityGroup extends AppCompatActivity implements
     private String userID;
     private String courseID;
     private String groupID;
+    private String leader;
 
     private Intent timerService;
     private QuizGET quizGET;
     private QuizViewGroup quizViewGroup;
     private SessionManager session;
+
+    private boolean isLeader = false;
 
     // BroadcastReceiver for QuizService
     private BroadcastReceiver br = new BroadcastReceiver() {
@@ -58,11 +64,16 @@ public class QuizActivityGroup extends AppCompatActivity implements
         setSupportActionBar(toolbar);
 
         Intent intent = getIntent();
-        quizID = intent.getStringExtra("QUIZ_ID");
-        userID = intent.getStringExtra("USER_ID");
-        courseID = intent.getStringExtra("COURSE_ID");
-        groupID = intent.getStringExtra("GROUP_ID");
-
+        if (intent.getExtras() != null) {
+            quizID = intent.getStringExtra("QUIZ_ID");
+            userID = intent.getStringExtra("USER_ID");
+            courseID = intent.getStringExtra("COURSE_ID");
+            groupID = intent.getStringExtra("GROUP_ID");
+            leader = intent.getStringExtra("LEADER_ID");
+            if (leader.equals(userID)) {
+                isLeader = true;
+            }
+        }
         // Session manager
         session = new SessionManager(getApplicationContext());
         timerService = new Intent(getBaseContext(), QuizService.class);
@@ -117,10 +128,10 @@ public class QuizActivityGroup extends AppCompatActivity implements
 
     @Override
     public void setSelectedAnswers(ArrayList<SelectedAnswer> selectedAnswers) {
-
-        // @TODO if leader then do this.
-        //session.setSelectedAnswersFor(selectedAnswers);
-
+        if (isLeader) {
+            session.setSelectedAnswersFor(selectedAnswers);
+        }
+        // if leader then do this.
     }
 
     public void submitQuiz() {

@@ -2,14 +2,19 @@ package edu.umsl.superclickers.activity.quiz;
 
 import android.app.Activity;
 import android.app.FragmentManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import edu.umsl.superclickers.R;
+import edu.umsl.superclickers.activity.quiz.helper.QuizService;
 import edu.umsl.superclickers.activity.waitingroom.WaitingRoomActivity;
 import edu.umsl.superclickers.app.FragmentConfig;
 import edu.umsl.superclickers.app.SessionManager;
@@ -34,6 +39,14 @@ public class QuizReviewActivityUser extends AppCompatActivity
     private SessionManager session;
     private Intent timerService;
 
+    // BroadcastReceiver for QuizService
+    private BroadcastReceiver br = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            handleQuizTimer(intent);
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,11 +56,12 @@ public class QuizReviewActivityUser extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         Intent intent = getIntent();
-        quizID = intent.getStringExtra("QUIZ_ID");
-        userID = intent.getStringExtra("USER_ID");
-        courseID = intent.getStringExtra("COURSE_ID");
-        groupID = intent.getStringExtra("GROUP_ID");
-
+        if (intent.getExtras() != null) {
+            quizID = intent.getStringExtra("QUIZ_ID");
+            userID = intent.getStringExtra("USER_ID");
+            courseID = intent.getStringExtra("COURSE_ID");
+            groupID = intent.getStringExtra("GROUP_ID");
+        }
         // Session manager
         session = new SessionManager(getBaseContext());
         timerService = new Intent(getBaseContext(), QuizService.class);
@@ -105,10 +119,58 @@ public class QuizReviewActivityUser extends AppCompatActivity
 
     }
 
+    void handleQuizTimer(Intent intent) {
+        if (intent.getExtras() != null) {
+            long millisUntilFinished = intent.getLongExtra("countdown", 4);
+
+            if (millisUntilFinished < 2000) {
+                submitQuiz();
+            }
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        try {
+            registerReceiver(br, new IntentFilter(QuizService.COUNTDOWN_BR));
+            Log.d(TAG, "Registered broadcast reciever");
+        } catch (Exception e) {
+            // Receiver stopped onPause
+        }
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        try {
+            unregisterReceiver(br);
+            Log.d(TAG, "Unregistered broadcast reciever");
+        } catch (Exception e) {
+            // Receiver stopped onPause
+        }
+        super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        try {
+            unregisterReceiver(br);
+            Log.d(TAG, "Unregistered broadcast reciever");
+        } catch (Exception e) {
+            // Receiver stopped onPause
+        }
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        Log.d(TAG, "Review Activity destoyed");
+        super.onDestroy();
+    }
+
+
     @Override
     public void onBackPressed() {
-
-
         super.onBackPressed();
     }
 }
