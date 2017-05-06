@@ -1,50 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/text_quiz_name"
-        android:layout_width="match_parent"
+        android:id="@+id/text_course_name"
+        android:layout_width="352dp"
         android:layout_height="wrap_content"
         android:fontFamily="casual"
         android:text="TextView"
         android:textAlignment="center"
         android:textColor="@color/color5"
         android:textSize="24sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <TextView
+        android:id="@+id/text_quiz_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="casual"
+        android:text="TextView"
+        android:textAlignment="center"
+        android:textColor="@color/color5"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/text_course_name"
+        android:layout_marginLeft="16dp"
+        app:layout_constraintLeft_toLeftOf="parent" />
 
     <TextView
         android:id="@+id/text_quiz_text"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:fontFamily="casual"
         android:text="TextView"
         android:textAlignment="center"
         android:textColor="@color/color5"
         android:textSize="14sp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/text_course_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="casual"
-        android:text="TextView"
-        android:textAlignment="center"
-        android:textColor="@color/color5"
-        android:textSize="14sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/text_quiz_name"
+        android:layout_marginLeft="16dp"
+        app:layout_constraintLeft_toLeftOf="parent" />
 
     <TextView
         android:id="@+id/text_quiz_time"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:fontFamily="casual"
         android:text="TextView"
         android:textAlignment="center"
         android:textColor="@color/color5"
         android:textSize="14sp"
-        android:textStyle="bold" />
-</LinearLayout>
+        android:textStyle="bold"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/text_course_name"
+        app:layout_constraintLeft_toRightOf="@+id/text_quiz_name"
+        android:layout_marginLeft="16dp" />
+
+</android.support.constraint.ConstraintLayout>
