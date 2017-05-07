@@ -55,7 +55,7 @@ public abstract class QuizView extends Fragment implements
         void setQuizIndex(int qNum);
         int getQuizIndex();
         void setSelectedAnswers(ArrayList<SelectedAnswer> selectedAnswers);
-
+        void resetQuizActivity();
     }
 
     public void setQuizInfo(String quizID, String userID, String courseID) {
@@ -68,11 +68,17 @@ public abstract class QuizView extends Fragment implements
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-        qController = (QuizView.QuizController) getActivity();
-        quizGET = qController.getQuizGET();
-        quizGET.setController(this);
-        if (!resume || curQuiz == null) {
-            getToken();
+        try {
+            qController = (QuizView.QuizController) getActivity();
+            quizGET = qController.getQuizGET();
+
+            quizGET.setController(this);
+            if (!resume || curQuiz == null) {
+                getToken();
+            }
+        } catch (NullPointerException e) {
+            Log.e(TAG, e.getMessage());
+            qController.resetQuizActivity();
         }
     }
 
@@ -167,14 +173,20 @@ public abstract class QuizView extends Fragment implements
         String time = String.format(Locale.getDefault(), "%02d", minutesLeft) +
                 String.format(Locale.getDefault(), ":%02d", secondsLeft);
         if (quizTimeView != null) {
+            int color;
+            color = getResources().getColor(android.R.color.background_light);
+            quizTimeView.setBackgroundColor(color);
             if (minutesLeft > curQuiz.getTimedLength() / 2) {
-                quizTimeView.setTextColor(Color.GREEN);
+                color = getResources().getColor(android.R.color.holo_green_light);
+                quizTimeView.setTextColor(color);
             } else if (minutesLeft > curQuiz.getTimedLength() / 2 / 2) {
-                quizTimeView.setTextColor(Color.YELLOW);
+                color = getResources().getColor(android.R.color.holo_orange_dark);
+                quizTimeView.setTextColor(color);
             } else if (minutesLeft == 0 && secondsLeft == 1) {
                 quizTimeView.setTextColor(Color.CYAN);
             } else {
-                quizTimeView.setTextColor(Color.RED);
+                color = getResources().getColor(android.R.color.holo_red_light);
+                quizTimeView.setTextColor(color);
             }
             quizTimeView.setText(time);
         }

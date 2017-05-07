@@ -86,10 +86,12 @@ public class GroupViewFragment extends Fragment implements GroupController.Group
             if (mGroups != null) {
                 try {
                     if (selectedPos == position) {
-                        holder.itemView.setBackgroundColor(Color.GREEN);
+                        int color = getResources().getColor(android.R.color.holo_green_dark);
+                        holder.itemView.setBackgroundColor(color);
                     } else {
                         holder.itemView.setBackgroundColor(Color.TRANSPARENT);
                     }
+
                     holder.bindGroup(mGroups.get(position));
                 } catch (IndexOutOfBoundsException e) {
                     Log.e("GROUP_RECYCLER", e.getMessage());

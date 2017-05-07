@@ -123,15 +123,17 @@ public class WaitingRoomActivity extends AppCompatActivity
 
     @Override
     public void startGroupQuiz() {
-        Intent quizIntent = new Intent(WaitingRoomActivity.this, QuizActivityGroup.class);
-        session.setQuizIndex(0);
-        quizIntent.putExtra("QUIZ_ID", quizID);
-        quizIntent.putExtra("COURSE_ID", courseID);
-        quizIntent.putExtra("USER_ID", userID);
-        quizIntent.putExtra("GROUP_ID", groupID);
-        quizIntent.putExtra("LEADER_ID", leader);
-        startActivity(quizIntent);
-        finish();
+        if (leader != null) {
+            Intent quizIntent = new Intent(WaitingRoomActivity.this, QuizActivityGroup.class);
+            session.setQuizIndex(0);
+            quizIntent.putExtra("QUIZ_ID", quizID);
+            quizIntent.putExtra("COURSE_ID", courseID);
+            quizIntent.putExtra("USER_ID", userID);
+            quizIntent.putExtra("GROUP_ID", groupID);
+            quizIntent.putExtra("LEADER_ID", leader);
+            startActivity(quizIntent);
+            finish();
+        }
     }
 
     @Override

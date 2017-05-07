@@ -257,6 +257,11 @@ public class QuizActivityUser extends AppCompatActivity implements
     }
 
     @Override
+    public void resetQuizActivity() {
+        onRestart();
+    }
+
+    @Override
     protected void onResume() {
         try {
             registerReceiver(br, new IntentFilter(QuizService.COUNTDOWN_BR));

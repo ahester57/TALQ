@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -69,7 +70,12 @@ public class HomeViewFragment extends Fragment implements View.OnClickListener {
         Button btnPlay = (Button) view.findViewById(R.id.play_button);
         Button btnCreateGroup = (Button) view.findViewById(R.id.groups_button);
         qRecyclerView = (RecyclerView) view.findViewById(R.id.quiz_list_recycler);
-        qRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        DividerItemDecoration divider = new DividerItemDecoration(qRecyclerView.getContext(),
+                layoutManager.getOrientation());
+        qRecyclerView.setLayoutManager(layoutManager);
+        qRecyclerView.addItemDecoration(divider);
         qRecyclerView.setAdapter(new QuizAdapter(quizzes));
 
         if (!session.isLoggedIn()) {
@@ -149,11 +155,15 @@ public class HomeViewFragment extends Fragment implements View.OnClickListener {
         public void onBindViewHolder(QuizHolder holder, final int position) {
             if (mQuizzes != null) {
                 try {
+                    // for highlighting
                     if (selectedPos == position) {
-                        holder.itemView.setBackgroundColor(Color.GREEN);
+                        int color = getResources().getColor(android.R.color.holo_green_dark);
+                        holder.itemView.setBackgroundColor(color);
                     } else {
-                        holder.itemView.setBackgroundColor(Color.TRANSPARENT);
+                        int color = getResources().getColor(android.R.color.tertiary_text_dark);
+                        holder.itemView.setBackgroundColor(color);
                     }
+
                     holder.bindQuiz(mQuizzes.get(position));
                     holder.itemView.setOnClickListener(new View.OnClickListener() {
                         @Override

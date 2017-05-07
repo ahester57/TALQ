@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -12,12 +13,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.umsl.superclickers.R;
 import edu.umsl.superclickers.activity.quiz.helper.QuestionHolder;
 import edu.umsl.superclickers.app.SessionManager;
 import edu.umsl.superclickers.quizdata.Question;
+import edu.umsl.superclickers.quizdata.SelectedAnswer;
 
 /**
  * Created by stin on 5/4/17.
@@ -53,7 +56,13 @@ public class QuizReviewViewUser extends Fragment {
 
         Button submit = (Button) view.findViewById(R.id.button_submit_quiz);
         qRecyclerView = (RecyclerView) view.findViewById(R.id.review_quiz_recycler);
-        qRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        DividerItemDecoration divider = new DividerItemDecoration(qRecyclerView.getContext(),
+                layoutManager.getOrientation());
+
+        qRecyclerView.setLayoutManager(layoutManager);
+        qRecyclerView.addItemDecoration(divider);
+
         setQuestionAdapter();
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,12 +107,46 @@ public class QuizReviewViewUser extends Fragment {
         public void onBindViewHolder(QuestionHolder holder, final int position) {
             if (mQuestions != null) {
                 try {
-                    if (selectedPos == position) {
-                        holder.itemView.setBackgroundColor(Color.GREEN);
-                    } else {
-                        holder.itemView.setBackgroundColor(Color.TRANSPARENT);
+                    // for getting selected answers
+                    boolean answeredFully = false;
+                    int pointCount = 0;
+                    ArrayList<SelectedAnswer> selectedAnswers = new ArrayList<>();
+                    for (SelectedAnswer sa : session.getSelectedAnswersFor(mQuestions.get(position).get_id())) {
+                        if (sa.getAllocatedPoints() != 0) {
+                            selectedAnswers.add(sa);
+                            pointCount += sa.getAllocatedPoints();
+                        }
                     }
-                    holder.bindQuestion(mQuestions.get(position), mQuestions.size(), position);
+                    // for checking fully answered question
+                    if (pointCount >= 4) {
+                        answeredFully = true;
+                    }
+                    //
+
+                    // for highlighting selected view
+                    if (selectedPos == position) {
+                        // if selected
+                        if (answeredFully) {
+                            int color = getResources().getColor(android.R.color.holo_green_dark);
+                            holder.itemView.setBackgroundColor(color);
+                        } else {
+                            int color = getResources().getColor(android.R.color.holo_red_light);
+                            holder.itemView.setBackgroundColor(color);
+                        }
+                    } else {
+                        // not selected
+                        if (answeredFully) {
+                            int color = getResources().getColor(android.R.color.holo_green_light);
+                            holder.itemView.setBackgroundColor(color);
+                        } else {
+                            int color = getResources().getColor(android.R.color.holo_red_dark);
+                            holder.itemView.setBackgroundColor(color);
+                        }
+                    }
+
+                    // bind question to view
+                    holder.bindQuestion(mQuestions.get(position), mQuestions.size(),
+                            position, selectedAnswers, answeredFully);
                     holder.itemView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

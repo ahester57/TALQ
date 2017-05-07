@@ -18,4 +18,7 @@
     <string name="start_group_quiz">Start Group Quiz</string>
     <string name="check_mark">\u2714</string>
     <string name="x_mark">\u2717</string>
+    <string name="finish_group_quiz">Finish Group Quiz</string>
+    <string name="user_results">User Results</string>
+    <string name="group_results">Group Results</string>
 </resources>

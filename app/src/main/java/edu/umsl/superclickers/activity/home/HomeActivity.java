@@ -107,10 +107,24 @@ public class HomeActivity extends AppCompatActivity implements
                     .commit();
             // only request groups if gController DNE
             if(user != null) {
-                gController.getGroupForUser(user.getUserId(), courses.get(0).getCourseId());
+                gController.getGroupForUser(userId, courses.get(0).getCourseId());
             }
         }
+    }
 
+    void updateInformation() {
+        try {
+            User user = session.getCurrentUser();
+            userId = user.getUserId();
+            courses = session.getEnrolledCourses();
+            if (gController != null) {
+                gController.getGroupForUser(userId, courses.get(0).getCourseId());
+            } else {
+                onRestart();
+            }
+        } catch (NullPointerException e) {
+            onRestart();
+        }
     }
 
     @Override
@@ -139,12 +153,17 @@ public class HomeActivity extends AppCompatActivity implements
 
     @Override
     public void startQuiz() {
-        Intent i = new Intent(HomeActivity.this, QuizActivityUser.class);
-        i.putExtra("QUIZ_ID", quizID);
-        i.putExtra("USER_ID", userId);
-        i.putExtra("COURSE_ID", courseId);
-        i.putExtra("GROUP_ID", group.getGroupId());
-        startActivity(i);
+        try {
+            Intent i = new Intent(HomeActivity.this, QuizActivityUser.class);
+            i.putExtra("QUIZ_ID", quizID);
+            i.putExtra("USER_ID", userId);
+            i.putExtra("COURSE_ID", courseId);
+            i.putExtra("GROUP_ID", group.getGroupId());
+            startActivity(i);
+        } catch (NullPointerException e) {
+            Log.e(TAG, "Info not found, Restarting....");
+            updateInformation();
+        }
     }
 
     public void stopQuiz() {

@@ -70,7 +70,7 @@ public class QuizActivityGroup extends AppCompatActivity implements
             courseID = intent.getStringExtra("COURSE_ID");
             groupID = intent.getStringExtra("GROUP_ID");
             leader = intent.getStringExtra("LEADER_ID");
-            if (leader.equals(userID)) {
+            if (leader != null && leader.equals(userID)) {
                 isLeader = true;
             }
         }
@@ -221,6 +221,11 @@ public class QuizActivityGroup extends AppCompatActivity implements
         }
         Log.d(TAG, "Timer NOT running ");
         return false;
+    }
+
+    @Override
+    public void resetQuizActivity() {
+        onRestart();
     }
 
     @Override
