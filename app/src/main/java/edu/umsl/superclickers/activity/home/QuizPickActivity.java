@@ -1,12 +1,16 @@
 package edu.umsl.superclickers.activity.home;
 
 import android.app.FragmentManager;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.util.Log;
+import android.view.LayoutInflater;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,17 +93,34 @@ public class QuizPickActivity extends AppCompatActivity implements
 
     @Override
     public void startQuiz() {
-        try {
-            Intent i = new Intent(QuizPickActivity.this, QuizActivityUser.class);
-            i.putExtra("QUIZ_ID", quizID);
-            i.putExtra("USER_ID", userID);
-            i.putExtra("COURSE_ID", courseID);
-            i.putExtra("GROUP_ID", groupID);
-            startActivity(i);
-            finish();
-        } catch (NullPointerException e) {
-            Log.e(TAG, "Info not found, Restarting....");
-        }
+        LayoutInflater inflater = this.getLayoutInflater();
+
+        new AlertDialog.Builder(this, R.style.Theme_AppCompat_DayNight_Dialog_MinWidth)
+                .setTitle(Html.fromHtml("<h2>Enter token</h2>"))
+                .setMessage(Html.fromHtml("<h4>Enter the token:</h4>"))
+                .setView(inflater.inflate(R.layout.dialog_token_input, null))
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        try {
+                            Intent i = new Intent(QuizPickActivity.this, QuizActivityUser.class);
+                            i.putExtra("QUIZ_ID", quizID);
+                            i.putExtra("USER_ID", userID);
+                            i.putExtra("COURSE_ID", courseID);
+                            i.putExtra("GROUP_ID", groupID);
+
+                            startActivity(i);
+                            finish();
+                        } catch (NullPointerException e) {
+                            Log.e(TAG, "Info not found, Restarting....");
+                        }
+                        Log.d(TAG, "Quiz started");
+                    }
+                })
+                .setNegativeButton(android.R.string.no, null)
+                .setIcon(android.R.drawable.ic_menu_directions)
+                .show();
+
     }
 
     @Override

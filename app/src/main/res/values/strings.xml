@@ -24,4 +24,5 @@
     <string name="group_results">Group Results</string>
     <string name="view_quizzes">View Quizzes</string>
     <string name="groups">Groups</string>
+    <string name="token">Token</string>
 </resources>

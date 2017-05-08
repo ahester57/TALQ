@@ -83,7 +83,7 @@ public class QuizPickViewFragment extends Fragment {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     hvListener.startQuiz();
-                                    Log.d(TAG, "Quiz started");
+                                    Log.d(TAG, "Quiz token requested");
                                 }
                             })
                             .setNegativeButton(android.R.string.no, null)
@@ -92,8 +92,6 @@ public class QuizPickViewFragment extends Fragment {
                 }
             }
         });
-
-
 
         return view;
     }
