@@ -21,7 +21,7 @@ public class Group {
         this.groupId = groupId;
     }
 
-    public Group(JSONObject gObj) {
+    public Group(JSONObject gObj) throws JSONException {
         try {
             this.groupId = gObj.getString("_id");
             this.groupName = gObj.getString("name");
@@ -36,6 +36,7 @@ public class Group {
             }
         } catch (JSONException e) {
             Log.e("JsONError", e.getMessage());
+            throw e;
         }
     }
 

@@ -17,5 +17,6 @@ public class QuizConfig {
 
     public static String URL_POST_USER_QUIZ = URL_BASE + // need to post json answer questions
             "/v1/quiz/?course_id=%1$s&user_id=%2$s&session_id=%3$s";
-
+    public static String URL_POST_GROUP_QUIZ = URL_BASE + // need to post json answer questions
+            "/v1/groupQuiz/?quiz_id=%1$s&group_id=%2$s&session_id=%3$s";
 }

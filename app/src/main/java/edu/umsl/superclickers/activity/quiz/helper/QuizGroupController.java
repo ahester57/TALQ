@@ -1,4 +1,4 @@
-package edu.umsl.superclickers.activity.waitingroom;
+package edu.umsl.superclickers.activity.quiz.helper;
 
 import android.app.Fragment;
 import android.app.ProgressDialog;
@@ -21,33 +21,30 @@ import java.io.UnsupportedEncodingException;
 
 import edu.umsl.superclickers.R;
 import edu.umsl.superclickers.app.AppController;
-import edu.umsl.superclickers.app.GroupConfig;
 import edu.umsl.superclickers.app.QuizConfig;
 import edu.umsl.superclickers.app.SessionManager;
 
 /**
- * Created by Austin on 5/1/2017.
- *
+ * Created by Austin on 5/7/2017.
  */
 
-public class WaitingRoomController extends Fragment {
+public class QuizGroupController extends Fragment {
 
-    private final String TAG = WaitingRoomController.class.getSimpleName();
+    private final String TAG = QuizGroupController.class.getSimpleName();
 
     private SessionManager session;
     private ProgressDialog pDialog;
-    private WaitListener wListener;
+    private GroupGradeListener wListener;
 
-    interface WaitListener {
+    interface GroupGradeListener {
         void postInfo(JSONObject response);
-        void setGroupStatus(String response);
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Login activity listener
-        wListener = (WaitListener) getActivity();
+        wListener = (GroupGradeListener) getActivity();
         // progress dialog
         pDialog = new ProgressDialog(getActivity());
         pDialog.setCancelable(false);
@@ -55,12 +52,12 @@ public class WaitingRoomController extends Fragment {
         session = new SessionManager(getActivity());
     }
 
-    void POSTQuiz(final String courseId, final String userId, final String sessionId,
-                  final JSONObject quizObj) {
-        String tag_str_req = "req_post_quiz";
+    void POSTGroupQuiz(final String quizId, final String groupId, final String sessionId,
+                  final JSONObject questionObj) {
+        String tag_str_req = "req_post_group_quiz";
         //pDialog.setMessage("Uploading quiz...");();
-        String uri = String.format(QuizConfig.URL_POST_USER_QUIZ, courseId,
-                userId, sessionId);
+        String uri = String.format(QuizConfig.URL_POST_GROUP_QUIZ, quizId,
+                groupId, sessionId);
         showDialog();
         // new string request
         StringRequest strReq = new StringRequest(Request.Method.POST, uri,
@@ -70,7 +67,7 @@ public class WaitingRoomController extends Fragment {
                         Log.d(TAG, "Quiz POST response: " + response);
                         try {
                             JSONObject jObj = new JSONObject(response);
-                            boolean error = true;
+                            boolean error;
                             try {
                                 String err = jObj.getString("error");
                                 error = true;
@@ -79,12 +76,13 @@ public class WaitingRoomController extends Fragment {
                                 error = false;
                             }
                             if (!error) {
-                                // Quiz POST SUCCESSFUL
+                                // Question POST SUCCESSFUL
+                                //JSONObject user = jObj.getJSONObject("user");
                                 wListener.postInfo(jObj);
-                                Toast.makeText(getActivity(), "Quiz submitted.",
+                                Toast.makeText(getActivity(), "Question submitted.",
                                         Toast.LENGTH_LONG).show();
                             } else {
-                                // Error uploading quiz
+                                // Error uploading question
                                 String errMessage = jObj.getString("error_msg");
                                 Toast.makeText(getActivity(), errMessage,
                                         Toast.LENGTH_LONG).show();
@@ -98,9 +96,9 @@ public class WaitingRoomController extends Fragment {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "Quiz error: " + error.getMessage());
+                Log.e(TAG, "Question error: " + error.getMessage());
                 wListener.postInfo(new JSONObject());
-                Toast.makeText(getActivity(), "Quiz already submitted.",
+                Toast.makeText(getActivity(), "Question not found.",
                         Toast.LENGTH_LONG).show();
             }
         }) {
@@ -112,7 +110,7 @@ public class WaitingRoomController extends Fragment {
             @Override
             public byte[] getBody() throws AuthFailureError {
                 try {
-                    return quizObj.toString().getBytes("utf-8");
+                    return questionObj.toString().getBytes("utf-8");
                 } catch (UnsupportedEncodingException e) {
                     VolleyLog.wtf("Unsupported encoding");
                     return null;
@@ -124,58 +122,10 @@ public class WaitingRoomController extends Fragment {
         AppController.getInstance().addToRequestQueue(strReq, tag_str_req);
     }
 
-    void getGroupStatus(final String group_id, final String courseId,
-                        final String quiz_id, final String session_id) {
-        String tag_str_req = "req_group";
-        String uri = String.format(GroupConfig.URL_GROUP_STATUS, group_id, courseId,
-                quiz_id, session_id);
-        // new string request
-        StringRequest strReq = new StringRequest(Request.Method.GET, uri,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        hideDialog();
-                        Log.d(TAG, " Response: " + response);
-                        try {
-                            JSONObject jObj = new JSONObject(response);
-                            String error;
-                            try {
-                                error = jObj.getString("error");
-                            } catch (JSONException e) {
-                                error = "false";
-                            }
-                            // if no errors
-                            if (error.equals("false")) {
-                                // Group was found
-                                wListener.setGroupStatus(response);
-                            } else {
-                                // Error
-                                String errMessage = "error";
-                                Toast.makeText(getActivity(), errMessage,
-                                        Toast.LENGTH_LONG).show();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Toast.makeText(getActivity(), "JSON error: "
-                                    + e.getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "Group error: " + error.getMessage());
-                Toast.makeText(getActivity(), error.getMessage(),
-                        Toast.LENGTH_LONG).show();
-                hideDialog();
-            }
-        });
-        hideDialog();
-        AppController.getInstance().addToRequestQueue(strReq, tag_str_req);
-    }
-
     private void showDialog() {
         if (pDialog != null && !pDialog.isShowing()) {
             pDialog.setIcon(R.drawable.seek_bar_text_thumb);
+            pDialog.setMessage("Uploading quiz...");
             pDialog.show();
         }
     }
@@ -185,5 +135,4 @@ public class WaitingRoomController extends Fragment {
             pDialog.dismiss();
         }
     }
-
 }

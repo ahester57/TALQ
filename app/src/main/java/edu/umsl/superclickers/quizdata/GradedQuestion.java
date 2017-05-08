@@ -17,7 +17,7 @@ public class GradedQuestion {
     private String questionId;
     private ArrayList<GradedAnswer> gradedAnswers = new ArrayList<>();
 
-    public GradedQuestion(JSONObject gradedObj) {
+    public GradedQuestion(JSONObject gradedObj) throws JSONException {
         try {
             this.questionId = gradedObj.getString("question");
             JSONArray answersArr = gradedObj.getJSONArray("submittedAnswers");
@@ -30,6 +30,7 @@ public class GradedQuestion {
 
         } catch (JSONException e) {
             Log.e("JSONERror", e.getMessage());
+            throw e;
         }
     }
 
