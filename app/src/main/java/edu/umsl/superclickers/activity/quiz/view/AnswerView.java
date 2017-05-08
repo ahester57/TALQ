@@ -34,7 +34,7 @@ public abstract class AnswerView extends Fragment {
     ArrayList<SelectedAnswer> selectedAnswers;
 
     SessionManager session;
-    AnswerViewGroup.AnswerListener aListener;
+    AnswerView.AnswerListener aListener;
 
     interface AnswerListener {
         Question getQuestion();

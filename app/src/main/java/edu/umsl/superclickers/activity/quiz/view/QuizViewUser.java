@@ -2,6 +2,7 @@ package edu.umsl.superclickers.activity.quiz.view;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,25 @@ import edu.umsl.superclickers.app.FragmentConfig;
 public class QuizViewUser extends QuizView {
 
     private final String TAG = QuizViewUser.class.getSimpleName();
+
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+        try {
+            qController = (QuizView.QuizController) getActivity();
+            quizGET = qController.getQuizGET();
+
+            quizGET.setController(this);
+            if (!resume || curQuiz == null) {
+                getToken();
+            }
+        } catch (NullPointerException e) {
+            Log.e(TAG, e.getMessage());
+            qController.resetQuizActivity();
+        }
+    }
 
     @Nullable
     @Override

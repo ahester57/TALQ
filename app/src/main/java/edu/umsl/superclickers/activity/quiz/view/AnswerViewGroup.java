@@ -15,6 +15,7 @@ import edu.umsl.superclickers.R;
 import edu.umsl.superclickers.activity.quiz.helper.SeekBarText;
 import edu.umsl.superclickers.app.FragmentConfig;
 import edu.umsl.superclickers.app.SessionManager;
+import edu.umsl.superclickers.quizdata.Question;
 import edu.umsl.superclickers.quizdata.SelectedAnswer;
 
 /**
@@ -25,13 +26,20 @@ import edu.umsl.superclickers.quizdata.SelectedAnswer;
 public class AnswerViewGroup extends AnswerView {
     private static final String TAG = AnswerViewGroup.class.getSimpleName();
 
+    private AnswerViewGroup.AnswerListener aListener;
+    interface AnswerListener {
+        Question getQuestion();
+        void setHasChosen(boolean flag);
+        void setSelectedAnswers(ArrayList<SelectedAnswer> selectedAnswers);
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
 
         session = new SessionManager(getActivity());
-        aListener = (AnswerView.AnswerListener) getFragmentManager()
+        aListener = (AnswerViewGroup.AnswerListener) getFragmentManager()
                 .findFragmentByTag(FragmentConfig.KEY_QUIZ_VIEW_GROUP);
         curQuestion = aListener.getQuestion();
 
@@ -53,7 +61,7 @@ public class AnswerViewGroup extends AnswerView {
         bP = (SeekBarText) view.findViewById(R.id.B_points_group);
         cP = (SeekBarText) view.findViewById(R.id.C_points_group);
         dP = (SeekBarText) view.findViewById(R.id.D_points_group);
-        aListener = (AnswerView.AnswerListener) getFragmentManager()
+        aListener = (AnswerViewGroup.AnswerListener) getFragmentManager()
                 .findFragmentByTag(FragmentConfig.KEY_QUIZ_VIEW_GROUP);
 
         pointsView = (TextView) view.findViewById(R.id.question_points_group);
@@ -101,6 +109,9 @@ public class AnswerViewGroup extends AnswerView {
             Log.d(TAG, "index answer: " + index);
             if (index == -1) {
                 return;
+            }
+            if (aListener != null) {
+                aListener.setHasChosen(true);
             }
             String questionId = curQuestion.get_id();
             selectedAnswers = new ArrayList<>();

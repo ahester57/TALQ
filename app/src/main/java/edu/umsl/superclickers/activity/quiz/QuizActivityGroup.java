@@ -107,7 +107,7 @@ public class QuizActivityGroup extends AppCompatActivity implements
             // Only try to reload quiz when fragment is not loaded
             reloadQuiz(quizID, userID, courseID);
         }
-
+        startQuizTimer();
     }
 
     @Override
@@ -163,6 +163,11 @@ public class QuizActivityGroup extends AppCompatActivity implements
             hasChosen = true;
         }
         // if leader then do this.
+    }
+
+    @Override
+    public void setHasChosen(boolean flag) {
+        hasChosen = flag;
     }
 
     public void submitQuestion() {

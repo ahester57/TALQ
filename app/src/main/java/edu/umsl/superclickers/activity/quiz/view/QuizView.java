@@ -64,23 +64,23 @@ public abstract class QuizView extends Fragment implements
         this.courseID = courseID;
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setRetainInstance(true);
-        try {
-            qController = (QuizView.QuizController) getActivity();
-            quizGET = qController.getQuizGET();
-
-            quizGET.setController(this);
-            if (!resume || curQuiz == null) {
-                getToken();
-            }
-        } catch (NullPointerException e) {
-            Log.e(TAG, e.getMessage());
-            qController.resetQuizActivity();
-        }
-    }
+//    @Override
+//    public void onCreate(@Nullable Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setRetainInstance(true);
+//        try {
+//            qController = (QuizView.QuizController) getActivity();
+//            quizGET = qController.getQuizGET();
+//
+//            quizGET.setController(this);
+//            if (!resume || curQuiz == null) {
+//                getToken();
+//            }
+//        } catch (NullPointerException e) {
+//            Log.e(TAG, e.getMessage());
+//            qController.resetQuizActivity();
+//        }
+//    }
 
     @Override
     public void setSelectedAnswers(ArrayList<SelectedAnswer> selectedAnswers) {
