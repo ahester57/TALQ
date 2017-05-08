@@ -75,7 +75,7 @@ public class QuizPickViewFragment extends Fragment {
             public void onClick(View v) {
                 if (hvListener != null) {
                     String qName = hvListener.getActiveQuizTitle();
-                    new AlertDialog.Builder(getActivity(), R.style.Theme_AppCompat_Dialog_Alert)
+                    new AlertDialog.Builder(getActivity(), R.style.Theme_AppCompat_DayNight_Dialog_MinWidth)
                             .setTitle(Html.fromHtml("<h2>Begin Quiz?</h2>"))
                             .setMessage(Html.fromHtml("<h4>Are you <i>sure</i> you" +
                                             " want to start</h4> <h3><b>" +

@@ -51,7 +51,7 @@
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="16dp"
                 android:background="@drawable/button_custom1"
-                android:enabled="false"
+                android:elevation="0dp"
                 android:fontFamily="casual"
                 android:text="Test"
                 android:textColor="@color/color3"
@@ -68,7 +68,8 @@
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="16dp"
                 android:background="@drawable/button_custom2"
-                android:enabled="false"
+                android:elevation="0dp"
+                android:enabled="true"
                 android:fontFamily="casual"
                 android:text="Test"
                 android:textColor="@color/color3"
@@ -86,7 +87,7 @@
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="19dp"
                 android:background="@drawable/button_custom4"
-                android:enabled="false"
+                android:enabled="true"
                 android:fontFamily="casual"
                 android:text="Test"
                 android:textColor="@color/color3"
@@ -104,7 +105,8 @@
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="16dp"
                 android:background="@drawable/button_custom3"
-                android:enabled="false"
+                android:elevation="0dp"
+                android:enabled="true"
                 android:fontFamily="casual"
                 android:text="Test"
                 android:textColor="@color/color3"
@@ -118,41 +120,45 @@
                 android:id="@+id/A_points_group"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="@+id/A_button_group"
                 android:layout_marginLeft="16dp"
-                app:layout_constraintLeft_toLeftOf="@+id/A_button_group"
                 android:layout_marginRight="16dp"
+                android:elevation="88dp"
+                app:layout_constraintBottom_toBottomOf="@+id/A_button_group"
+                app:layout_constraintLeft_toLeftOf="@+id/A_button_group"
                 app:layout_constraintRight_toRightOf="@+id/A_button_group" />
 
             <edu.umsl.superclickers.activity.quiz.helper.SeekBarText
                 android:id="@+id/B_points_group"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="@+id/B_button_group"
                 android:layout_marginLeft="16dp"
-                app:layout_constraintLeft_toLeftOf="@+id/B_button_group"
                 android:layout_marginRight="16dp"
+                android:elevation="88dp"
+                app:layout_constraintBottom_toBottomOf="@+id/B_button_group"
+                app:layout_constraintLeft_toLeftOf="@+id/B_button_group"
                 app:layout_constraintRight_toRightOf="@+id/B_button_group" />
 
             <edu.umsl.superclickers.activity.quiz.helper.SeekBarText
                 android:id="@+id/C_points_group"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="@+id/C_button_group"
-                android:layout_marginRight="16dp"
-                app:layout_constraintRight_toRightOf="@+id/C_button_group"
                 android:layout_marginLeft="16dp"
-                app:layout_constraintLeft_toLeftOf="@+id/C_button_group" />
+                android:layout_marginRight="16dp"
+                android:elevation="88dp"
+                app:layout_constraintBottom_toBottomOf="@+id/C_button_group"
+                app:layout_constraintLeft_toLeftOf="@+id/C_button_group"
+                app:layout_constraintRight_toRightOf="@+id/C_button_group" />
 
             <edu.umsl.superclickers.activity.quiz.helper.SeekBarText
                 android:id="@+id/D_points_group"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="@+id/D_button_group"
-                android:layout_marginRight="16dp"
-                app:layout_constraintRight_toRightOf="@+id/D_button_group"
                 android:layout_marginLeft="16dp"
-                app:layout_constraintLeft_toLeftOf="@+id/D_button_group" />
+                android:layout_marginRight="16dp"
+                android:elevation="88dp"
+                app:layout_constraintBottom_toBottomOf="@+id/D_button_group"
+                app:layout_constraintLeft_toLeftOf="@+id/D_button_group"
+                app:layout_constraintRight_toRightOf="@+id/D_button_group" />
         </android.support.constraint.ConstraintLayout>
     </ScrollView>
 </RelativeLayout>

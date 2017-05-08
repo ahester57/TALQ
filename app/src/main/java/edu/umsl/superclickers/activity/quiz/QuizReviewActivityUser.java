@@ -98,7 +98,7 @@ public class QuizReviewActivityUser extends AppCompatActivity
         switch(item.getItemId()) {
 
             case R.id.action_submit_quiz:
-                new AlertDialog.Builder(this, R.style.Theme_AppCompat_Dialog_Alert)
+                new AlertDialog.Builder(this, R.style.Theme_AppCompat_DayNight_Dialog_MinWidth)
                         .setTitle(Html.fromHtml("<h2>Submit Quiz?</h2>"))
                         .setMessage(Html.fromHtml("<h3>Are you sure you want to submit this quiz?</h3>"))
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
@@ -109,7 +109,7 @@ public class QuizReviewActivityUser extends AppCompatActivity
                             }
                         })
                         .setNegativeButton(android.R.string.no, null)
-                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setIcon(android.R.drawable.ic_input_add)
                         .show();
                 return true;
             default:

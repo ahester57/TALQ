@@ -1,13 +1,16 @@
 package edu.umsl.superclickers.activity.home;
 
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -30,6 +33,7 @@ import edu.umsl.superclickers.userdata.User;
  */
 
 public class HomeViewFragment extends Fragment implements View.OnClickListener {
+    private final static String TAG = HomeViewFragment.class.getSimpleName();
 
     private TextView textName;
     private TextView textEmail;
@@ -102,17 +106,30 @@ public class HomeViewFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-
-        switch (view.getId()) {
-            case R.id.logout_button:
-                hvListener.logoutUser();
-                break;
-            case R.id.play_button:
-                hvListener.goToQuizzes();
-                break;
-            case R.id.groups_button:
-                hvListener.goToGroups();
-                break;
+        if (hvListener != null) {
+            switch (view.getId()) {
+                case R.id.logout_button:
+                    new AlertDialog.Builder(getActivity(), R.style.Theme_AppCompat_DayNight_Dialog_MinWidth)
+                            .setTitle(Html.fromHtml("<h2>Leaving??</h2>"))
+                            .setMessage(Html.fromHtml("Are you sure you want to <center><h3>logout?</h3></center>"))
+                            .setPositiveButton(R.string.logout, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    hvListener.logoutUser();
+                                    Log.d(TAG, "Logged out");
+                                }
+                            })
+                            .setNegativeButton(android.R.string.no, null)
+                            .setIcon(android.R.drawable.ic_menu_directions)
+                            .show();
+                    break;
+                case R.id.play_button:
+                    hvListener.goToQuizzes();
+                    break;
+                case R.id.groups_button:
+                    hvListener.goToGroups();
+                    break;
+            }
         }
     }
 

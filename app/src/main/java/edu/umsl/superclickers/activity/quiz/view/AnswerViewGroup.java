@@ -53,7 +53,8 @@ public class AnswerViewGroup extends AnswerView {
         bP = (SeekBarText) view.findViewById(R.id.B_points_group);
         cP = (SeekBarText) view.findViewById(R.id.C_points_group);
         dP = (SeekBarText) view.findViewById(R.id.D_points_group);
-
+        aListener = (AnswerView.AnswerListener) getFragmentManager()
+                .findFragmentByTag(FragmentConfig.KEY_QUIZ_VIEW_GROUP);
 
         pointsView = (TextView) view.findViewById(R.id.question_points_group);
         pointsView.setText(String.valueOf(curQuestion.getPointsPossible()));
@@ -97,6 +98,7 @@ public class AnswerViewGroup extends AnswerView {
                     index = 3;
                     break;
             }
+            Log.d(TAG, "index answer: " + index);
             if (index == -1) {
                 return;
             }
@@ -112,6 +114,7 @@ public class AnswerViewGroup extends AnswerView {
             selectedAnswers.get(index).setAllocatedPoints(4);
             if (aListener != null) {
                 aListener.setSelectedAnswers(selectedAnswers);
+                Log.d(TAG, "answer listener exists");
             }
             Log.d(TAG, "selected answer: " + selectedAnswers.toString());
         }

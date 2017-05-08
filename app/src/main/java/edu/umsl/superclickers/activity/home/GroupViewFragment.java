@@ -95,7 +95,8 @@ public class GroupViewFragment extends Fragment implements GroupController.Group
                         int color = getResources().getColor(android.R.color.holo_green_dark);
                         holder.itemView.setBackgroundColor(color);
                     } else {
-                        holder.itemView.setBackgroundColor(Color.TRANSPARENT);
+                        int color = getResources().getColor(android.R.color.holo_blue_dark);
+                        holder.itemView.setBackgroundColor(color);
                     }
 
                     holder.bindGroup(mGroups.get(position));

@@ -52,7 +52,7 @@ public class QuizActivityGroup extends AppCompatActivity implements
     private SessionManager session;
 
     private boolean isLeader = false;
-    private boolean hasChosen = false;
+    private boolean hasChosen;
 
     // BroadcastReceiver for QuizService
     private BroadcastReceiver br = new BroadcastReceiver() {
@@ -126,6 +126,7 @@ public class QuizActivityGroup extends AppCompatActivity implements
                 //quizViewGroup.prevQuestion();
                 return true;
             case R.id.action_review_quiz:
+                Log.d(TAG, "has chosen = " + hasChosen);
                 if (hasChosen) {
                     String value = "";
                     try {

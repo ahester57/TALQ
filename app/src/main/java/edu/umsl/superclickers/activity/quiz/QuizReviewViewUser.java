@@ -69,7 +69,7 @@ public class QuizReviewViewUser extends Fragment {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new AlertDialog.Builder(getActivity(), R.style.Theme_AppCompat_Dialog_Alert)
+                new AlertDialog.Builder(getActivity(), R.style.Theme_AppCompat_DayNight_Dialog_MinWidth)
                         .setTitle(Html.fromHtml("<h2>Submit Quiz?</h2>"))
                         .setMessage(Html.fromHtml("<h3>Are you sure you want to submit this quiz?</h3>"))
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
@@ -82,7 +82,7 @@ public class QuizReviewViewUser extends Fragment {
                             }
                         })
                         .setNegativeButton(android.R.string.no, null)
-                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setIcon(android.R.drawable.ic_input_add)
                         .show();
             }
         });
