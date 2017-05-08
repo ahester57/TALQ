@@ -174,8 +174,6 @@ public abstract class QuizView extends Fragment implements
                 String.format(Locale.getDefault(), ":%02d", secondsLeft);
         if (quizTimeView != null) {
             int color;
-            color = getResources().getColor(android.R.color.background_light);
-            quizTimeView.setBackgroundColor(color);
             if (minutesLeft > curQuiz.getTimedLength() / 2) {
                 color = getResources().getColor(android.R.color.holo_green_light);
                 quizTimeView.setTextColor(color);

@@ -51,7 +51,11 @@ public class Group {
         return courseIds;
     }
 
-    public ArrayList<SimpleUser> getUsers() {
-        return users;
+    public ArrayList<String> getUsers() {
+        ArrayList<String> userData = new ArrayList<>();
+        for(SimpleUser user : users) {
+            userData.add(user.getFirst() + " " + user.getLast() + " " + user.getEmail());
+        }
+        return userData;
     }
 }

@@ -71,10 +71,7 @@ public class HomeViewFragment extends Fragment implements View.OnClickListener {
         qRecyclerView = (RecyclerView) view.findViewById(R.id.course_list_recycler);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        DividerItemDecoration divider = new DividerItemDecoration(qRecyclerView.getContext(),
-                layoutManager.getOrientation());
         qRecyclerView.setLayoutManager(layoutManager);
-        qRecyclerView.addItemDecoration(divider);
         qRecyclerView.setAdapter(new CourseAdapter(courses));
 
         if (!session.isLoggedIn()) {
@@ -155,11 +152,11 @@ public class HomeViewFragment extends Fragment implements View.OnClickListener {
                 try {
                     // for highlighting
                     if (selectedPos == position) {
-                        int color = getResources().getColor(android.R.color.holo_green_dark);
-                        holder.itemView.setBackgroundColor(color);
+                        holder.itemView.setBackground(getResources().getDrawable(R.drawable.line));
+                        holder.itemView.setPadding(8, 8, 8, 8);
                     } else {
-                        int color = getResources().getColor(android.R.color.tertiary_text_dark);
-                        holder.itemView.setBackgroundColor(color);
+                        holder.itemView.setBackgroundResource(0);
+                        holder.itemView.setPadding(8, 8, 8, 8);
                     }
                     final Course course = mCourses.get(position);
                     holder.bindCourse(course);

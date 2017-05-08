@@ -35,10 +35,13 @@
 
     <TextView
         android:id="@+id/quiz_timer_text"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
+        android:background="@drawable/round_background"
+        android:paddingRight="3dp"
+        android:paddingLeft="3dp"
         android:fontFamily="casual"
         android:text=""
         android:textSize="30sp"

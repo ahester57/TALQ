@@ -59,10 +59,7 @@ public class QuizPickViewFragment extends Fragment {
 
         qRecyclerView = (RecyclerView) view.findViewById(R.id.quiz_list_recycler);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        DividerItemDecoration divider = new DividerItemDecoration(qRecyclerView.getContext(),
-                layoutManager.getOrientation());
         qRecyclerView.setLayoutManager(layoutManager);
-        qRecyclerView.addItemDecoration(divider);
         qRecyclerView.setAdapter(new QuizAdapter(mQuizzes));
 
         Button startQuiz = (Button) view.findViewById(R.id.button_start_quiz);
@@ -111,11 +108,11 @@ public class QuizPickViewFragment extends Fragment {
                 try {
                     // for highlighting
                     if (selectedPos == position) {
-                        int color = getResources().getColor(android.R.color.holo_green_dark);
-                        holder.itemView.setBackgroundColor(color);
+                        holder.itemView.setBackground(getResources().getDrawable(R.drawable.line));
+                        holder.itemView.setPadding(8, 8, 8, 8);
                     } else {
-                        int color = getResources().getColor(android.R.color.tertiary_text_dark);
-                        holder.itemView.setBackgroundColor(color);
+                        holder.itemView.setBackgroundResource(0);
+                        holder.itemView.setPadding(8, 8, 8, 8);
                     }
                     QuizListItem quiz = mQuizzes.get(position);
                     Course course = session.getCourseById(quiz.getCourseId());

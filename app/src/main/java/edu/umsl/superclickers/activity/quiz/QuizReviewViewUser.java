@@ -56,11 +56,8 @@ public class QuizReviewViewUser extends Fragment {
         Button submit = (Button) view.findViewById(R.id.button_submit_quiz);
         qRecyclerView = (RecyclerView) view.findViewById(R.id.review_quiz_recycler);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        DividerItemDecoration divider = new DividerItemDecoration(qRecyclerView.getContext(),
-                layoutManager.getOrientation());
 
         qRecyclerView.setLayoutManager(layoutManager);
-        qRecyclerView.addItemDecoration(divider);
 
         setQuestionAdapter();
         submit.setOnClickListener(new View.OnClickListener() {
@@ -121,21 +118,16 @@ public class QuizReviewViewUser extends Fragment {
                     if (selectedPos == position) {
                         // if selected
                         if (answeredFully) {
-                            int color = getResources().getColor(android.R.color.holo_green_dark);
-                            holder.itemView.setBackgroundColor(color);
+                            holder.itemView.setBackground(getResources().getDrawable(R.drawable.line));
+                            holder.itemView.setPadding(8, 8, 8, 8);
                         } else {
-                            int color = getResources().getColor(android.R.color.holo_red_light);
-                            holder.itemView.setBackgroundColor(color);
+                            holder.itemView.setBackground(getResources().getDrawable(R.drawable.line_black));
+                            holder.itemView.setPadding(8, 8, 8, 8);
                         }
                     } else {
                         // not selected
-                        if (answeredFully) {
-                            int color = getResources().getColor(android.R.color.holo_green_light);
-                            holder.itemView.setBackgroundColor(color);
-                        } else {
-                            int color = getResources().getColor(android.R.color.holo_red_dark);
-                            holder.itemView.setBackgroundColor(color);
-                        }
+                        holder.itemView.setBackgroundResource(0);
+                        holder.itemView.setPadding(8, 8, 8, 8);
                     }
 
                     // bind question to view

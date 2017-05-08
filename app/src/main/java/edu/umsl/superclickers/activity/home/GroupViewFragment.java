@@ -1,10 +1,8 @@
 package edu.umsl.superclickers.activity.home;
 
 import android.app.Fragment;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -42,11 +40,7 @@ public class GroupViewFragment extends Fragment implements GroupController.Group
         gRecycler = (RecyclerView) view.findViewById(R.id.group_list_recycler);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        DividerItemDecoration divider = new DividerItemDecoration(gRecycler.getContext(),
-                layoutManager.getOrientation());
-
         gRecycler.setLayoutManager(layoutManager);
-        gRecycler.addItemDecoration(divider);
         gRecycler.setAdapter(new GroupAdapter(gGroups));
         return view;
     }
@@ -92,10 +86,11 @@ public class GroupViewFragment extends Fragment implements GroupController.Group
             if (mGroups != null) {
                 try {
                     if (selectedPos == position) {
-                        int color = getResources().getColor(android.R.color.holo_green_dark);
-                        holder.itemView.setBackgroundColor(color);
+                        holder.itemView.setBackground(getResources().getDrawable(R.drawable.line));
+                        holder.itemView.setPadding(8, 8, 8, 8);
                     } else {
-                        holder.itemView.setBackgroundColor(Color.TRANSPARENT);
+                        holder.itemView.setBackgroundResource(0);
+                        holder.itemView.setPadding(8, 8, 8, 8);
                     }
 
                     holder.bindGroup(mGroups.get(position));
