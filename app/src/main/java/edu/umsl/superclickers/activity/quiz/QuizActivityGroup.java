@@ -15,6 +15,7 @@ import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -148,6 +149,9 @@ public class QuizActivityGroup extends AppCompatActivity implements
                             })
                             .setNegativeButton(android.R.string.no, null)
                             .setIcon(android.R.drawable.ic_input_add)
+                            .show();
+                } else {
+                    Toast.makeText(this, "Please make a selection.", Toast.LENGTH_SHORT)
                             .show();
                 }
                 return true;
