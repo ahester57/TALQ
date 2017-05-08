@@ -123,16 +123,18 @@ public abstract class AnswerView extends Fragment {
     };
 
     void getSelectedAnswers() {
-        String questionId = curQuestion.get_id();
-        // selected answers now store "prevProgress" as allocatedPoints
-        selectedAnswers = new ArrayList<>();
-        selectedAnswers = session.getSelectedAnswersFor(questionId);
-        if (selectedAnswers.size() != 4) {
-            Log.d(TAG, "New selected answers created.");
-            selectedAnswers.add(new SelectedAnswer(curQuestion.getA().getValue(), 0, questionId));
-            selectedAnswers.add(new SelectedAnswer(curQuestion.getB().getValue(), 0, questionId));
-            selectedAnswers.add(new SelectedAnswer(curQuestion.getC().getValue(), 0, questionId));
-            selectedAnswers.add(new SelectedAnswer(curQuestion.getD().getValue(), 0, questionId));
+        if (curQuestion != null) {
+            String questionId = curQuestion.get_id();
+            // selected answers now store "prevProgress" as allocatedPoints
+            selectedAnswers = new ArrayList<>();
+            selectedAnswers = session.getSelectedAnswersFor(questionId);
+            if (selectedAnswers.size() != 4) {
+                Log.d(TAG, "New selected answers created.");
+                selectedAnswers.add(new SelectedAnswer(curQuestion.getA().getValue(), 0, questionId));
+                selectedAnswers.add(new SelectedAnswer(curQuestion.getB().getValue(), 0, questionId));
+                selectedAnswers.add(new SelectedAnswer(curQuestion.getC().getValue(), 0, questionId));
+                selectedAnswers.add(new SelectedAnswer(curQuestion.getD().getValue(), 0, questionId));
+            }
         }
     }
 }

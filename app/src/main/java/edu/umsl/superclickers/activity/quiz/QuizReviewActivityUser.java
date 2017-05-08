@@ -4,11 +4,14 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -95,7 +98,19 @@ public class QuizReviewActivityUser extends AppCompatActivity
         switch(item.getItemId()) {
 
             case R.id.action_submit_quiz:
-                submitQuiz();
+                new AlertDialog.Builder(this, R.style.Theme_AppCompat_Dialog_Alert)
+                        .setTitle(Html.fromHtml("<h2>Submit Quiz?</h2>"))
+                        .setMessage(Html.fromHtml("<h3>Are you sure you want to submit this quiz?</h3>"))
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                submitQuiz();
+                                Log.d(TAG, "Quiz submitted");
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, null)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

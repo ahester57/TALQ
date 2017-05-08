@@ -33,6 +33,7 @@ public class QuizPickActivity extends AppCompatActivity implements
     private String courseID;
     private String groupID;
 
+    private QuizListItem curQuiz;
     private ArrayList<QuizListItem> quizzes;
     private ArrayList<String> courseIds;
     private ArrayList<Course> courses;
@@ -83,9 +84,7 @@ public class QuizPickActivity extends AppCompatActivity implements
                 hController.getQuizzesFor("arh5w6", "cmpsci4020");
             }
         }
-
-
-
+        Log.d(TAG, "Quiz pick created.");
     }
 
     @Override
@@ -104,6 +103,14 @@ public class QuizPickActivity extends AppCompatActivity implements
     }
 
     @Override
+    public String getActiveQuizTitle() {
+        if (curQuiz != null) {
+            return curQuiz.getDescription();
+        }
+        return null;
+    }
+
+    @Override
     public void setQuizzes(ArrayList<QuizListItem> quizzes) {
         this.quizzes = quizzes;
 
@@ -115,8 +122,9 @@ public class QuizPickActivity extends AppCompatActivity implements
 
     @Override
     public void setActiveQuiz(int pos) {
-        quizID = quizzes.get(pos).get_id();
-        Log.d(TAG, "Selected quiz: " + quizzes.get(pos).getDescription());
+        curQuiz = quizzes.get(pos);
+        quizID = curQuiz.get_id();
+        Log.d(TAG, "Selected quiz: " + curQuiz.getDescription());
     }
 
 

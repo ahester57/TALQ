@@ -22,7 +22,7 @@ public class GradedQuiz {
     private int totalPoints;
     private ArrayList<GradedQuestion> gradedQuestions = new ArrayList<>();
 
-    public GradedQuiz(JSONObject gradedQuizObj) {
+    public GradedQuiz(JSONObject gradedQuizObj) throws JSONException {
         try {
             this.sessionId = gradedQuizObj.getString("sessionId");
             this.userId = gradedQuizObj.getString("user");
@@ -38,6 +38,7 @@ public class GradedQuiz {
             this.totalPoints = calculateTotalPoints();
         } catch (JSONException e) {
             Log.e("JSONError", e.getMessage());
+            throw e;
         }
     }
 

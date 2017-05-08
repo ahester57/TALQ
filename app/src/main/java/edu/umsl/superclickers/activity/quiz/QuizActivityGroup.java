@@ -4,15 +4,20 @@ import android.app.ActivityManager;
 import android.app.FragmentManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -22,6 +27,7 @@ import edu.umsl.superclickers.activity.quiz.helper.QuizService;
 import edu.umsl.superclickers.activity.quiz.view.QuizViewGroup;
 import edu.umsl.superclickers.app.FragmentConfig;
 import edu.umsl.superclickers.app.SessionManager;
+import edu.umsl.superclickers.quizdata.Question;
 import edu.umsl.superclickers.quizdata.Quiz;
 import edu.umsl.superclickers.quizdata.SelectedAnswer;
 
@@ -46,6 +52,7 @@ public class QuizActivityGroup extends AppCompatActivity implements
     private SessionManager session;
 
     private boolean isLeader = false;
+    private boolean hasChosen = false;
 
     // BroadcastReceiver for QuizService
     private BroadcastReceiver br = new BroadcastReceiver() {
@@ -113,13 +120,35 @@ public class QuizActivityGroup extends AppCompatActivity implements
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.action_next_question:
-                quizViewGroup.nextQuestion();
+                //quizViewGroup.nextQuestion();
                 return true;
             case R.id.action_prev_question:
-                quizViewGroup.prevQuestion();
+                //quizViewGroup.prevQuestion();
                 return true;
             case R.id.action_review_quiz:
-                submitQuiz();
+                if (hasChosen) {
+                    String value = "";
+                    try {
+                        JSONObject question = buildAnswersForPOST();
+                        value = question.getString("answerValue");
+                    } catch (JSONException e) {
+                        Log.e(TAG, e.getMessage());
+                    }
+                    new AlertDialog.Builder(this, R.style.Theme_AppCompat_DayNight_Dialog_MinWidth)
+                            .setTitle(Html.fromHtml("<h2>Submit Question?</h2>"))
+                            .setMessage(Html.fromHtml("<h3>Are you sure you want to submit with " +
+                                    "choice: " + value + "?</h3>"))
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                submitQuestion();
+                                Log.d(TAG, "Question submitted");
+                                }
+                            })
+                            .setNegativeButton(android.R.string.no, null)
+                            .setIcon(android.R.drawable.ic_input_add)
+                            .show();
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -130,14 +159,46 @@ public class QuizActivityGroup extends AppCompatActivity implements
     public void setSelectedAnswers(ArrayList<SelectedAnswer> selectedAnswers) {
         if (isLeader) {
             session.setSelectedAnswersFor(selectedAnswers);
+            hasChosen = true;
         }
         // if leader then do this.
     }
 
-    public void submitQuiz() {
+    public void submitQuestion() {
+        if (hasChosen) {
+            buildAnswersForPOST();
+            hasChosen = false;
+
+
+            quizViewGroup.nextQuestion(); // @TODO end when quiz is over
+        }
+
+    }
+
+    private JSONObject buildAnswersForPOST() {
+        JSONObject questionObj = new JSONObject();
+        try {
+            // Build question object
+            Question question = quizViewGroup.getQuestion();
+            questionObj = new JSONObject();
+            questionObj.put("question_id", question.get_id());
+            // Build selected answer array
+            for (SelectedAnswer sa : session.getSelectedAnswersFor(question.get_id())) {
+                if (sa.getAllocatedPoints() != 0) {
+                    questionObj.put("answerValue", sa.getValue());
+                }
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
+        }
+        Log.i(TAG, questionObj.toString());
+        return questionObj;
+    }
+
+    public void finishQuiz() {
         // @TODO POST quiz for grading
 
-        Toast.makeText(getApplicationContext(), "Group Quiz Submitted", Toast.LENGTH_LONG).show();
+        //Toast.makeText(getApplicationContext(), "Group Quiz Submitted", Toast.LENGTH_LONG).show();
         stopService(timerService);
 
         Intent quizIntent = new Intent(QuizActivityGroup.this, QuizResultActivityGroup.class);
@@ -206,7 +267,7 @@ public class QuizActivityGroup extends AppCompatActivity implements
             secondsLeft = secondsLeft % 60;
             quizViewGroup.updateGUITimer(minutesLeft, secondsLeft);
             if (millisUntilFinished < 2000) {
-                submitQuiz();
+                finishQuiz();
             }
         }
     }

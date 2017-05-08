@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.os.Build;
 import android.support.v7.widget.AppCompatSeekBar;
 import android.text.TextPaint;
 import android.util.AttributeSet;
@@ -32,10 +33,12 @@ public class SeekBarText extends AppCompatSeekBar {
         super(context, attributeSet, defStyleAttr);
 
         TextView t = new TextView(context);
-        t.setTextAppearance(android.R.style.TextAppearance_DeviceDefault_Widget_Button);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            t.setTextAppearance(android.R.style.TextAppearance_DeviceDefault_Widget_Button);
+        }
         mThumbSize = getResources().getDimensionPixelSize(R.dimen.thumb_size);
         mTextPaint = new TextPaint();
-        mTextPaint.setTextSize(40);
+        mTextPaint.setTextSize(60);
         mTextPaint.setTypeface(t.getTypeface());
         mTextPaint.setTextAlign(Paint.Align.CENTER);
     }

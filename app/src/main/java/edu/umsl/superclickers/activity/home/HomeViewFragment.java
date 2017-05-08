@@ -158,7 +158,7 @@ public class HomeViewFragment extends Fragment implements View.OnClickListener {
                         int color = getResources().getColor(android.R.color.holo_green_dark);
                         holder.itemView.setBackgroundColor(color);
                     } else {
-                        int color = getResources().getColor(android.R.color.tertiary_text_dark);
+                        int color = getResources().getColor(android.R.color.holo_blue_dark);
                         holder.itemView.setBackgroundColor(color);
                     }
                     final Course course = mCourses.get(position);
@@ -173,8 +173,8 @@ public class HomeViewFragment extends Fragment implements View.OnClickListener {
                         }
                     });
                 } catch (IndexOutOfBoundsException e) {
-                    e.printStackTrace();
                     Log.e(TAG, e.getMessage());
+                    e.printStackTrace();
                 }
             }
         }

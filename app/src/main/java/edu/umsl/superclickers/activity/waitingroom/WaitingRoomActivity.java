@@ -137,10 +137,10 @@ public class WaitingRoomActivity extends AppCompatActivity
     }
 
     @Override
-    public void postInfo(String response) {
+    public void postInfo(JSONObject response) {
         GradedQuiz gradedQuiz = null;
         try {
-            gradedQuiz = new GradedQuiz(new JSONObject(response));
+            gradedQuiz = new GradedQuiz(response);
         } catch (JSONException e) {
             Log.e("JSONError", e.getMessage());
         }

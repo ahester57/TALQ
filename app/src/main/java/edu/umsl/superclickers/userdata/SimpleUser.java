@@ -19,7 +19,7 @@ public class SimpleUser {
         this.last = last;
     }
 
-    public SimpleUser(JSONObject uObj) {
+    public SimpleUser(JSONObject uObj) throws JSONException {
         try {
             this.userId = uObj.getString("userID");
             this.email = uObj.getString("email");
@@ -28,6 +28,7 @@ public class SimpleUser {
 
         } catch (JSONException e) {
             Log.e("JSONERROR", e.getMessage());
+            throw e;
         }
     }
 

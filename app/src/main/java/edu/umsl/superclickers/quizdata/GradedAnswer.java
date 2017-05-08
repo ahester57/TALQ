@@ -16,7 +16,7 @@ public class GradedAnswer {
     private String questionId;
     private boolean isCorrect;
 
-    public GradedAnswer(JSONObject gradedObj, String questionId) {
+    public GradedAnswer(JSONObject gradedObj, String questionId) throws JSONException {
         try {
             this.questionId = questionId;
             this.allocatedPoints = gradedObj.getInt("points");
@@ -25,6 +25,7 @@ public class GradedAnswer {
 
         } catch (JSONException e) {
             Log.e("JSONERror", e.getMessage());
+            throw e;
         }
     }
 

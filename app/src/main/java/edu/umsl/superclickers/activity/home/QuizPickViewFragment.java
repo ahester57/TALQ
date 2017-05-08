@@ -1,13 +1,16 @@
 package edu.umsl.superclickers.activity.home;
 
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,7 +30,7 @@ import edu.umsl.superclickers.userdata.Course;
  */
 
 public class QuizPickViewFragment extends Fragment {
-
+    private final static String TAG = QuizPickViewFragment.class.getSimpleName();
 
     private List<QuizListItem> mQuizzes;
 
@@ -37,6 +40,7 @@ public class QuizPickViewFragment extends Fragment {
 
     interface QuizPickListener {
         void startQuiz();
+        String getActiveQuizTitle();
         List<QuizListItem> getQuizzes();
         void setActiveQuiz(int pos);
     }
@@ -69,7 +73,24 @@ public class QuizPickViewFragment extends Fragment {
         startQuiz.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                hvListener.startQuiz();
+                if (hvListener != null) {
+                    String qName = hvListener.getActiveQuizTitle();
+                    new AlertDialog.Builder(getActivity(), R.style.Theme_AppCompat_Dialog_Alert)
+                            .setTitle(Html.fromHtml("<h2>Begin Quiz?</h2>"))
+                            .setMessage(Html.fromHtml("<h4>Are you <i>sure</i> you" +
+                                            " want to start</h4> <h3><b>" +
+                                    qName + "</b>?</h3>"))
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    hvListener.startQuiz();
+                                    Log.d(TAG, "Quiz started");
+                                }
+                            })
+                            .setNegativeButton(android.R.string.no, null)
+                            .setIcon(android.R.drawable.ic_menu_directions)
+                            .show();
+                }
             }
         });
 
@@ -114,7 +135,7 @@ public class QuizPickViewFragment extends Fragment {
                         int color = getResources().getColor(android.R.color.holo_green_dark);
                         holder.itemView.setBackgroundColor(color);
                     } else {
-                        int color = getResources().getColor(android.R.color.tertiary_text_dark);
+                        int color = getResources().getColor(android.R.color.holo_blue_dark);
                         holder.itemView.setBackgroundColor(color);
                     }
                     QuizListItem quiz = mQuizzes.get(position);

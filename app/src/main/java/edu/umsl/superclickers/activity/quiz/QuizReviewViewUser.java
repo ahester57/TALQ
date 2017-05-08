@@ -1,11 +1,14 @@
 package edu.umsl.superclickers.activity.quiz;
 
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -66,7 +69,21 @@ public class QuizReviewViewUser extends Fragment {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                rListener.submitQuiz();
+                new AlertDialog.Builder(getActivity(), R.style.Theme_AppCompat_Dialog_Alert)
+                        .setTitle(Html.fromHtml("<h2>Submit Quiz?</h2>"))
+                        .setMessage(Html.fromHtml("<h3>Are you sure you want to submit this quiz?</h3>"))
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (rListener != null) {
+                                    rListener.submitQuiz();
+                                    Log.d(TAG, "Quiz submitted");
+                                }
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, null)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
             }
         });
         return view;
@@ -151,7 +168,8 @@ public class QuizReviewViewUser extends Fragment {
                         }
                     });
                 } catch (IndexOutOfBoundsException e) {
-                    Log.e("WHOOPS", "idk");
+                    Log.e(TAG, e.getMessage());
+                    e.printStackTrace();
                 }
             }
         }
