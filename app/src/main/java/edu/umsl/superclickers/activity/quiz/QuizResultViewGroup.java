@@ -2,10 +2,9 @@ package edu.umsl.superclickers.activity.quiz;
 
 import android.app.Fragment;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -13,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.Button;
 
 import java.util.List;
@@ -70,8 +68,16 @@ public class QuizResultViewGroup extends Fragment {
 
         uRecyclerView = (RecyclerView) view.findViewById(R.id.user_result_recycler);
         gRecyclerView = (RecyclerView) view.findViewById(R.id.group_result_recycler);
-        uRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        gRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        LinearLayoutManager glayoutManager = new LinearLayoutManager(getActivity());
+        DividerItemDecoration divider = new DividerItemDecoration(uRecyclerView.getContext(),
+                layoutManager.getOrientation());
+        DividerItemDecoration gdivider = new DividerItemDecoration(gRecyclerView.getContext(),
+                glayoutManager.getOrientation());
+        uRecyclerView.setLayoutManager(layoutManager);
+        uRecyclerView.addItemDecoration(divider);
+        gRecyclerView.setLayoutManager(glayoutManager);
+        gRecyclerView.addItemDecoration(gdivider);
 
         SelfScrollListener userOnScroll = new SelfScrollListener() {
             @Override
@@ -119,7 +125,8 @@ public class QuizResultViewGroup extends Fragment {
 
         uRecyclerView.addOnScrollListener(userOnScroll);
         gRecyclerView.addOnScrollListener(groupOnScroll);
-
+        uRecyclerView.setScrollX(0);
+        gRecyclerView.setScrollX(0);
         setQuestionAdapter();
         return view;
     }
@@ -151,11 +158,6 @@ public class QuizResultViewGroup extends Fragment {
         }
 
         @Override
-        public void setQuiz(int pos) {
-            //
-        }
-
-        @Override
         public void onBindViewHolder(QuestionHolder holder, final int position) {
             if (mQuestions != null) {
                 try {
@@ -173,7 +175,7 @@ public class QuizResultViewGroup extends Fragment {
                             notifyItemChanged(selectedPos);
                             selectedPos = position;
                             notifyItemChanged(selectedPos);
-                            setQuiz(position);
+
                         }
                     });
                 } catch (IndexOutOfBoundsException e) {

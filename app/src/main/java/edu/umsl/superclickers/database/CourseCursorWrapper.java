@@ -24,13 +24,15 @@ class CourseCursorWrapper extends CursorWrapper {
 
         moveToFirst();
         if (getCount() > 0) {
-            String _id = getString(getColumnIndex(CourseSchema.KEY_UID));
-            String courseId = getString(getColumnIndex(CourseSchema.KEY_COURSE_ID));
-            String extID = getString(getColumnIndex(CourseSchema.KEY_EXTENDED_ID));
-            String name = getString(getColumnIndex(CourseSchema.KEY_NAME));
-            String semester = getString(getColumnIndex(CourseSchema.KEY_SEMESTER));
-            String instructor = getString(getColumnIndex(CourseSchema.KEY_INSTRUCTOR));
-            courses.add(new Course(_id, courseId, extID, name, semester, instructor));
+            do {
+                String _id = getString(getColumnIndex(CourseSchema.KEY_UID));
+                String courseId = getString(getColumnIndex(CourseSchema.KEY_COURSE_ID));
+                String extID = getString(getColumnIndex(CourseSchema.KEY_EXTENDED_ID));
+                String name = getString(getColumnIndex(CourseSchema.KEY_NAME));
+                String semester = getString(getColumnIndex(CourseSchema.KEY_SEMESTER));
+                String instructor = getString(getColumnIndex(CourseSchema.KEY_INSTRUCTOR));
+                courses.add(new Course(_id, courseId, extID, name, semester, instructor));
+            } while (moveToNext());
         }
         return courses;
     }

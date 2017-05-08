@@ -1,7 +1,6 @@
 package edu.umsl.superclickers.activity.home;
 
 import android.app.Fragment;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -21,9 +20,9 @@ import android.widget.TextView;
 import java.util.List;
 
 import edu.umsl.superclickers.R;
-import edu.umsl.superclickers.activity.quiz.helper.QuizHolder;
+import edu.umsl.superclickers.activity.helper.CourseHolder;
 import edu.umsl.superclickers.app.SessionManager;
-import edu.umsl.superclickers.quizdata.QuizListItem;
+import edu.umsl.superclickers.userdata.Course;
 import edu.umsl.superclickers.userdata.User;
 
 /**
@@ -35,7 +34,7 @@ public class HomeViewFragment extends Fragment implements View.OnClickListener {
     private TextView textName;
     private TextView textEmail;
 
-    private List<QuizListItem> quizzes;
+    private List<Course> courses;
 
     private SessionManager session;
     private RecyclerView qRecyclerView;
@@ -43,9 +42,9 @@ public class HomeViewFragment extends Fragment implements View.OnClickListener {
 
     interface HomeViewListener {
         void logoutUser();
-        void startQuiz();
         void goToGroups();
-        void setActiveQuiz(int pos);
+        void goToQuizzes();
+        void setActiveCourse(String courseId);
     }
 
     @Override
@@ -69,14 +68,14 @@ public class HomeViewFragment extends Fragment implements View.OnClickListener {
         Button btnLogout = (Button) view.findViewById(R.id.logout_button);
         Button btnPlay = (Button) view.findViewById(R.id.play_button);
         Button btnCreateGroup = (Button) view.findViewById(R.id.groups_button);
-        qRecyclerView = (RecyclerView) view.findViewById(R.id.quiz_list_recycler);
+        qRecyclerView = (RecyclerView) view.findViewById(R.id.course_list_recycler);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         DividerItemDecoration divider = new DividerItemDecoration(qRecyclerView.getContext(),
                 layoutManager.getOrientation());
         qRecyclerView.setLayoutManager(layoutManager);
         qRecyclerView.addItemDecoration(divider);
-        qRecyclerView.setAdapter(new QuizAdapter(quizzes));
+        qRecyclerView.setAdapter(new CourseAdapter(courses));
 
         if (!session.isLoggedIn()) {
             //logoutUser();
@@ -109,7 +108,7 @@ public class HomeViewFragment extends Fragment implements View.OnClickListener {
                 hvListener.logoutUser();
                 break;
             case R.id.play_button:
-                hvListener.startQuiz();
+                hvListener.goToQuizzes();
                 break;
             case R.id.groups_button:
                 hvListener.goToGroups();
@@ -123,37 +122,36 @@ public class HomeViewFragment extends Fragment implements View.OnClickListener {
         textEmail.setText(user.getUserId());
     }
 
-    void setQuizAdapter(List<QuizListItem> quizzes) {
-        this.quizzes = quizzes;
-        qRecyclerView.setAdapter(new QuizAdapter(quizzes));
+    void setCourseAdapter(List<Course> courses) {
+        this.courses = courses;
+        qRecyclerView.setAdapter(new CourseAdapter(courses));
     }
 
 
-    private class QuizAdapter extends RecyclerView.Adapter<QuizHolder> implements
-            QuizHolder.QuizHolderListener {
+    private class CourseAdapter extends RecyclerView.Adapter<CourseHolder> {
+        private final String TAG = CourseAdapter.class.getSimpleName();
 
         private int selectedPos = 0;
-        private List<QuizListItem> mQuizzes;
+        private List<Course> mCourses;
 
-        QuizAdapter(List<QuizListItem> quizzes) {
-            mQuizzes = quizzes;
+        CourseAdapter(List<Course> courses) {
+            mCourses = courses;
         }
 
         @Override
-        public QuizHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public CourseHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater inflater = LayoutInflater.from(getActivity());
-            View view = inflater.inflate(R.layout.quiz_recycler_item, parent, false);
-            return new QuizHolder(view, this);
+            View view = inflater.inflate(R.layout.course_recycler_item, parent, false);
+            return new CourseHolder(view);
+        }
+
+        public void goToQuizzes(String courseId) {
+            hvListener.setActiveCourse(courseId);
         }
 
         @Override
-        public void setQuiz(int pos) {
-            hvListener.setActiveQuiz(pos);
-        }
-
-        @Override
-        public void onBindViewHolder(QuizHolder holder, final int position) {
-            if (mQuizzes != null) {
+        public void onBindViewHolder(CourseHolder holder, final int position) {
+            if (mCourses != null) {
                 try {
                     // for highlighting
                     if (selectedPos == position) {
@@ -163,27 +161,28 @@ public class HomeViewFragment extends Fragment implements View.OnClickListener {
                         int color = getResources().getColor(android.R.color.tertiary_text_dark);
                         holder.itemView.setBackgroundColor(color);
                     }
-
-                    holder.bindQuiz(mQuizzes.get(position));
+                    final Course course = mCourses.get(position);
+                    holder.bindCourse(course);
                     holder.itemView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             notifyItemChanged(selectedPos);
                             selectedPos = position;
                             notifyItemChanged(selectedPos);
-                            setQuiz(position);
+                            goToQuizzes(course.getCourseId());
                         }
                     });
                 } catch (IndexOutOfBoundsException e) {
-                    Log.e("WHOOPS", "idk");
+                    e.printStackTrace();
+                    Log.e(TAG, e.getMessage());
                 }
             }
         }
 
         @Override
         public int getItemCount() {
-            if (mQuizzes != null) {
-                return mQuizzes.size();
+            if (mCourses != null) {
+                return mCourses.size();
             }
             return 0;
         }

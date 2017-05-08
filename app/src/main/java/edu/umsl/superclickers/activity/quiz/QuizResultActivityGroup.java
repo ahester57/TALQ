@@ -1,9 +1,9 @@
 package edu.umsl.superclickers.activity.quiz;
 
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 
 import edu.umsl.superclickers.R;
@@ -35,10 +35,12 @@ public class QuizResultActivityGroup extends AppCompatActivity implements
         session.setDoneWithIndividualQuiz(false);
 
         Intent i = getIntent();
-        quizID = i.getStringExtra("QUIZ_ID");
-        courseID = i.getStringExtra("COURSE_ID");
-        userID = i.getStringExtra("USER_ID");
-        groupID = i.getStringExtra("GROUP_ID");
+        if (i.getExtras() != null) {
+            quizID = i.getStringExtra("QUIZ_ID");
+            courseID = i.getStringExtra("COURSE_ID");
+            userID = i.getStringExtra("USER_ID");
+            groupID = i.getStringExtra("GROUP_ID");
+        }
 
         FragmentManager fm = getFragmentManager();
         if (fm.findFragmentByTag(FragmentConfig.KEY_RESULT_VIEW_GROUP) != null) {

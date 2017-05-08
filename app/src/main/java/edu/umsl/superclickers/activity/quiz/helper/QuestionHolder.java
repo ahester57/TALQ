@@ -28,9 +28,8 @@ public class QuestionHolder extends RecyclerView.ViewHolder {
     private WeakReference<QuestionHolderListener> mListener;
 
     public interface QuestionHolderListener {
-        void setQuiz(int pos);
-    }
 
+    }
 
     public QuestionHolder(View itemView, QuestionHolderListener listener) {
         super(itemView);

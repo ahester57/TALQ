@@ -15,3 +15,5 @@ git clone http://umsl.vigilantestudio.com/superClickers/superClickers.git
 	- submit group quizzes for grading
 	- fix timer on app force close --> allows for infinite time
 	- add AlarmManager for submitting quiz when app is closed
+	- show running quizzes, block starting a new quiz until over
+	- user vs. group results

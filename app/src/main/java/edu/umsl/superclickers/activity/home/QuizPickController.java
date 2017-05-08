@@ -22,36 +22,34 @@ import edu.umsl.superclickers.app.QuizConfig;
 import edu.umsl.superclickers.app.SessionManager;
 import edu.umsl.superclickers.quizdata.QuizListItem;
 
-
 /**
- * Created by stin on 3/23/17.
+ * Created by Austin on 5/7/2017.
  */
 
-public class HomeController extends Fragment {
+public class QuizPickController extends Fragment {
 
-    private final String TAG = HomeController.class.getSimpleName();
+    private final String TAG = QuizPickController.class.getSimpleName();
 
     private SessionManager session;
-    private HomeListener hListener;
+    private QuizPickDelegate hListener;
     private ArrayList<QuizListItem> quizzes;
     private ArrayList<String> courseIds;
 
-    interface HomeListener {
-        void setCourses(ArrayList<QuizListItem> quizzes, ArrayList<String> courseId);
+    interface QuizPickDelegate {
+        void setQuizzes(ArrayList<QuizListItem> quizzes);
     }
-
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         session = new SessionManager(getActivity());
-        hListener = (HomeListener) getActivity();
+        hListener = (QuizPickDelegate) getActivity();
         quizzes = new ArrayList<>();
         courseIds = new ArrayList<>();
     }
 
 
-    void getCoursesFor(final String user_id) {
+    void getQuizzesFor(final String user_id, final String course_id) {
         String tag_str_req = "req_quiz";
         String uri = String.format(QuizConfig.URL_QUIZZES_FOR_USER, user_id);
         // new string request
@@ -77,15 +75,14 @@ public class HomeController extends Fragment {
                                 for (int i = 0; i < jArr.length(); i++) {
                                     JSONObject jObj = jArr.getJSONObject(i);
                                     String courseId = jObj.getString("courseId");
-
                                     JSONObject quiz = jObj.getJSONObject("quiz");
                                     //session.addQuizToDB(new Quiz(quiz));
-                                    // @TODO return quiz object
-                                    quizzes.add(new QuizListItem(quiz, courseId));
-                                    courseIds.add(courseId);
+                                    if (courseId.equals(course_id)) {
+                                        quizzes.add(new QuizListItem(quiz, courseId));
+                                    }
                                 }
 
-                                hListener.setCourses(quizzes, courseIds);
+                                hListener.setQuizzes(quizzes);
 
                             } else {
                                 // Error

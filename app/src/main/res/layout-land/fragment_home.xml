@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/quiz_list_recycler"
+        android:id="@+id/course_list_recycler"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="15dp"
@@ -52,16 +52,16 @@
         android:id="@+id/play_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         android:background="@drawable/button_custom4"
         android:fontFamily="casual"
-        android:text="@string/play"
+        android:text="@string/view_quizzes"
         android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         tools:layout_constraintLeft_creator="1"
-        tools:layout_constraintRight_creator="1"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="16dp" />
+        tools:layout_constraintRight_creator="1" />
 
     <Button
         android:id="@+id/groups_button"
@@ -95,8 +95,8 @@
         app:layout_constraintLeft_toRightOf="@+id/name_text_view"
         android:layout_marginLeft="8dp"
         app:layout_constraintHorizontal_bias="1.0"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/quiz_list_recycler" />
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_alt" />
 
     <TextView
         android:id="@+id/welcome_text_view"
@@ -113,7 +113,8 @@
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_alt" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_alt"
+        android:layout_marginRight="16dp" />
 
     <TextView
         android:id="@+id/name_text_view"
@@ -129,7 +130,7 @@
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintLeft_toRightOf="@+id/welcome_text_view"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/quiz_list_recycler" />
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_alt" />
 
 </android.support.constraint.ConstraintLayout>

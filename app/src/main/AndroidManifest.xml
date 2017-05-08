@@ -33,6 +33,9 @@
         <activity android:name=".activity.home.HomeActivity">
         </activity>
 
+        <activity android:name=".activity.home.QuizPickActivity">
+        </activity>
+
         <activity android:name=".activity.home.GroupActivity">
         </activity>
 

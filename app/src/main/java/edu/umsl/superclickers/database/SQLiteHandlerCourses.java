@@ -106,7 +106,7 @@ public class SQLiteHandlerCourses extends SQLiteOpenHelper {
 
             cursor.close();
             db.close();
-            Log.d(TAG, "Fectching course from Sqlite: " + courses.toString());
+            Log.d(TAG, "Fectching courses from Sqlite: " + courses.toString());
         } catch (SQLiteException e) {
             Log.d(TAG, "couldn't get courses");
         }
@@ -114,9 +114,9 @@ public class SQLiteHandlerCourses extends SQLiteOpenHelper {
     }
 
     /// get course data
-    public Course getCourseById(String guid) { // change to return user object
+    public Course getCourseById(String courseId) { // change to return user object
         String selectQuery = "SELECT * FROM " + TableSchema.TABLE_COURSE +
-                    " WHERE " + CourseSchema.KEY_UID + " = \"" + guid + "\";";
+                    " WHERE " + CourseSchema.KEY_COURSE_ID + " = \"" + courseId + "\";";
 
         Course course = null;
         try {

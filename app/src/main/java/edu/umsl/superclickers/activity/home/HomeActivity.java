@@ -15,7 +15,6 @@ import java.util.ArrayList;
 
 import edu.umsl.superclickers.R;
 import edu.umsl.superclickers.activity.login.LoginActivity;
-import edu.umsl.superclickers.activity.quiz.QuizActivityUser;
 import edu.umsl.superclickers.activity.quiz.helper.QuizService;
 import edu.umsl.superclickers.activity.waitingroom.WaitingRoomActivity;
 import edu.umsl.superclickers.app.FragmentConfig;
@@ -92,9 +91,9 @@ public class HomeActivity extends AppCompatActivity implements
                     .commit();
             // only request quizzes if hController DNE
             if(user != null) {
-                hController.getQuizzesFor(user.getUserId());
+                hController.getCoursesFor(user.getUserId());
             } else {
-                hController.getQuizzesFor("arh5w6");
+                hController.getCoursesFor("arh5w6");
             }
         }
 
@@ -122,6 +121,7 @@ public class HomeActivity extends AppCompatActivity implements
             } else {
                 onRestart();
             }
+            Log.d(TAG, "updating home info");
         } catch (NullPointerException e) {
             onRestart();
         }
@@ -133,29 +133,32 @@ public class HomeActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void setQuizzes(ArrayList<QuizListItem> quizzes, ArrayList<String> courseIds) {
-        this.quizzes = quizzes;
-        this.courseIds = courseIds;
+    public void setCourses(ArrayList<QuizListItem> quizzes, ArrayList<String> courseIds) {
+        try {
+            this.quizzes = quizzes;
+            this.courseIds = courseIds;
 
-        setActiveQuiz(0);
-        hViewFragment.setQuizAdapter(quizzes);
+            setActiveCourse(this.courseIds.get(0));
+            hViewFragment.setCourseAdapter(courses);
+        } catch (IndexOutOfBoundsException e) {
+            e.printStackTrace();
+            Log.e(TAG, e.getMessage());
+        }
         // @TODO display running quizzes
         // @TODO display full course name
     }
 
+
     @Override
-    public void setActiveQuiz(int pos) {
-        quizID = quizzes.get(pos).get_id();
-        courseId = courseIds.get(pos);
-        Log.d(TAG, "Selected quiz: " + quizzes.get(pos).getDescription());
+    public void setActiveCourse(String courseId) {
+        this.courseId = courseId;
+        Log.d(TAG, "Selected course: " + courseId);
     }
 
-
     @Override
-    public void startQuiz() {
+    public void goToQuizzes() {
         try {
-            Intent i = new Intent(HomeActivity.this, QuizActivityUser.class);
-            i.putExtra("QUIZ_ID", quizID);
+            Intent i = new Intent(HomeActivity.this, QuizPickActivity.class);
             i.putExtra("USER_ID", userId);
             i.putExtra("COURSE_ID", courseId);
             i.putExtra("GROUP_ID", group.getGroupId());
@@ -165,6 +168,8 @@ public class HomeActivity extends AppCompatActivity implements
             updateInformation();
         }
     }
+
+
 
     public void stopQuiz() {
         // @TODO POST quiz for grading
@@ -244,5 +249,10 @@ public class HomeActivity extends AppCompatActivity implements
     protected void onDestroy() {
         Log.d(TAG, "Home Activity destoyed");
         super.onDestroy();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        //super.onSaveInstanceState(outState);
     }
 }

@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -39,9 +40,14 @@ public class GroupViewFragment extends Fragment implements GroupController.Group
 
 
         gRecycler = (RecyclerView) view.findViewById(R.id.group_list_recycler);
-        gRecycler.setAdapter(new GroupAdapter(gGroups));
-        gRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        DividerItemDecoration divider = new DividerItemDecoration(gRecycler.getContext(),
+                layoutManager.getOrientation());
+
+        gRecycler.setLayoutManager(layoutManager);
+        gRecycler.addItemDecoration(divider);
+        gRecycler.setAdapter(new GroupAdapter(gGroups));
         return view;
     }
 

@@ -1,7 +1,6 @@
 package edu.umsl.superclickers.activity.quiz;
 
 import android.app.Fragment;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DividerItemDecoration;
@@ -97,11 +96,6 @@ public class QuizReviewViewUser extends Fragment {
             return new QuestionHolder(view, this);
         }
 
-        @Override
-        public void setQuiz(int pos) {
-
-            //hvListener.setActiveQuiz(pos);
-        }
 
         @Override
         public void onBindViewHolder(QuestionHolder holder, final int position) {
@@ -153,7 +147,7 @@ public class QuizReviewViewUser extends Fragment {
                             notifyItemChanged(selectedPos);
                             selectedPos = position;
                             notifyItemChanged(selectedPos);
-                            setQuiz(position);
+
                         }
                     });
                 } catch (IndexOutOfBoundsException e) {
