@@ -87,22 +87,21 @@ public class AnswerViewGroup extends AnswerView {
         public void onClick(View v) {
             int index = -1;
             clearButtons();
-            int color = getResources().getColor(android.R.color.holo_green_light);
             switch (v.getId()) {
                 case R.id.A_button_group:
-                    A.setBackgroundColor(color);
+                    A.setBackground(getResources().getDrawable(R.drawable.button_selected));
                     index = 0;
                     break;
                 case R.id.B_button_group:
-                    B.setBackgroundColor(color);
+                    B.setBackground(getResources().getDrawable(R.drawable.button_selected2));
                     index = 1;
                     break;
                 case R.id.C_button_group:
-                    C.setBackgroundColor(color);
+                    C.setBackground(getResources().getDrawable(R.drawable.button_selected4));
                     index = 2;
                     break;
                 case R.id.D_button_group:
-                    D.setBackgroundColor(color);
+                    D.setBackground(getResources().getDrawable(R.drawable.button_selected3));
                     index = 3;
                     break;
             }
@@ -132,11 +131,10 @@ public class AnswerViewGroup extends AnswerView {
     };
 
     void clearButtons() {
-        int color = getResources().getColor(android.R.color.background_light);
-        A.setBackgroundColor(color);
-        B.setBackgroundColor(color);
-        C.setBackgroundColor(color);
-        D.setBackgroundColor(color);
+        A.setBackground(getResources().getDrawable(R.drawable.button_custom1));
+        B.setBackground(getResources().getDrawable(R.drawable.button_custom2));
+        C.setBackground(getResources().getDrawable(R.drawable.button_custom4));
+        D.setBackground(getResources().getDrawable(R.drawable.button_custom3));
     }
 
     @Override

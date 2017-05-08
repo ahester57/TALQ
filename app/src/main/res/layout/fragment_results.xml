@@ -38,15 +38,16 @@
 
     <Button
         android:id="@+id/button_finish_group_quiz"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@drawable/button_custom2"
+        android:padding="8dp"
         android:text="@string/finish_group_quiz"
-        android:layout_marginRight="8dp"
+        android:layout_marginRight="16dp"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp" />
+        android:layout_marginEnd="16dp" />
 
     <Space
         android:layout_width="wrap_content"
