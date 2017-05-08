@@ -142,8 +142,8 @@ public class QuizActivityGroup extends AppCompatActivity implements
                             .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                submitQuestion();
-                                Log.d(TAG, "Question submitted");
+                                    submitQuestion();
+                                    Log.d(TAG, "Question submitted");
                                 }
                             })
                             .setNegativeButton(android.R.string.no, null)

@@ -143,8 +143,14 @@ public class QuizReviewViewUser extends Fragment {
                         }
                     } else {
                         // not selected
-                        holder.itemView.setBackgroundResource(0);
-                        holder.itemView.setPadding(8, 8, 8, 8);
+                        if (answeredFully) {
+                            holder.itemView.setBackgroundResource(0);
+                            holder.itemView.setPadding(8, 8, 8, 8);
+                        } else {
+                            holder.itemView.setBackground(getResources().getDrawable(R.drawable.line_black));
+                            holder.itemView.setPadding(8, 8, 8, 8);
+                        }
+
                     }
 
                     // bind question to view
