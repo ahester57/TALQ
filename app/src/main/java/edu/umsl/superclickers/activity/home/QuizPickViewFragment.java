@@ -2,6 +2,7 @@ package edu.umsl.superclickers.activity.home;
 
 import android.app.Fragment;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -16,10 +17,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 
 import java.util.List;
 
 import edu.umsl.superclickers.R;
+import edu.umsl.superclickers.activity.quiz.QuizActivityUser;
 import edu.umsl.superclickers.activity.quiz.helper.QuizHolder;
 import edu.umsl.superclickers.app.SessionManager;
 import edu.umsl.superclickers.quizdata.QuizListItem;
@@ -39,7 +42,7 @@ public class QuizPickViewFragment extends Fragment {
     private QuizPickListener hvListener;
 
     interface QuizPickListener {
-        void startQuiz();
+        void startQuiz(String token);
         String getActiveQuizTitle();
         List<QuizListItem> getQuizzes();
         void setActiveQuiz(int pos);
@@ -51,11 +54,13 @@ public class QuizPickViewFragment extends Fragment {
         setRetainInstance(true);
         session = new SessionManager(getActivity());
         hvListener = (QuizPickListener) getActivity();
-        mQuizzes = hvListener.getQuizzes();
+        if (hvListener != null) {
+            mQuizzes = hvListener.getQuizzes();
+        }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_quiz_list, container, false);
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar_alt);
@@ -71,24 +76,36 @@ public class QuizPickViewFragment extends Fragment {
         Button startQuiz = (Button) view.findViewById(R.id.button_start_quiz);
         startQuiz.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
                 if (hvListener != null) {
-                    String qName = hvListener.getActiveQuizTitle();
-                    new AlertDialog.Builder(getActivity(), R.style.Theme_AppCompat_DayNight_Dialog_MinWidth)
-                            .setTitle(Html.fromHtml("<h2>Begin Quiz?</h2>"))
-                            .setMessage(Html.fromHtml("<h4>Are you <i>sure</i> you" +
-                                    " want to start</h4> <h3><b>" +
-                                    qName + "</b>?</h3>"))
-                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    hvListener.startQuiz();
-                                    Log.d(TAG, "Quiz token requested");
-                                }
-                            })
-                            .setNegativeButton(android.R.string.no, null)
-                            .setIcon(android.R.drawable.ic_menu_directions)
-                            .show();
+                    if (session.isQuizRunning()) {
+                        hvListener.startQuiz("ALL_GOOD");
+                        Log.d(TAG, "Quiz resumed.");
+                    } else {
+                        String qName = hvListener.getActiveQuizTitle();
+                        LayoutInflater inflater = getActivity().getLayoutInflater();
+                        final View dialogView = inflater.inflate(R.layout.dialog_token_input, null);
+                        final EditText tokenIn = (EditText) dialogView.findViewById(R.id.quiz_token_input);
+
+                        new AlertDialog.Builder(getActivity(), R.style.Theme_AppCompat_DayNight_Dialog_MinWidth)
+                                .setTitle(Html.fromHtml("<h2>Enter token</h2>"))
+                                .setMessage(Html.fromHtml("<h4>Enter the token for <i>" +
+                                        qName + "</i>:</h4>"))
+                                .setView(dialogView)
+                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if (tokenIn != null) {
+                                            String token = tokenIn.getText().toString();
+                                            hvListener.startQuiz(token);
+                                            Log.d(TAG, "Quiz token input: " + token);
+                                        }
+                                    }
+                                })
+                                .setNegativeButton(android.R.string.no, null)
+                                .setIcon(android.R.drawable.ic_menu_directions)
+                                .show();
+                    }
                 }
             }
         });
@@ -99,7 +116,9 @@ public class QuizPickViewFragment extends Fragment {
 
     void setQuizAdapter(List<QuizListItem> quizzes) {
         this.mQuizzes = quizzes;
-        qRecyclerView.setAdapter(new QuizAdapter(quizzes));
+        if (qRecyclerView != null) {
+            qRecyclerView.setAdapter(new QuizAdapter(quizzes));
+        }
     }
 
     private class QuizAdapter extends RecyclerView.Adapter<QuizHolder> {
@@ -120,7 +139,9 @@ public class QuizPickViewFragment extends Fragment {
         }
 
         public void setQuiz(int pos) {
-            hvListener.setActiveQuiz(pos);
+            if (hvListener != null) {
+                hvListener.setActiveQuiz(pos);
+            }
         }
 
         @Override

@@ -179,8 +179,11 @@ public class QuizActivityGroup extends AppCompatActivity implements
             buildAnswersForPOST();
             hasChosen = false;
 
-
-            quizViewGroup.nextQuestion(); // @TODO end when quiz is over
+            if (getQuizIndex() >= getActiveQuiz().getQuestions().size() - 1) {
+                finishQuiz();
+            } else {
+                quizViewGroup.nextQuestion();
+            }// @TODO end when quiz is over
         }
 
     }
