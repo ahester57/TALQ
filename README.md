@@ -11,7 +11,6 @@ git clone http://umsl.vigilantestudio.com/superClickers/superClickers.git
 
 @TODO [05/08/17]
 - need to change the group quiz so that it's not using sliders
-- input token to unlock quiz
 - submit group quizzes for grading
 - fix timer on app force close --> allows for infinite time
 - add AlarmManager for submitting quiz when app is closed
