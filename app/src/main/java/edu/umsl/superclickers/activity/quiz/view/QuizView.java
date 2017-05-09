@@ -159,10 +159,25 @@ public abstract class QuizView extends Fragment implements
     public abstract void loadAnswerFragment(boolean isNewQuestion);
 
     public int getQuizTime() {
-        return curQuiz.getTimedLength();
+        if (curQuiz != null) {
+            return curQuiz.getTimedLength();
+        }
+        return 0;
     }
 
-    public String getQuizID() { return curQuiz.get_id(); }
+    public int getQuizProgess() {
+        if (curQuiz != null) {
+            return curQuiz.getqNum();
+        }
+        return 0;
+    }
+
+    public String getQuizID() {
+        if (curQuiz != null) {
+            return curQuiz.get_id();
+        }
+        return null;
+    }
 
     public void updateGUITimer(int minutes, int seconds) {
         minutesLeft = minutes;

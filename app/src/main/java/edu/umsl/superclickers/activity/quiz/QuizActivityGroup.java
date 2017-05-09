@@ -8,6 +8,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -48,6 +50,7 @@ public class QuizActivityGroup extends AppCompatActivity implements
     private String userID;
     private String courseID;
     private String groupID;
+    private String sessionId;
     private String leader;
 
     private Intent timerService;
@@ -55,6 +58,7 @@ public class QuizActivityGroup extends AppCompatActivity implements
     private QuizViewGroup quizViewGroup;
     private QuizGroupController qGroupController;
     private SessionManager session;
+    private Handler mHandler;
 
     private boolean isLeader = false;
     private boolean hasChosen;
@@ -90,6 +94,8 @@ public class QuizActivityGroup extends AppCompatActivity implements
         session = new SessionManager(getApplicationContext());
         timerService = new Intent(getBaseContext(), QuizService.class);
 
+        sessionId = session.getActiveQuiz().getSessionId();
+
         FragmentManager fm = getFragmentManager();
         // Check if quizGET exists
         if (fm.findFragmentByTag(FragmentConfig.KEY_QUIZ_GET) != null) {
@@ -122,6 +128,9 @@ public class QuizActivityGroup extends AppCompatActivity implements
             reloadQuiz(quizID, userID, courseID);
         }
         startQuizTimer();
+        if (!isLeader) {
+            startPolling();
+        }
     }
 
     @Override
@@ -134,14 +143,14 @@ public class QuizActivityGroup extends AppCompatActivity implements
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.action_next_question:
-                if (!isLeader) {
-                    quizViewGroup.nextQuestion();
-                }
+//                if (!isLeader) {
+//                    quizViewGroup.nextQuestion();
+//                }
                 return true;
             case R.id.action_prev_question:
-                if (!isLeader) {
-                    quizViewGroup.prevQuestion();
-                }
+//                if (!isLeader) {
+//                    quizViewGroup.prevQuestion();
+//                }
                 return true;
             case R.id.action_review_quiz:
                 Log.d(TAG, "has chosen = " + hasChosen);
@@ -185,53 +194,55 @@ public class QuizActivityGroup extends AppCompatActivity implements
     public void submitQuestion() {
         if (hasChosen) {
             JSONObject questionObj = buildAnswersForPOST();
-            String sessionId = session.getActiveQuiz().getSessionId();
+            if (sessionId == null) {
+                sessionId = session.getActiveQuiz().getSessionId();
+            }
             hasChosen = false;
-
-            qGroupController.POSTGroupQuiz(quizID, groupID, sessionId, questionObj);
-
-
+            if (qGroupController != null) {
+                qGroupController.POSTGroupQuiz(quizID, groupID, sessionId, questionObj);
+            }
         }
 
     }
 
     @Override
     public void postInfo(JSONObject response) {
+        if (quizViewGroup != null) {
+            try {
+                String questionId = response.getString("question");
+                JSONArray subAnswersArr = response.getJSONArray("submittedAnswers");
 
-        try {
-            String questionId = response.getString("question");
-            JSONArray subAnswersArr = response.getJSONArray("submittedAnswers");
-
-            String value = "none";
-            boolean isCorrect = false;
-            int points = 0;
-            for (int i = 0; i < subAnswersArr.length(); i++) {
-                JSONObject gradedObj = subAnswersArr.getJSONObject(i);
-                value = gradedObj.getString("value");
-                points = gradedObj.getInt("points");
-                isCorrect = gradedObj.getBoolean("isCorrect");
-                if (!isCorrect) {
-                    quizViewGroup.disableButton(valueToIndex(value));
+                String value = "none";
+                boolean isCorrect = false;
+                int points = 0;
+                for (int i = 0; i < subAnswersArr.length(); i++) {
+                    JSONObject gradedObj = subAnswersArr.getJSONObject(i);
+                    value = gradedObj.getString("value");
+                    points = gradedObj.getInt("points");
+                    isCorrect = gradedObj.getBoolean("isCorrect");
+                    if (!isCorrect) {
+                        quizViewGroup.disableButton(valueToIndex(value));
+                    }
                 }
-            }
-            if (isCorrect) {
-                String message = points > 0 ? "Congragulations!\n" : "Better luck next time!\n";
-                Toast.makeText(this, message + value + " is correct!" +
-                                "\nYou got " + points + " points for it.",
-                        Toast.LENGTH_LONG).show();
-                if (getQuizIndex() >= getActiveQuiz().getQuestions().size() - 1) {
-                    finishQuiz();
+                if (isCorrect) {
+                    String message = points > 0 ? "Congragulations!\n" : "Better luck next time!\n";
+                    Toast.makeText(this, message + value + " is correct!" +
+                                    "\nYou got " + points + " points for it.",
+                            Toast.LENGTH_LONG).show();
+                    if (getQuizIndex() >= getActiveQuiz().getQuestions().size() - 1) {
+                        finishQuiz();
+                    } else {
+                        quizViewGroup.nextQuestion();
+                    }
                 } else {
-                    quizViewGroup.nextQuestion();
+                    Toast.makeText(this, "OOPS! " + value + " is not correct!",
+                            Toast.LENGTH_SHORT).show();
+
                 }
-            } else {
-                Toast.makeText(this, "OOPS! " + value + " is not correct!",
-                        Toast.LENGTH_SHORT).show();
 
+            } catch (JSONException e) {
+                Log.e(TAG, e.getMessage());
             }
-
-        } catch (JSONException e) {
-            Log.e(TAG, e.getMessage());
         }
     }
 
@@ -256,6 +267,26 @@ public class QuizActivityGroup extends AppCompatActivity implements
     }
 
     @Override
+    public void setGroupQuizStatus(JSONObject response) {
+        // sync with leader
+        if (quizViewGroup != null) {
+            int questionsAnswered = 0;
+            try {
+                questionsAnswered = response.getInt("questionsAnswered");
+                if (questionsAnswered > getQuizIndex()) {
+                    if (getQuizIndex() >= getActiveQuiz().getQuestions().size() - 1) {
+                        finishQuiz();
+                    } else {
+                        quizViewGroup.nextQuestion();
+                    }
+                }
+            } catch (JSONException e) {
+                Log.e(TAG, "JSON error parsing group quiz progress");
+            }
+        }
+    }
+
+    @Override
     public void setSelectedAnswers(ArrayList<SelectedAnswer> selectedAnswers) {
         if (isLeader) {
             session.setSelectedAnswersFor(selectedAnswers);
@@ -274,6 +305,7 @@ public class QuizActivityGroup extends AppCompatActivity implements
 
         //Toast.makeText(getApplicationContext(), "Group Quiz Submitted", Toast.LENGTH_LONG).show();
         stopService(timerService);
+        stopPolling();
 
         Intent quizIntent = new Intent(QuizActivityGroup.this, QuizResultActivityGroup.class);
         quizIntent.putExtra("QUIZ_ID", quizID);
@@ -305,6 +337,34 @@ public class QuizActivityGroup extends AppCompatActivity implements
             timerService.putExtra("QUIZ_TIME", getQuizTime());
             timerService.putExtra("QUIZ_ID", getQuizID());
             startService(timerService);
+        }
+    }
+
+    private Runnable checkGroupProgress = new Runnable() {
+        @Override
+        public void run() {
+            if (qGroupController != null) {
+                if (sessionId == null) {
+                    sessionId = session.getActiveQuiz().getSessionId();
+                }
+                qGroupController.getGroupQuizStatus(quizID, groupID,
+                        sessionId);
+                mHandler.postDelayed(checkGroupProgress, 1500);
+            }
+        }
+    };
+
+    private void startPolling() {
+        if (mHandler == null) {
+            mHandler = new Handler(Looper.getMainLooper());
+            mHandler.postDelayed(checkGroupProgress, 500);
+        }
+    }
+
+    void stopPolling() {
+        if (mHandler != null) {
+            mHandler.removeCallbacks(checkGroupProgress);
+            mHandler = null;
         }
     }
 

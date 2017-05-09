@@ -21,6 +21,7 @@ import java.io.UnsupportedEncodingException;
 
 import edu.umsl.superclickers.R;
 import edu.umsl.superclickers.app.AppController;
+import edu.umsl.superclickers.app.GroupConfig;
 import edu.umsl.superclickers.app.QuizConfig;
 import edu.umsl.superclickers.app.SessionManager;
 
@@ -38,6 +39,7 @@ public class QuizGroupController extends Fragment {
 
     public interface GroupGradeListener {
         void postInfo(JSONObject response);
+        void setGroupQuizStatus(JSONObject response);
     }
 
     @Override
@@ -118,6 +120,55 @@ public class QuizGroupController extends Fragment {
         };
         hideDialog();
         // end string request.. phew!
+        AppController.getInstance().addToRequestQueue(strReq, tag_str_req);
+    }
+
+    public void getGroupQuizStatus(final String quiz_id, final String group_id,
+                                     final String session_id) {
+        String tag_str_req = "req_group_quiz_status";
+        String uri = String.format(QuizConfig.URL_GROUP_QUIZ_PROGRESS, quiz_id, group_id,
+                session_id);
+        // new string request
+        StringRequest strReq = new StringRequest(Request.Method.GET, uri,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        hideDialog();
+                        Log.d(TAG, " Response: " + response);
+                        try {
+                            JSONObject jObj = new JSONObject(response);
+                            String error;
+                            try {
+                                error = jObj.getString("error");
+                            } catch (JSONException e) {
+                                error = "false";
+                            }
+                            // if no errors
+                            if (error.equals("false")) {
+                                // quiz status was found
+                                wListener.setGroupQuizStatus(jObj);
+                            } else {
+                                // Error
+                                String errMessage = "error";
+                                Toast.makeText(getActivity(), errMessage,
+                                        Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getActivity(), "JSON error: "
+                                    + e.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "Quiz error: " + error.getMessage());
+                Toast.makeText(getActivity(), error.getMessage(),
+                        Toast.LENGTH_LONG).show();
+                hideDialog();
+            }
+        });
+        hideDialog();
         AppController.getInstance().addToRequestQueue(strReq, tag_str_req);
     }
 
