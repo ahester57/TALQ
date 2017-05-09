@@ -130,6 +130,23 @@ public class AnswerViewGroup extends AnswerView {
         }
     };
 
+    void disableButton(int index) {
+        switch (index) {
+            case 0:
+                A.setEnabled(false);
+                break;
+            case 1:
+                B.setEnabled(false);
+                break;
+            case 2:
+                C.setEnabled(false);
+                break;
+            case 3:
+                D.setEnabled(false);
+                break;
+        }
+    }
+
     private void clearButtons() {
         A.setBackground(getResources().getDrawable(R.drawable.button_custom1));
         B.setBackground(getResources().getDrawable(R.drawable.button_custom2));

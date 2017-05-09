@@ -38,7 +38,6 @@ public class HomeController extends Fragment {
         void setCourses(ArrayList<QuizListItem> quizzes, ArrayList<String> courseId);
     }
 
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

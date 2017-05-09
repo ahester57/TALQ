@@ -90,8 +90,8 @@ public class HomeActivity extends AppCompatActivity implements
                     .add(hController, FragmentConfig.KEY_HOME_CONTROLLER)
                     .commit();
             // only request quizzes if hController DNE
-            if(user != null) {
-                hController.getCoursesFor(user.getUserId());
+            if(userId != null) {
+                hController.getCoursesFor(userId);
             } else {
                 hController.getCoursesFor("arh5w6");
             }
@@ -105,7 +105,7 @@ public class HomeActivity extends AppCompatActivity implements
                     .add(gController, FragmentConfig.KEY_GROUP_CONTROLLER)
                     .commit();
             // only request groups if gController DNE
-            if(user != null) {
+            if(userId != null) {
                 gController.getGroupForUser(userId, courses.get(0).getCourseId());
             }
         }

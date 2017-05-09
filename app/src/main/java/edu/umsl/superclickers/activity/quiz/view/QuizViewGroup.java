@@ -24,6 +24,7 @@ public class QuizViewGroup extends QuizView implements AnswerViewGroup.AnswerLis
 
     private final String TAG = QuizViewGroup.class.getSimpleName();
 
+    private AnswerViewGroup aViewFragment;
     private QuizViewGroup.QuizController qController;
 
     public interface QuizController {
@@ -78,6 +79,12 @@ public class QuizViewGroup extends QuizView implements AnswerViewGroup.AnswerLis
         qController.setHasChosen(flag);
     }
 
+    void disableButton(int index) {
+        if (aViewFragment != null) {
+            aViewFragment.disableButton(index);
+        }
+    }
+
     @Override
     public void loadAnswerFragment() {
         questionView.setText(curQuestion.getQuestion());
@@ -85,11 +92,11 @@ public class QuizViewGroup extends QuizView implements AnswerViewGroup.AnswerLis
         progressView.setText(Integer.toString(curQuiz.getqNum() + 1));
         // create instance of the answer fragment
         updateGUITimer(minutesLeft, secondsLeft);
-        AnswerViewGroup answerFrag = new AnswerViewGroup();
+        aViewFragment = new AnswerViewGroup();
         // load answer fragment into answerSection of QuizActivityUser
         android.app.FragmentManager fm = getFragmentManager();
         android.app.FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(R.id.answer_segment_group, answerFrag, FragmentConfig.KEY_ANSWER_VIEW_GROUP);
+        ft.replace(R.id.answer_segment_group, aViewFragment, FragmentConfig.KEY_ANSWER_VIEW_GROUP);
         ft.commit();
     }
 
