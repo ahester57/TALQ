@@ -151,7 +151,7 @@ public class WaitingRoomActivity extends AppCompatActivity
         if( wFragment != null) {
             if (gradedQuiz != null) {
                 wFragment.setTextQuizInfo("You got " + gradedQuiz.calculateTotalPoints() +
-                        " points.\n\nYou can do better probably.");
+                        " points.\n\nImagine yourself in a nice waiting room.");
             } else {
                 wFragment.setTextQuizInfo("You've already taken this quiz.");
             }

@@ -36,7 +36,7 @@ public class QuizGroupController extends Fragment {
     private ProgressDialog pDialog;
     private GroupGradeListener wListener;
 
-    interface GroupGradeListener {
+    public interface GroupGradeListener {
         void postInfo(JSONObject response);
     }
 
@@ -52,7 +52,7 @@ public class QuizGroupController extends Fragment {
         session = new SessionManager(getActivity());
     }
 
-    void POSTGroupQuiz(final String quizId, final String groupId, final String sessionId,
+    public void POSTGroupQuiz(final String quizId, final String groupId, final String sessionId,
                   final JSONObject questionObj) {
         String tag_str_req = "req_post_group_quiz";
         //pDialog.setMessage("Uploading quiz...");();

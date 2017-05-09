@@ -23,5 +23,6 @@ public class FragmentConfig {
     public static String KEY_HOME_CONTROLLER = "HOME_CONTROLLER";
     public static String KEY_GROUP_CONTROLLER = "GROUP_CONTROLLER";
     public static String KEY_WAITING_CONTROLLER = "WAITING_CONTROLLER";
+    public static String KEY_GROUP_QUIZ_CONTROLLER = "GROUP_QUIZ_CONTROLLER";
 
 }

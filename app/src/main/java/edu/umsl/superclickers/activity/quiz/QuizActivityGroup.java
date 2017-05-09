@@ -17,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 
 import edu.umsl.superclickers.R;
 import edu.umsl.superclickers.activity.quiz.helper.QuizGET;
+import edu.umsl.superclickers.activity.quiz.helper.QuizGroupController;
 import edu.umsl.superclickers.activity.quiz.helper.QuizService;
 import edu.umsl.superclickers.activity.quiz.view.QuizViewGroup;
 import edu.umsl.superclickers.app.FragmentConfig;
@@ -37,7 +39,8 @@ import edu.umsl.superclickers.quizdata.SelectedAnswer;
  */
 
 public class QuizActivityGroup extends AppCompatActivity implements
-        QuizViewGroup.QuizController {
+        QuizViewGroup.QuizController,
+        QuizGroupController.GroupGradeListener {
 
     private final String TAG = QuizActivityGroup.class.getSimpleName();
 
@@ -50,6 +53,7 @@ public class QuizActivityGroup extends AppCompatActivity implements
     private Intent timerService;
     private QuizGET quizGET;
     private QuizViewGroup quizViewGroup;
+    private QuizGroupController qGroupController;
     private SessionManager session;
 
     private boolean isLeader = false;
@@ -94,6 +98,15 @@ public class QuizActivityGroup extends AppCompatActivity implements
             quizGET = new QuizGET();
             fm.beginTransaction()
                     .add(quizGET, FragmentConfig.KEY_QUIZ_GET)
+                    .commit();
+        }
+        // Check if quizGET exists
+        if (fm.findFragmentByTag(FragmentConfig.KEY_GROUP_QUIZ_CONTROLLER) != null) {
+            qGroupController = (QuizGroupController) fm.findFragmentByTag(FragmentConfig.KEY_GROUP_QUIZ_CONTROLLER);
+        } else {
+            qGroupController = new QuizGroupController();
+            fm.beginTransaction()
+                    .add(quizGET, FragmentConfig.KEY_GROUP_QUIZ_CONTROLLER)
                     .commit();
         }
         // Check if fragment exists
@@ -160,24 +173,13 @@ public class QuizActivityGroup extends AppCompatActivity implements
         }
     }
 
-    @Override
-    public void setSelectedAnswers(ArrayList<SelectedAnswer> selectedAnswers) {
-        if (isLeader) {
-            session.setSelectedAnswersFor(selectedAnswers);
-            hasChosen = true;
-        }
-        // if leader then do this.
-    }
-
-    @Override
-    public void setHasChosen(boolean flag) {
-        hasChosen = flag;
-    }
-
     public void submitQuestion() {
         if (hasChosen) {
-            buildAnswersForPOST();
+            JSONObject questionObj = buildAnswersForPOST();
+            String sessionId = session.getActiveQuiz().getSessionId();
             hasChosen = false;
+
+            qGroupController.POSTGroupQuiz(quizID, groupID, sessionId, questionObj);
 
             if (getQuizIndex() >= getActiveQuiz().getQuestions().size() - 1) {
                 finishQuiz();
@@ -186,6 +188,23 @@ public class QuizActivityGroup extends AppCompatActivity implements
             }// @TODO end when quiz is over
         }
 
+    }
+
+    @Override
+    public void postInfo(JSONObject response) {
+
+        try {
+            String questionId = response.getString("question");
+            JSONArray subAnswersArr = response.getJSONArray("submittedAnswers");
+
+            for (int i = 0; i < subAnswersArr.length(); i++) {
+                JSONObject gradedObj = subAnswersArr.getJSONObject(i);
+
+                
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, e.getMessage());
+        }
     }
 
     private JSONObject buildAnswersForPOST() {
@@ -206,6 +225,20 @@ public class QuizActivityGroup extends AppCompatActivity implements
         }
         Log.i(TAG, questionObj.toString());
         return questionObj;
+    }
+
+    @Override
+    public void setSelectedAnswers(ArrayList<SelectedAnswer> selectedAnswers) {
+        if (isLeader) {
+            session.setSelectedAnswersFor(selectedAnswers);
+            hasChosen = true;
+        }
+        // if leader then do this.
+    }
+
+    @Override
+    public void setHasChosen(boolean flag) {
+        hasChosen = flag;
     }
 
     public void finishQuiz() {
