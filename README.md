@@ -9,7 +9,7 @@ from there:
 git clone http://umsl.vigilantestudio.com/superClickers/superClickers.git
 
 
-@TODO [04/20/17]
+@TODO [05/08/17]
 - need to change the group quiz so that it's not using sliders
 - input token to unlock quiz
 - submit group quizzes for grading
@@ -17,3 +17,8 @@ git clone http://umsl.vigilantestudio.com/superClickers/superClickers.git
 - add AlarmManager for submitting quiz when app is closed
 - show running quizzes, block starting a new quiz until over
 - user vs. group results
+- add to SQLite: gradedQuiz, gradedQuestion, gradedAnswer?.
+- more user-friendly
+- a teacher version
+- show running quizzes 
+- back button on layout of user review

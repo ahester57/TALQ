@@ -37,6 +37,7 @@ public class QuizActivityUser extends AppCompatActivity implements
     private String userID;
     private String courseID;
     private String groupID;
+    private String token;
 
     private Intent timerService;
     private QuizGET quizGET;
@@ -65,6 +66,7 @@ public class QuizActivityUser extends AppCompatActivity implements
             userID = intent.getStringExtra("USER_ID");
             courseID = intent.getStringExtra("COURSE_ID");
             groupID = intent.getStringExtra("GROUP_ID");
+            token = intent.getStringExtra("TOKEN");
         }
         // Session manager
         session = new SessionManager(getBaseContext());
@@ -87,9 +89,6 @@ public class QuizActivityUser extends AppCompatActivity implements
         }
 
 
-
-
-
         FragmentManager fm = getFragmentManager();
         // Check if quizGET exists
         if (fm.findFragmentByTag(FragmentConfig.KEY_QUIZ_GET) != null) {
@@ -100,6 +99,7 @@ public class QuizActivityUser extends AppCompatActivity implements
                     .add(quizGET, FragmentConfig.KEY_QUIZ_GET)
                     .commit();
         }
+
         // Check if fragment exists
         if (fm.findFragmentByTag(FragmentConfig.KEY_QUIZ_VIEW_USER) != null) {
             quizViewUser = (QuizViewUser) fm.findFragmentByTag(FragmentConfig.KEY_QUIZ_VIEW_USER);
@@ -115,8 +115,9 @@ public class QuizActivityUser extends AppCompatActivity implements
 
             reloadQuiz(quizID, userID, courseID);
         }
-
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -239,7 +240,7 @@ public class QuizActivityUser extends AppCompatActivity implements
             secondsLeft = secondsLeft % 60;
             quizViewUser.updateGUITimer(minutesLeft, secondsLeft);
             if (millisUntilFinished < 2000) {
-                reviewQuiz();
+                skipToWaitingRoom();
             }
         }
     }
