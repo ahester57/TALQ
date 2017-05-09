@@ -163,8 +163,7 @@ public class QuizGroupController extends Fragment {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "Quiz error: " + error.getMessage());
-                Toast.makeText(getActivity(), error.getMessage(),
-                        Toast.LENGTH_LONG).show();
+
                 hideDialog();
             }
         });

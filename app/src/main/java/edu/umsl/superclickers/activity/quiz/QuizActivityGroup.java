@@ -349,7 +349,7 @@ public class QuizActivityGroup extends AppCompatActivity implements
                 }
                 qGroupController.getGroupQuizStatus(quizID, groupID,
                         sessionId);
-                mHandler.postDelayed(checkGroupProgress, 1500);
+                mHandler.postDelayed(checkGroupProgress, 1000);
             }
         }
     };

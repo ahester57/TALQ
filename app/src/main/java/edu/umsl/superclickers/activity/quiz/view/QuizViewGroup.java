@@ -72,12 +72,16 @@ public class QuizViewGroup extends QuizView implements AnswerViewGroup.AnswerLis
 
     @Override
     public void setSelectedAnswers(ArrayList<SelectedAnswer> selectedAnswers) {
-        qController.setSelectedAnswers(selectedAnswers);
+        if (qController != null) {
+            qController.setSelectedAnswers(selectedAnswers);
+        }
     }
 
     @Override
     public void setHasChosen(boolean flag) {
-        qController.setHasChosen(flag);
+        if (qController != null) {
+            qController.setHasChosen(flag);
+        }
     }
 
     public void disableButton(int index) {
