@@ -79,8 +79,7 @@ public class QuizGroupController extends Fragment {
                                 // Question POST SUCCESSFUL
                                 //JSONObject user = jObj.getJSONObject("user");
                                 wListener.postInfo(jObj);
-                                Toast.makeText(getActivity(), "Question submitted.",
-                                        Toast.LENGTH_LONG).show();
+
                             } else {
                                 // Error uploading question
                                 String errMessage = jObj.getString("error_msg");

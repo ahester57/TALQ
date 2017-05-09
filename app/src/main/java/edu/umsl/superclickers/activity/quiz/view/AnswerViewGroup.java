@@ -1,5 +1,6 @@
 package edu.umsl.superclickers.activity.quiz.view;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -32,6 +33,8 @@ public class AnswerViewGroup extends AnswerView {
         void setHasChosen(boolean flag);
         void setSelectedAnswers(ArrayList<SelectedAnswer> selectedAnswers);
     }
+
+    private boolean Aenabled = true;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -77,7 +80,7 @@ public class AnswerViewGroup extends AnswerView {
         B.setOnClickListener(answerClick);
         C.setOnClickListener(answerClick);
         D.setOnClickListener(answerClick);
-        A.setEnabled(true);
+        A.setEnabled(Aenabled);
 
         return view;
     }
@@ -130,28 +133,41 @@ public class AnswerViewGroup extends AnswerView {
         }
     };
 
-    void disableButton(int index) {
+    public void disableButton(int index) {
         switch (index) {
             case 0:
                 A.setEnabled(false);
+                Aenabled = false;
+                A.setBackgroundColor(Color.TRANSPARENT);
                 break;
             case 1:
                 B.setEnabled(false);
+                B.setBackgroundColor(Color.TRANSPARENT);
                 break;
             case 2:
                 C.setEnabled(false);
+                C.setBackgroundColor(Color.TRANSPARENT);
                 break;
             case 3:
                 D.setEnabled(false);
+                D.setBackgroundColor(Color.TRANSPARENT);
                 break;
         }
     }
 
     private void clearButtons() {
-        A.setBackground(getResources().getDrawable(R.drawable.button_custom1));
-        B.setBackground(getResources().getDrawable(R.drawable.button_custom2));
-        C.setBackground(getResources().getDrawable(R.drawable.button_custom4));
-        D.setBackground(getResources().getDrawable(R.drawable.button_custom3));
+        if (A.isEnabled()) {
+            A.setBackground(getResources().getDrawable(R.drawable.button_custom1));
+        }
+        if (B.isEnabled()) {
+            B.setBackground(getResources().getDrawable(R.drawable.button_custom2));
+        }
+        if (C.isEnabled()) {
+            C.setBackground(getResources().getDrawable(R.drawable.button_custom4));
+        }
+        if (D.isEnabled()) {
+            D.setBackground(getResources().getDrawable(R.drawable.button_custom3));
+        }
     }
 
     @Override

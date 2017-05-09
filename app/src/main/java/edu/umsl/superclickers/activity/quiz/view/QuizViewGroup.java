@@ -79,8 +79,9 @@ public class QuizViewGroup extends QuizView implements AnswerViewGroup.AnswerLis
         qController.setHasChosen(flag);
     }
 
-    void disableButton(int index) {
+    public void disableButton(int index) {
         if (aViewFragment != null) {
+            Log.d(TAG, "button " + index + "disabled.");
             aViewFragment.disableButton(index);
         }
     }

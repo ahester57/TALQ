@@ -106,7 +106,7 @@ public class QuizActivityGroup extends AppCompatActivity implements
         } else {
             qGroupController = new QuizGroupController();
             fm.beginTransaction()
-                    .add(quizGET, FragmentConfig.KEY_GROUP_QUIZ_CONTROLLER)
+                    .add(qGroupController, FragmentConfig.KEY_GROUP_QUIZ_CONTROLLER)
                     .commit();
         }
         // Check if fragment exists
@@ -134,37 +134,46 @@ public class QuizActivityGroup extends AppCompatActivity implements
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.action_next_question:
-                //quizViewGroup.nextQuestion();
+                if (!isLeader) {
+                    quizViewGroup.nextQuestion();
+                }
                 return true;
             case R.id.action_prev_question:
-                //quizViewGroup.prevQuestion();
+                if (!isLeader) {
+                    quizViewGroup.prevQuestion();
+                }
                 return true;
             case R.id.action_review_quiz:
                 Log.d(TAG, "has chosen = " + hasChosen);
-                if (hasChosen) {
-                    String value = "";
-                    try {
-                        JSONObject question = buildAnswersForPOST();
-                        value = question.getString("answerValue");
-                    } catch (JSONException e) {
-                        Log.e(TAG, e.getMessage());
+                if (isLeader) {
+                    if (hasChosen) {
+                        String value = "";
+                        try {
+                            JSONObject question = buildAnswersForPOST();
+                            value = question.getString("answerValue");
+                        } catch (JSONException e) {
+                            Log.e(TAG, e.getMessage());
+                        }
+                        new AlertDialog.Builder(this, R.style.Theme_AppCompat_DayNight_Dialog_MinWidth)
+                                .setTitle(Html.fromHtml("<h2>Submit Question?</h2>"))
+                                .setMessage(Html.fromHtml("<h3>Are you sure you want to submit with " +
+                                        "choice: " + value + "?</h3>"))
+                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        submitQuestion();
+                                        Log.d(TAG, "Question submitted");
+                                    }
+                                })
+                                .setNegativeButton(android.R.string.no, null)
+                                .setIcon(android.R.drawable.ic_input_add)
+                                .show();
+                    } else {
+                        Toast.makeText(this, "Please make a selection.", Toast.LENGTH_SHORT)
+                                .show();
                     }
-                    new AlertDialog.Builder(this, R.style.Theme_AppCompat_DayNight_Dialog_MinWidth)
-                            .setTitle(Html.fromHtml("<h2>Submit Question?</h2>"))
-                            .setMessage(Html.fromHtml("<h3>Are you sure you want to submit with " +
-                                    "choice: " + value + "?</h3>"))
-                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    submitQuestion();
-                                    Log.d(TAG, "Question submitted");
-                                }
-                            })
-                            .setNegativeButton(android.R.string.no, null)
-                            .setIcon(android.R.drawable.ic_input_add)
-                            .show();
                 } else {
-                    Toast.makeText(this, "Please make a selection.", Toast.LENGTH_SHORT)
+                    Toast.makeText(this, "Only leader can submit.", Toast.LENGTH_SHORT)
                             .show();
                 }
                 return true;
@@ -181,11 +190,7 @@ public class QuizActivityGroup extends AppCompatActivity implements
 
             qGroupController.POSTGroupQuiz(quizID, groupID, sessionId, questionObj);
 
-            if (getQuizIndex() >= getActiveQuiz().getQuestions().size() - 1) {
-                finishQuiz();
-            } else {
-                quizViewGroup.nextQuestion();
-            }// @TODO end when quiz is over
+
         }
 
     }
@@ -197,11 +202,33 @@ public class QuizActivityGroup extends AppCompatActivity implements
             String questionId = response.getString("question");
             JSONArray subAnswersArr = response.getJSONArray("submittedAnswers");
 
+            String value = "none";
+            boolean isCorrect = false;
+            int points = 0;
             for (int i = 0; i < subAnswersArr.length(); i++) {
                 JSONObject gradedObj = subAnswersArr.getJSONObject(i);
-
-                
+                value = gradedObj.getString("value");
+                points = gradedObj.getInt("points");
+                isCorrect = gradedObj.getBoolean("isCorrect");
+                if (!isCorrect) {
+                    quizViewGroup.disableButton(valueToIndex(value));
+                }
             }
+            if (isCorrect) {
+                Toast.makeText(this, "Congragulations! " + value + " is correct!" +
+                                "\nYou got " + points + " points for it.",
+                        Toast.LENGTH_LONG).show();
+                if (getQuizIndex() >= getActiveQuiz().getQuestions().size() - 1) {
+                    finishQuiz();
+                } else {
+                    quizViewGroup.nextQuestion();
+                }
+            } else {
+                Toast.makeText(this, "OOPS! " + value + " is not correct!",
+                        Toast.LENGTH_SHORT).show();
+
+            }
+
         } catch (JSONException e) {
             Log.e(TAG, e.getMessage());
         }
@@ -328,6 +355,20 @@ public class QuizActivityGroup extends AppCompatActivity implements
         }
         Log.d(TAG, "Timer NOT running ");
         return false;
+    }
+
+    private int valueToIndex(String value) {
+        if (value.equals("A")) {
+            return 0;
+        } else if (value.equals("B")) {
+            return 1;
+        } else if (value.equals("C")) {
+            return 2;
+        } else if (value.equals("D")) {
+            return 3;
+        } else {
+            return -1;
+        }
     }
 
     @Override
