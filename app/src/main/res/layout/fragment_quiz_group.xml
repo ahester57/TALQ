@@ -54,7 +54,7 @@
         android:layout_height="wrap_content"
         android:text="0"
         android:textColor="@color/color5"
-        android:textSize="16dp"
+        android:textSize="16sp"
         app:layout_constraintRight_toLeftOf="@+id/num_questions_group"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="8dp" />
@@ -65,7 +65,7 @@
         android:layout_height="wrap_content"
         android:text="/0"
         android:textColor="@color/color5"
-        android:textSize="16dp"
+        android:textSize="16sp"
         android:layout_marginRight="7dp"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"

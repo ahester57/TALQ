@@ -20,8 +20,6 @@ import edu.umsl.superclickers.R;
 import edu.umsl.superclickers.activity.quiz.helper.QuizService;
 import edu.umsl.superclickers.activity.waitingroom.WaitingRoomActivity;
 import edu.umsl.superclickers.app.FragmentConfig;
-import edu.umsl.superclickers.app.SessionManager;
-import edu.umsl.superclickers.quizdata.Quiz;
 
 /**
  * Created by Austin on 5/3/2017.
@@ -36,10 +34,8 @@ public class QuizReviewActivityUser extends AppCompatActivity
     private String userID;
     private String courseID;
     private String groupID;
-    private Quiz curQuiz;
 
     private QuizReviewViewUser qReviewView;
-    private SessionManager session;
     private Intent timerService;
 
     // BroadcastReceiver for QuizService
@@ -65,11 +61,9 @@ public class QuizReviewActivityUser extends AppCompatActivity
             courseID = intent.getStringExtra("COURSE_ID");
             groupID = intent.getStringExtra("GROUP_ID");
         }
-        // Session manager
-        session = new SessionManager(getBaseContext());
+
         timerService = new Intent(getBaseContext(), QuizService.class);
 
-        curQuiz = session.getActiveQuiz();
 
         FragmentManager fm = getFragmentManager();
 

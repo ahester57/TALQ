@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SuperClickers</string>
+    <string name="app_name">SuperClickers (aka TBLearn)</string>
     <string name="testButton">This button does something</string>
     <string name="connecting">Connecting....</string>
     <string name="name">Name</string>
@@ -25,4 +25,6 @@
     <string name="view_quizzes">View Quizzes</string>
     <string name="groups">Groups</string>
     <string name="token">Token</string>
+    <string name="available_quizzes">Available Quizzes</string>
+    <string name="confidence_points">Confidence Points Remaining: </string>
 </resources>

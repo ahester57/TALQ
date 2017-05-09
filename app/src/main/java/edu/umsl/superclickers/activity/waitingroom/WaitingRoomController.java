@@ -23,7 +23,6 @@ import edu.umsl.superclickers.R;
 import edu.umsl.superclickers.app.AppController;
 import edu.umsl.superclickers.app.GroupConfig;
 import edu.umsl.superclickers.app.QuizConfig;
-import edu.umsl.superclickers.app.SessionManager;
 
 /**
  * Created by Austin on 5/1/2017.
@@ -34,7 +33,6 @@ public class WaitingRoomController extends Fragment {
 
     private final String TAG = WaitingRoomController.class.getSimpleName();
 
-    private SessionManager session;
     private ProgressDialog pDialog;
     private WaitListener wListener;
 
@@ -51,8 +49,7 @@ public class WaitingRoomController extends Fragment {
         // progress dialog
         pDialog = new ProgressDialog(getActivity());
         pDialog.setCancelable(false);
-        // Session manager
-        session = new SessionManager(getActivity());
+
     }
 
     void POSTQuiz(final String courseId, final String userId, final String sessionId,

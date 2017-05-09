@@ -97,18 +97,25 @@ public class Quiz {
     public String getSessionId() { return sessionId; }
 
     public ArrayList<Question> getQuestions() {
-        return questions;
+        if (questions != null) {
+            return questions;
+        }
+        return null;
     }
 
     public Question getQuestion() {
-        Question q = questions.get(qNum);
-        return q;
+        if (questions != null) {
+            return questions.get(qNum);
+        }
+        return null;
     }
 
     public Question getNextQuestion() {
-        qNum = (qNum + 1) % questions.size();
-        Question q = questions.get(qNum);
-        return q;
+        if (questions != null) {
+            qNum = (qNum + 1) % questions.size();
+            return questions.get(qNum);
+        }
+        return null;
     }
 
     public void setqNum(int n) {
@@ -120,12 +127,14 @@ public class Quiz {
     }
 
     public Question getPrevQuestion() {
-        qNum = (qNum - 1) % questions.size();
-        if(qNum < 0) {
-            qNum += questions.size(); // BUT -1 MOD 10 = 9!!!! stupid % not following rules of math
+        if (questions != null) {
+            qNum = (qNum - 1) % questions.size();
+            if (qNum < 0) {
+                qNum += questions.size(); // BUT -1 MOD 10 = 9!!!! stupid % not following rules of math
+            }
+            return questions.get(qNum);
         }
-        Question q = questions.get(qNum);
-        return q;
+        return null;
     }
 
     public boolean getTimed() { return timed; }

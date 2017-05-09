@@ -12,7 +12,7 @@
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             tools:layout_editor_absoluteY="0dp"
             tools:layout_editor_absoluteX="0dp">
 
@@ -22,7 +22,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:fontFamily="casual"
-                android:text="Confidence Points Remaining: "
+                android:text="@string/confidence_points"
                 android:textColor="@color/color5"
                 android:textSize="18sp"
                 android:textStyle="bold"

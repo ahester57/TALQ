@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -25,7 +24,6 @@ public class QuestionHolder extends RecyclerView.ViewHolder {
     private TextView tQuestionAnswers;
     private TextView tCheckMark;
     private TextView tXMark;
-    private WeakReference<QuestionHolderListener> mListener;
 
     public interface QuestionHolderListener {
 
@@ -33,7 +31,6 @@ public class QuestionHolder extends RecyclerView.ViewHolder {
 
     public QuestionHolder(View itemView, QuestionHolderListener listener) {
         super(itemView);
-        this.mListener = new WeakReference<>(listener);
         tQuestionNumber = (TextView) itemView.findViewById(R.id.question_number);
         tQuestionText = (TextView) itemView.findViewById(R.id.question_review_text);
         tQuestionAnswers = (TextView) itemView.findViewById(R.id.selected_answers);

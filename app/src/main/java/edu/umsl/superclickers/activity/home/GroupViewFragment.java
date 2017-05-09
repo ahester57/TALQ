@@ -23,10 +23,15 @@ import edu.umsl.superclickers.userdata.Group;
  */
 
 public class GroupViewFragment extends Fragment implements GroupController.GroupListener {
-
+    private final static String TAG = GroupViewFragment.class.getSimpleName();
 
     private RecyclerView gRecycler;
     private List<Group> gGroups = new ArrayList<>();
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     @Nullable
     @Override
@@ -72,8 +77,7 @@ public class GroupViewFragment extends Fragment implements GroupController.Group
         public GroupHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater inflater = LayoutInflater.from(getActivity());
             View view = inflater.inflate(R.layout.group_recycler_item, parent, false);
-            GroupHolder gHolder = new GroupHolder(view, this);
-            return gHolder;
+            return new GroupHolder(view, this);
         }
 
         @Override
@@ -92,8 +96,13 @@ public class GroupViewFragment extends Fragment implements GroupController.Group
                         holder.itemView.setBackgroundResource(0);
                         holder.itemView.setPadding(8, 8, 8, 8);
                     }
+                    Group group = mGroups.get(position);
+                    String users = "";
 
-                    holder.bindGroup(mGroups.get(position));
+                    for (String u : mGroups.get(position).getUsers()) {
+                        users += u + "\n";
+                    }
+                    holder.bindGroup(group, users);
                 } catch (IndexOutOfBoundsException e) {
                     Log.e("GROUP_RECYCLER", e.getMessage());
                 }

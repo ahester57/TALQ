@@ -82,7 +82,7 @@ public class AnswerViewGroup extends AnswerView {
         return view;
     }
 
-    View.OnClickListener answerClick = new View.OnClickListener() {
+    private View.OnClickListener answerClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             int index = -1;
@@ -130,7 +130,7 @@ public class AnswerViewGroup extends AnswerView {
         }
     };
 
-    void clearButtons() {
+    private void clearButtons() {
         A.setBackground(getResources().getDrawable(R.drawable.button_custom1));
         B.setBackground(getResources().getDrawable(R.drawable.button_custom2));
         C.setBackground(getResources().getDrawable(R.drawable.button_custom4));

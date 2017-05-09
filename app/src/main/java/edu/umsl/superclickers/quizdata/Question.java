@@ -54,11 +54,7 @@ public class Question {
         } catch (JSONException e) {
             throw new JSONException(e.getMessage());
         }
-;
-    }
 
-    public boolean check(String guess) {
-        return true; //answer.equalsIgnoreCase(guess);
     }
 
     public int getPointsPossible() {
@@ -74,7 +70,10 @@ public class Question {
     public String getQuestion() { return text; }
 
     public ArrayList<Answer> getAnswers() {
-        return availableAnswers;
+        if (availableAnswers != null) {
+            return availableAnswers;
+        }
+        return null;
     }
 
     public Answer getA() {

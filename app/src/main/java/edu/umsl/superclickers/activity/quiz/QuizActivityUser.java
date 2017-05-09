@@ -240,6 +240,7 @@ public class QuizActivityUser extends AppCompatActivity implements
             secondsLeft = secondsLeft % 60;
             quizViewUser.updateGUITimer(minutesLeft, secondsLeft);
             if (millisUntilFinished < 2000) {
+                session.setDoneWithIndividualQuiz(true);
                 skipToWaitingRoom();
             }
         }

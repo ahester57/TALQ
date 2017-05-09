@@ -7,23 +7,19 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import edu.umsl.superclickers.app.SessionManager;
-
 /**
  * Created by Austin on 4/19/2017.
  */
 
 public class QuizService extends Service {
-
-    final String TAG = getClass().getSimpleName();
-    private SessionManager session;
+    private final static String TAG = QuizService.class.getSimpleName();
 
     private int quizTime = 20;
     private String quizId;
-    CountDownTimer quizTimer = null;
+    private CountDownTimer quizTimer = null;
 
     public static final String COUNTDOWN_BR = "edu.umsl.superclickers.app.countdown_br";
-    Intent qI = new Intent(COUNTDOWN_BR);
+    private Intent qI = new Intent(COUNTDOWN_BR);
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -38,7 +34,6 @@ public class QuizService extends Service {
     public void onCreate() {
         super.onCreate();
         Log.d(TAG, "Starting quiz timer.");
-        session = new SessionManager(getApplicationContext());
 
         quizTimer = new CountDownTimer((quizTime * 60 * 1000) + 2000, 1000) {
             @Override

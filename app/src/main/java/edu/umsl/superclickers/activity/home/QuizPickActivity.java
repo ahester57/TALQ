@@ -1,16 +1,12 @@
 package edu.umsl.superclickers.activity.home;
 
 import android.app.FragmentManager;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
 import android.util.Log;
-import android.view.LayoutInflater;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,9 +14,7 @@ import java.util.List;
 import edu.umsl.superclickers.R;
 import edu.umsl.superclickers.activity.quiz.QuizActivityUser;
 import edu.umsl.superclickers.app.FragmentConfig;
-import edu.umsl.superclickers.app.SessionManager;
 import edu.umsl.superclickers.quizdata.QuizListItem;
-import edu.umsl.superclickers.userdata.Course;
 
 /**
  * Created by Austin on 5/7/2017.
@@ -39,10 +33,7 @@ public class QuizPickActivity extends AppCompatActivity implements
 
     private QuizListItem curQuiz;
     private ArrayList<QuizListItem> quizzes;
-    private ArrayList<String> courseIds;
-    private ArrayList<Course> courses;
 
-    private SessionManager session;
     private QuizPickController hController;
     private QuizPickViewFragment qViewFragment;
 
@@ -53,8 +44,6 @@ public class QuizPickActivity extends AppCompatActivity implements
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_alt);
         setSupportActionBar(toolbar);
-
-        session = new SessionManager(getApplicationContext());
 
         Intent i = getIntent();
         if (i.getExtras() != null) {
@@ -131,6 +120,11 @@ public class QuizPickActivity extends AppCompatActivity implements
         curQuiz = quizzes.get(pos);
         quizID = curQuiz.get_id();
         Log.d(TAG, "Selected quiz: " + curQuiz.getDescription());
+    }
+
+    @Override
+    public String getQuizID() {
+        return quizID;
     }
 
 

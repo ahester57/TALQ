@@ -2,12 +2,10 @@ package edu.umsl.superclickers.activity.home;
 
 import android.app.Fragment;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -18,11 +16,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.util.List;
 
 import edu.umsl.superclickers.R;
-import edu.umsl.superclickers.activity.quiz.QuizActivityUser;
 import edu.umsl.superclickers.activity.quiz.helper.QuizHolder;
 import edu.umsl.superclickers.app.SessionManager;
 import edu.umsl.superclickers.quizdata.QuizListItem;
@@ -46,6 +44,7 @@ public class QuizPickViewFragment extends Fragment {
         String getActiveQuizTitle();
         List<QuizListItem> getQuizzes();
         void setActiveQuiz(int pos);
+        String getQuizID();
     }
 
     @Override
@@ -68,10 +67,16 @@ public class QuizPickViewFragment extends Fragment {
 
         qRecyclerView = (RecyclerView) view.findViewById(R.id.quiz_list_recycler);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-
         qRecyclerView.setLayoutManager(layoutManager);
-
         qRecyclerView.setAdapter(new QuizAdapter(mQuizzes));
+
+        Button leaveList = (Button) view.findViewById(R.id.button_leave_quiz_list);
+        leaveList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
 
         Button startQuiz = (Button) view.findViewById(R.id.button_start_quiz);
         startQuiz.setOnClickListener(new View.OnClickListener() {
@@ -79,8 +84,13 @@ public class QuizPickViewFragment extends Fragment {
             public void onClick(final View v) {
                 if (hvListener != null) {
                     if (session.isQuizRunning()) {
-                        hvListener.startQuiz("ALL_GOOD");
-                        Log.d(TAG, "Quiz resumed.");
+                        if (session.getActiveQuiz().get_id().equals(hvListener.getQuizID())) {
+                            hvListener.startQuiz("ALL_GOOD");
+                            Log.d(TAG, "Quiz resumed.");
+                        } else {
+                            Toast.makeText(getActivity(), "Another quiz already in progress.",
+                                    Toast.LENGTH_LONG).show();
+                        }
                     } else {
                         String qName = hvListener.getActiveQuizTitle();
                         LayoutInflater inflater = getActivity().getLayoutInflater();

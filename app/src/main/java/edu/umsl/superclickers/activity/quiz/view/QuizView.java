@@ -2,8 +2,6 @@ package edu.umsl.superclickers.activity.quiz.view;
 
 import android.app.Fragment;
 import android.graphics.Color;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.TextView;
 

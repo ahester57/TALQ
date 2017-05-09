@@ -75,9 +75,8 @@ public class HorDottedProgress extends View {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         int width, height;
-        int calcWidth = (20*(dotAmount+1)*(bounceDotRadius+1));
+        width = (20*(dotAmount+1)*(bounceDotRadius+1));
 
-        width = calcWidth;
         height = bounceDotRadius * 2;
 
         setMeasuredDimension(width, height);

@@ -28,12 +28,12 @@
         android:fontFamily="casual"
         android:text="waiting"
         android:textColor="@color/color5"
-        android:textSize="16dp"
+        android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@+id/button_submit_quiz" />
+        app:layout_constraintTop_toBottomOf="@+id/button_start_group_quiz" />
 
     <TextView
         android:id="@+id/text_group_status"
@@ -45,7 +45,7 @@
         android:fontFamily="casual"
         android:text="TextView"
         android:textColor="@color/color5"
-        android:textSize="16dp"
+        android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"

@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -107,7 +108,7 @@ public class WaitingRoomActivity extends AppCompatActivity
         }
     };
 
-    void startPolling() {
+    private void startPolling() {
         if (mHandler == null) {
             mHandler = new Handler(Looper.getMainLooper());
             mHandler.postDelayed(checkGroupStatus, 500);
@@ -133,6 +134,9 @@ public class WaitingRoomActivity extends AppCompatActivity
             quizIntent.putExtra("LEADER_ID", leader);
             startActivity(quizIntent);
             finish();
+        } else {
+            Toast.makeText(this, "For some reason there is no leader even though you're done",
+                    Toast.LENGTH_SHORT).show();
         }
     }
 

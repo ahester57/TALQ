@@ -134,6 +134,26 @@ public class SQLiteHandlerCourses extends SQLiteOpenHelper {
         return course;
     }
 
+    public Course getCourseByUid(String uid) { // change to return user object
+        String selectQuery = "SELECT * FROM " + TableSchema.TABLE_COURSE +
+                " WHERE " + CourseSchema.KEY_UID + " = \"" + uid + "\";";
+
+        Course course = null;
+        try {
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(selectQuery, null);
+            CourseCursorWrapper uCursor = new CourseCursorWrapper(cursor);
+            course = uCursor.getCourses().get(0);
+
+            cursor.close();
+            db.close();
+            Log.d(TAG, "Fectching course from Sqlite: " + course.toString());
+        } catch (SQLiteException e) {
+            Log.d(TAG, "couldn't get courses");
+        }
+        return course;
+    }
+
     public void deleteAllCourses() {
 
         // delete all courses

@@ -1,7 +1,7 @@
 package edu.umsl.superclickers.activity.helper;
 
-/**
- * Created by Austin on 5/1/2017.
+/*
+  Created by Austin on 5/1/2017.
  */
 
 import android.support.v7.widget.RecyclerView;
@@ -40,10 +40,10 @@ public class GroupHolder extends RecyclerView.ViewHolder implements View.OnClick
         itemView.setOnClickListener(this);
     }
 
-    public void bindGroup(Group group) {
+    public void bindGroup(Group group, String users) {
         tGroupName.setText(group.getGroupName());
         tGroupCourse.setText(group.getCourseIds().toString());
-        tGroupUsers.setText(group.getUsers().toString()); ////////
+        tGroupUsers.setText(users); ////////
     }
 
     @Override
