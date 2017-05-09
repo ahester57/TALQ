@@ -135,7 +135,7 @@ public abstract class QuizView extends Fragment implements
         }
         curQuestion = curQuiz.getQuestion();
         startTimer();
-        loadAnswerFragment();
+        loadAnswerFragment(false);
     }
 
     public void nextQuestion() {
@@ -144,7 +144,7 @@ public abstract class QuizView extends Fragment implements
         if (horDottedProgress != null) {
             horDottedProgress.nextDot();
         }
-        loadAnswerFragment();
+        loadAnswerFragment(true);
     }
 
     public void prevQuestion() {
@@ -153,10 +153,10 @@ public abstract class QuizView extends Fragment implements
         if (horDottedProgress != null) {
             horDottedProgress.previousDot();
         }
-        loadAnswerFragment();
+        loadAnswerFragment(true);
     }
 
-    public abstract void loadAnswerFragment();
+    public abstract void loadAnswerFragment(boolean isNewQuestion);
 
     public int getQuizTime() {
         return curQuiz.getTimedLength();

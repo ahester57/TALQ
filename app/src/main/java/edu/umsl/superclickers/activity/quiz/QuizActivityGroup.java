@@ -215,7 +215,8 @@ public class QuizActivityGroup extends AppCompatActivity implements
                 }
             }
             if (isCorrect) {
-                Toast.makeText(this, "Congragulations! " + value + " is correct!" +
+                String message = points > 0 ? "Congragulations!\n" : "Better luck next time!\n";
+                Toast.makeText(this, message + value + " is correct!" +
                                 "\nYou got " + points + " points for it.",
                         Toast.LENGTH_LONG).show();
                 if (getQuizIndex() >= getActiveQuiz().getQuestions().size() - 1) {

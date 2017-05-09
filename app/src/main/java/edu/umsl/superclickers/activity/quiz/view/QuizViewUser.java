@@ -54,7 +54,7 @@ public class QuizViewUser extends QuizView {
     }
 
     @Override
-    public void loadAnswerFragment() {
+    public void loadAnswerFragment(boolean isNewQuestion) {
         questionView.setText(curQuestion.getQuestion());
         qController.setQuizIndex(curQuiz.getqNum());
         progressView.setText(Integer.toString(curQuiz.getqNum() + 1));

@@ -1,5 +1,6 @@
 package edu.umsl.superclickers.activity.quiz.view;
 
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -87,18 +88,34 @@ public class QuizViewGroup extends QuizView implements AnswerViewGroup.AnswerLis
     }
 
     @Override
-    public void loadAnswerFragment() {
+    public void loadAnswerFragment(boolean isNewQuestion) {
         questionView.setText(curQuestion.getQuestion());
         qController.setQuizIndex(curQuiz.getqNum());
         progressView.setText(Integer.toString(curQuiz.getqNum() + 1));
         // create instance of the answer fragment
         updateGUITimer(minutesLeft, secondsLeft);
-        aViewFragment = new AnswerViewGroup();
+
+
         // load answer fragment into answerSection of QuizActivityUser
-        android.app.FragmentManager fm = getFragmentManager();
-        android.app.FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(R.id.answer_segment_group, aViewFragment, FragmentConfig.KEY_ANSWER_VIEW_GROUP);
-        ft.commit();
+        FragmentManager fm = getFragmentManager();
+        if (isNewQuestion) {
+            loadNewAnswers(fm);
+        } else {
+            if (fm.findFragmentByTag(FragmentConfig.KEY_ANSWER_VIEW_GROUP) != null) {
+                aViewFragment = (AnswerViewGroup)
+                        fm.findFragmentByTag(FragmentConfig.KEY_ANSWER_VIEW_GROUP);
+            } else {
+                loadNewAnswers(fm);
+            }
+        }
+    }
+
+    private void loadNewAnswers(FragmentManager fm) {
+        aViewFragment = new AnswerViewGroup();
+        fm.beginTransaction()
+                .replace(R.id.answer_segment_group, aViewFragment,
+                        FragmentConfig.KEY_ANSWER_VIEW_GROUP)
+                .commit();
     }
 
 }

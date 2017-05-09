@@ -35,6 +35,10 @@ public class AnswerViewGroup extends AnswerView {
     }
 
     private boolean Aenabled = true;
+    private boolean Benabled = true;
+    private boolean Cenabled = true;
+    private boolean Denabled = true;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -81,7 +85,10 @@ public class AnswerViewGroup extends AnswerView {
         C.setOnClickListener(answerClick);
         D.setOnClickListener(answerClick);
         A.setEnabled(Aenabled);
-
+        B.setEnabled(Benabled);
+        C.setEnabled(Cenabled);
+        D.setEnabled(Denabled);
+        clearButtons();
         return view;
     }
 
@@ -142,14 +149,17 @@ public class AnswerViewGroup extends AnswerView {
                 break;
             case 1:
                 B.setEnabled(false);
+                Benabled = false;
                 B.setBackgroundColor(Color.TRANSPARENT);
                 break;
             case 2:
                 C.setEnabled(false);
+                Cenabled = false;
                 C.setBackgroundColor(Color.TRANSPARENT);
                 break;
             case 3:
                 D.setEnabled(false);
+                Denabled = false;
                 D.setBackgroundColor(Color.TRANSPARENT);
                 break;
         }
@@ -158,15 +168,23 @@ public class AnswerViewGroup extends AnswerView {
     private void clearButtons() {
         if (A.isEnabled()) {
             A.setBackground(getResources().getDrawable(R.drawable.button_custom1));
+        } else {
+            A.setBackgroundColor(Color.TRANSPARENT);
         }
         if (B.isEnabled()) {
             B.setBackground(getResources().getDrawable(R.drawable.button_custom2));
+        } else {
+            B.setBackgroundColor(Color.TRANSPARENT);
         }
         if (C.isEnabled()) {
             C.setBackground(getResources().getDrawable(R.drawable.button_custom4));
+        } else {
+            C.setBackgroundColor(Color.TRANSPARENT);
         }
         if (D.isEnabled()) {
             D.setBackground(getResources().getDrawable(R.drawable.button_custom3));
+        } else {
+            D.setBackgroundColor(Color.TRANSPARENT);
         }
     }
 
